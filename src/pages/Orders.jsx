@@ -146,11 +146,11 @@ const Orders = () => {
         <Elements stripe={stripePromise}>
             <div className="space-y-12 pb-20 font-sans">
                 {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white dark:bg-[#111827] p-8 lg:p-10 rounded-2xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#111827] p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                     <div className="space-y-2 relative z-10 text-center md:text-left">
-                        <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">Order Register</h1>
+                        <h1 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">Order Register</h1>
                         <div className="flex items-center justify-center md:justify-start gap-3">
                             <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 shadow-[0_0_8px_#4f46e5]"></div>
                             <p className="text-xs font-semibold text-slate-400 dark:text-gray-500 uppercase tracking-widest">{orders.length} Active Nodes</p>
@@ -159,7 +159,7 @@ const Orders = () => {
 
                     <button
                         onClick={fetchOrders}
-                        className="relative z-10 group flex items-center justify-center gap-4 bg-slate-900 dark:bg-indigo-600 text-white px-8 lg:px-10 py-5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-2xl shadow-indigo-600/10 active:scale-95  no-wrap"
+                        className="relative z-10 group flex items-center justify-center gap-3 bg-slate-900 dark:bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-2xl shadow-indigo-600/10 active:scale-95  no-wrap"
                     >
                         <RefreshCw size={18} strokeWidth={2.5} className="group-hover:rotate-180 transition-transform duration-500" /> Sync Database
                     </button>
@@ -176,7 +176,7 @@ const Orders = () => {
                                 key={key}
                                 whileHover={{ y: -5 }}
                                 onClick={() => setFilterStatus(isActive ? 'all' : key)}
-                                className={`p-6 lg:p-8 rounded-2xl border-2 transition-all text-left relative overflow-hidden ${isActive
+                                className={`p-3 lg:p-4 rounded-xl border-2 transition-all text-left relative overflow-hidden ${isActive
                                     ? 'border-indigo-600 bg-indigo-600 text-white shadow-2xl shadow-indigo-600/20'
                                     : 'border-gray-100 dark:border-white/5 bg-white dark:bg-[#111827] hover:border-indigo-600/30 shadow-premium'
                                     }`}
@@ -185,7 +185,7 @@ const Orders = () => {
                                     <div className={`w-2.5 h-2.5 rounded-full ${isActive ? 'bg-white shadow-[0_0_8px_white]' : cfg.dot}`}></div>
                                     <span className={`text-[10px] font-bold uppercase tracking-widest leading-none  ${isActive ? 'text-indigo-200' : 'text-slate-400'}`}>{cfg.label}</span>
                                 </div>
-                                <p className={`text-3xl lg:text-4xl font-bold  tracking-tighter font-['Outfit'] leading-none ${isActive ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                                <p className={`text-xl lg:text-2xl font-bold tracking-tight font-['Outfit'] leading-none ${isActive ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
                                     {count}
                                 </p>
                             </motion.button>
@@ -199,13 +199,13 @@ const Orders = () => {
                         <table className="min-w-full text-left">
                             <thead>
                                 <tr className="bg-slate-50/50 dark:bg-white/[0.02] text-[11px] font-bold text-slate-400 uppercase tracking-widest ">
-                                    <th className="px-12 py-8 text-center md:text-left">Order ID</th>
-                                    <th className="py-8 px-6">Customer</th>
-                                    <th className="py-8 px-6">Total Amount</th>
-                                    <th className="py-8 px-6">Payment</th>
-                                    <th className="py-8 px-6">Status</th>
-                                    <th className="py-8 px-6">Action</th>
-                                    <th className="px-12 py-8 text-right">Details</th>
+                                    <th className="px-10 py-4 text-center md:text-left">Order ID</th>
+                                    <th className="py-4 px-6">Customer</th>
+                                    <th className="py-4 px-6">Total Amount</th>
+                                    <th className="py-4 px-6">Payment</th>
+                                    <th className="py-4 px-6">Status</th>
+                                    <th className="py-4 px-6">Action</th>
+                                    <th className="px-10 py-4 text-right">Details</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50 dark:divide-white/5">
@@ -227,17 +227,17 @@ const Orders = () => {
                                         return (
                                             <React.Fragment key={order.id}>
                                                 <tr className={`group transition-all duration-500 ${isExpanded ? 'bg-indigo-50/30 dark:bg-indigo-600/5' : 'hover:bg-slate-50/50 dark:hover:bg-white/[0.02]'}`}>
-                                                    <td className="px-12 py-7">
+                                                    <td className="px-12 py-2.5">
                                                         <div className="flex flex-col items-center md:items-start">
-                                                            <p className="font-bold text-gray-900 dark:text-white uppercase tracking-tighter text-xl  leading-none font-['Outfit']">#ORD-{String(order.id).padStart(4, '0')}</p>
+                                                            <p className="font-bold text-gray-900 dark:text-white uppercase tracking-tight text-base leading-none font-['Outfit']">#ORD-{String(order.id).padStart(4, '0')}</p>
                                                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1.5 ">
                                                                 {order.created_at ? new Date(order.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) : '—'}
                                                             </p>
                                                         </div>
                                                     </td>
-                                                    <td className="py-7 px-6">
+                                                    <td className="py-2.5 px-6">
                                                         <div className="flex items-center gap-4">
-                                                            <div className="w-12 h-12 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow-premium border border-slate-100 dark:border-white/5 font-bold text-lg font-['Outfit']  text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                                            <div className="w-8 h-8 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center shadow-premium border border-slate-100 dark:border-white/5 font-bold text-sm font-['Outfit']  text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                                                                 {order.user?.name?.[0]?.toUpperCase() || '?'}
                                                             </div>
                                                             <div className="min-w-0">
@@ -246,7 +246,7 @@ const Orders = () => {
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td className="py-7 px-6">
+                                                    <td className="py-2.5 px-6">
                                                         <div className="flex items-end gap-1">
                                                             <span className="text-xs font-bold text-indigo-600 mb-1">₹</span>
                                                             <p className="text-2xl font-bold text-gray-900 dark:text-white font-['Outfit'] tracking-tight group-hover:text-indigo-600 transition-colors">
@@ -254,7 +254,7 @@ const Orders = () => {
                                                             </p>
                                                         </div>
                                                     </td>
-                                                    <td className="py-7 px-6">
+                                                    <td className="py-2.5 px-6">
                                                         <div className="space-y-2">
                                                             <select
                                                                 value={order.payment_status || 'pending'}
@@ -273,13 +273,13 @@ const Orders = () => {
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td className="py-7 px-6">
+                                                    <td className="py-2.5 px-6">
                                                         <div className={`inline-flex items-center gap-2.5 px-5 py-2 rounded-2xl text-[9px] font-bold uppercase tracking-widest shadow-sm ${cfg.bg} ${cfg.color}`}>
                                                             <span className={`w-2 h-2 rounded-full ${cfg.dot} ${order.status === 'pending' ? 'animate-pulse shadow-[0_0_6px_currentColor]' : ''}`}></span>
                                                             {cfg.label}
                                                         </div>
                                                     </td>
-                                                    <td className="py-7 px-6">
+                                                    <td className="py-2.5 px-6">
                                                         <select
                                                             value={order.status}
                                                             onChange={(e) => handleStatusChange(order.id, e.target.value)}
@@ -293,7 +293,7 @@ const Orders = () => {
                                                             <option value="cancelled">Cancel</option>
                                                         </select>
                                                     </td>
-                                                    <td className="px-12 py-7 text-right">
+                                                    <td className="px-12 py-2.5 text-right">
                                                         <motion.button
                                                             whileTap={{ scale: 0.9 }}
                                                             onClick={() => setExpandedId(isExpanded ? null : order.id)}

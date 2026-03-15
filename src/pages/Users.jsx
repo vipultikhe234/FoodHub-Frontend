@@ -51,11 +51,11 @@ const Users = () => {
     return (
         <div className="space-y-12 pb-20 font-sans">
             {/* Header / Action Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white dark:bg-[#111827] p-8 lg:p-10 rounded-2xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white dark:bg-[#111827] p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="space-y-2 relative z-10 text-center md:text-left">
-                    <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">User Registry</h1>
+                    <h1 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">User Registry</h1>
                     <div className="flex items-center justify-center md:justify-start gap-3">
                         <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 shadow-[0_0_8px_#4f46e5]"></div>
                         <p className="text-xs font-semibold text-slate-400 dark:text-gray-500 uppercase tracking-widest">{users.length} Database Nodes</p>
@@ -71,7 +71,7 @@ const Users = () => {
                         placeholder="Search users..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-white/5 border border-transparent focus:border-indigo-600/20 py-4 pl-14 pr-6 rounded-xl text-xs font-bold text-gray-900 dark:text-white outline-none focus:ring-4 focus:ring-indigo-600/5 transition-all shadow-inner"
+                        className="w-full bg-slate-50 dark:bg-white/5 border border-transparent focus:border-indigo-600/20 py-2.5 pl-12 pr-6 rounded-lg text-xs font-bold text-gray-900 dark:text-white outline-none focus:ring-4 focus:ring-indigo-600/5 transition-all shadow-inner"
                     />
                 </div>
             </div>
@@ -82,10 +82,10 @@ const Users = () => {
                     <table className="min-w-full text-left">
                         <thead>
                             <tr className="bg-slate-50/50 dark:bg-white/[0.02] text-[11px] font-bold text-slate-400 uppercase tracking-widest ">
-                                <th className="px-12 py-8">Identity</th>
-                                <th className="py-8 px-6">Contact Node</th>
-                                <th className="py-8 px-6">Delivery Target</th>
-                                <th className="px-12 py-8 text-right">Member Since</th>
+                                <th className="px-10 py-4">Identity</th>
+                                <th className="py-4 px-6">Contact Node</th>
+                                <th className="py-4 px-6">Delivery Target</th>
+                                <th className="px-10 py-4 text-right">Member Since</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50 dark:divide-white/5">
@@ -101,9 +101,9 @@ const Users = () => {
                             ) : (
                                 filtered.map((user) => (
                                     <tr key={user.id} className="group hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors">
-                                        <td className="px-12 py-7">
+                                        <td className="px-12 py-2.5">
                                             <div className="flex items-center gap-6">
-                                                <div className="w-14 h-14 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center shadow-premium border border-slate-100 dark:border-white/5 font-bold text-lg font-['Outfit']  text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                                <div className="w-10 h-10 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center shadow-premium border border-slate-100 dark:border-white/5 font-bold text-base font-['Outfit']  text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                                                     {user.name?.[0]?.toUpperCase() || '?'}
                                                 </div>
                                                 <div className="min-w-0">
@@ -114,13 +114,13 @@ const Users = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-7 px-6">
+                                        <td className="py-2.5 px-6">
                                             <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-slate-50 dark:bg-white/5 rounded-2xl text-[10px] font-bold uppercase text-slate-400 dark:text-gray-300 border border-slate-100 dark:border-white/5 ">
                                                 <Phone size={12} className="opacity-40" />
                                                 {user.phone || 'Standard Null'}
                                             </div>
                                         </td>
-                                        <td className="py-7 px-6">
+                                        <td className="py-2.5 px-6">
                                             <div className="flex items-center gap-3 group/loc">
                                                 <div className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-300 group-hover/loc:bg-indigo-600 group-hover/loc:text-white transition-all">
                                                     <MapPin size={14} />
@@ -128,7 +128,7 @@ const Users = () => {
                                                 <p className="text-[10px] font-bold text-slate-400 dark:text-gray-400 uppercase tracking-widest max-w-[280px] truncate  leading-none">{user.address || 'Address not listed'}</p>
                                             </div>
                                         </td>
-                                        <td className="py-7 px-12 text-right">
+                                        <td className="py-2.5 px-12 text-right">
                                             <div className="flex flex-col items-end">
                                                 <div className="flex items-center gap-2">
                                                     <Calendar size={12} className="text-indigo-600 opacity-60" />

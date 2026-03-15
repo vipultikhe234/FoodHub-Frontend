@@ -148,11 +148,11 @@ const Categories = () => {
     return (
         <div className="space-y-12 pb-20 font-sans">
             {/* Action Bar */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 bg-white dark:bg-[#111827] p-10 rounded-2xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#111827] p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="space-y-2 relative z-10">
-                    <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">Categories</h1>
+                    <h1 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">Categories</h1>
                     <div className="flex items-center justify-center md:justify-start gap-3">
                         <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 shadow-[0_0_8px_#4f46e5]"></div>
                         <p className="text-xs font-semibold text-slate-400 dark:text-gray-500 uppercase tracking-widest">{categories.length} Taxonomy Nodes</p>
@@ -169,13 +169,13 @@ const Categories = () => {
                             placeholder="Search..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-slate-50 dark:bg-white/5 border border-transparent focus:border-indigo-600/20 py-4 pl-14 pr-6 rounded-xl text-xs font-bold text-gray-900 dark:text-white outline-none focus:ring-4 focus:ring-indigo-600/5 transition-all shadow-inner"
+                            className="w-full bg-slate-50 dark:bg-white/5 border border-transparent focus:border-indigo-600/20 py-2.5 pr-6 pl-10 pr-6 rounded-lg text-xs font-bold text-gray-900 dark:text-white outline-none focus:ring-4 focus:ring-indigo-600/5 transition-all shadow-inner"
                         />
                     </div>
                     <motion.button
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setShowModal(true)}
-                        className="w-full sm:w-auto bg-indigo-600 text-white px-8 lg:px-10 py-4 rounded-xl font-bold shadow-2xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 text-xs uppercase tracking-widest"
+                        className="w-full sm:w-auto bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-bold shadow-2xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 text-xs uppercase tracking-widest"
                     >
                         <Plus size={18} strokeWidth={3} /> Add Category
                     </motion.button>
@@ -196,7 +196,7 @@ const Categories = () => {
                             whileHover={{ y: -8 }}
                             className="bg-white dark:bg-[#111827] rounded-2xl border border-gray-100 dark:border-white/5 shadow-premium hover:shadow-2xl transition-all group overflow-hidden"
                         >
-                            <div className="relative h-48 overflow-hidden">
+                            <div className="relative h-36 overflow-hidden">
                                 {cat.image_url ? (
                                     <img src={cat.image_url} alt={cat.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                                 ) : (
@@ -283,7 +283,7 @@ const Categories = () => {
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto p-10 custom-scrollbar relative z-10 space-y-10">
+                            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar relative z-10 space-y-10">
                                 <form onSubmit={handleSubmit} className="space-y-10">
                                     {/* Category Image */}
                                     <div className="space-y-4">
@@ -335,7 +335,7 @@ const Categories = () => {
                                         <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2 block ">Category Name</label>
                                         <input
                                             type="text" placeholder="e.g. Italian Platters" required
-                                            className="w-full h-18 bg-slate-50 dark:bg-white/5 px-8 rounded-xl focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-xl font-['Outfit']  shadow-inner border border-transparent focus:border-indigo-600/20"
+                                            className="w-full h-12 bg-slate-50 dark:bg-white/5 px-6 rounded-lg focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-base font-['Outfit']  shadow-inner border border-transparent focus:border-indigo-600/20"
                                             value={newCategory.name} onChange={handleNameChange}
                                         />
                                     </div>
@@ -343,11 +343,11 @@ const Categories = () => {
                                     {/* Status Toggle */}
                                     <div
                                         onClick={() => setNewCategory(prev => ({ ...prev, status: !prev.status }))}
-                                        className={`p-8 rounded-[36px] cursor-pointer transition-all border-2 flex items-center justify-between ${newCategory.status ? 'bg-emerald-50 border-emerald-100 shadow-emerald-500/5' : 'bg-slate-50 border-slate-100'
+                                        className={`p-4 rounded-xl cursor-pointer transition-all border-2 flex items-center justify-between ${newCategory.status ? 'bg-emerald-50 border-emerald-100 shadow-emerald-500/5' : 'bg-slate-50 border-slate-100'
                                             }`}
                                     >
                                         <div className="flex items-center gap-5">
-                                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${newCategory.status ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-400'}`}>
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${newCategory.status ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-400'}`}>
                                                 <Activity size={24} />
                                             </div>
                                             <div>
@@ -367,7 +367,7 @@ const Categories = () => {
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                         type="submit"
-                                        className="w-full h-20 bg-slate-900 dark:bg-indigo-600 text-white rounded-2xl font-bold text-[12px] uppercase tracking-widest shadow-2xl shadow-indigo-600/20 flex items-center justify-center gap-4 "
+                                        className="w-full h-14 bg-slate-900 dark:bg-indigo-600 text-white rounded-xl font-bold text-[11px] uppercase tracking-widest shadow-2xl shadow-indigo-600/20 flex items-center justify-center gap-4 "
                                     >
                                         <CheckCircle2 size={24} strokeWidth={3} /> {editingId ? 'Save Changes' : 'Activate Category'}
                                     </motion.button>

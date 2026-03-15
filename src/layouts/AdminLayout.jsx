@@ -90,9 +90,9 @@ const AdminLayout = () => {
                 className={`fixed lg:relative h-full bg-white dark:bg-[#111827] flex flex-col border-r border-gray-100 dark:border-white/5 shrink-0 z-[70] overflow-hidden lg:translate-x-0 ${isSidebarOpen ? 'w-72' : 'w-0'}`}
             >
                 {/* Brand Identity */}
-                <div className="px-8 py-10 flex items-center justify-between">
+                <div className="px-6 py-6 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-xl shadow-indigo-600/20 relative overflow-hidden group">
+                        <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center shadow-xl shadow-indigo-600/20 relative overflow-hidden group">
                             <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                             <Soup className="text-white relative z-10" size={24} strokeWidth={2.5} />
                         </div>
@@ -135,9 +135,9 @@ const AdminLayout = () => {
                 </nav>
 
                 {/* User Context & Actions */}
-                <div className="p-6 mt-auto border-t border-gray-100 dark:border-white/5 bg-slate-50/30 dark:bg-white/[0.01]">
+                <div className="p-4 mt-auto border-t border-gray-100 dark:border-white/5 bg-slate-50/30 dark:bg-white/[0.01]">
                     {user && (
-                        <div className="mb-6 flex items-center gap-3">
+                        <div className="mb-4 flex items-center gap-3">
                             <div className="w-10 h-10 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center shadow-sm relative border border-gray-100 dark:border-white/5">
                                 <span className="font-bold text-indigo-600 dark:text-indigo-400 font-['Outfit'] text-sm">{user.name?.[0]?.toUpperCase()}</span>
                                 <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white dark:border-gray-900 rounded-full"></div>
@@ -160,17 +160,17 @@ const AdminLayout = () => {
             {/* Stage Frame */}
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 {/* Global Command Center Header */}
-                <header className="h-[90px] px-6 lg:px-12 flex justify-between items-center bg-white/80 dark:bg-[#0B0F1A]/80 backdrop-blur-2xl border-b border-gray-100 dark:border-white/5 sticky top-0 z-40">
+                <header className="h-[64px] px-6 lg:px-8 flex justify-between items-center bg-white/80 dark:bg-[#0B0F1A]/80 backdrop-blur-2xl border-b border-gray-100 dark:border-white/5 sticky top-0 z-40">
                     <div className="flex items-center gap-4 lg:gap-8">
                         <button
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                            className="p-3 bg-slate-50 dark:bg-white/5 rounded-2xl text-slate-500 hover:text-indigo-600 transition-all border border-transparent hover:border-gray-100 lg:hidden"
+                            className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl text-slate-500 hover:text-indigo-600 transition-all border border-transparent hover:border-gray-100 lg:hidden"
                         >
                             <Menu size={20} />
                         </button>
 
                         <div className="flex flex-col">
-                            <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white tracking-tight leading-none font-['Outfit']">
+                            <h2 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none font-['Outfit']">
                                 {currentPathLabel}
                             </h2>
                             <div className="flex items-center gap-2 mt-1.5 lg:mt-2">
@@ -183,7 +183,7 @@ const AdminLayout = () => {
                         <div className="hidden lg:block h-10 w-px bg-slate-100 dark:bg-white/10 mx-2"></div>
 
                         {/* Search Bar */}
-                        <div className="hidden xl:flex items-center gap-4 px-6 py-3 bg-slate-50 dark:bg-white/5 rounded-2xl border border-transparent focus-within:border-indigo-500/30 focus-within:bg-white dark:focus-within:bg-gray-800 transition-all w-80">
+                        <div className="hidden xl:flex items-center gap-4 px-6 py-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-transparent focus-within:border-indigo-500/30 focus-within:bg-white dark:focus-within:bg-gray-800 transition-all w-80">
                             <Search size={18} className="text-slate-300 transition-colors" />
                             <input
                                 type="text"
@@ -195,11 +195,11 @@ const AdminLayout = () => {
 
                     <div className="flex items-center gap-4 lg:gap-8">
                         <div className="flex items-center gap-2 lg:gap-4">
-                            <motion.button whileTap={{ scale: 0.9 }} className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-white dark:hover:bg-white/10 rounded-2xl transition-all relative shadow-sm border border-transparent hover:border-gray-100">
+                            <motion.button whileTap={{ scale: 0.9 }} className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-white dark:hover:bg-white/10 rounded-xl transition-all relative shadow-sm border border-transparent hover:border-gray-100">
                                 <Bell size={18} lg={20} strokeWidth={2.5} />
                                 <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white dark:border-[#0B0F1A]"></span>
                             </motion.button>
-                            <motion.button whileTap={{ scale: 0.9 }} className="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-white dark:hover:bg-white/10 rounded-2xl transition-all shadow-sm border border-transparent hover:border-gray-100">
+                            <motion.button whileTap={{ scale: 0.9 }} className="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-white dark:hover:bg-white/10 rounded-xl transition-all shadow-sm border border-transparent hover:border-gray-100">
                                 <Settings size={18} lg={20} strokeWidth={2.5} />
                             </motion.button>
                         </div>
@@ -214,7 +214,7 @@ const AdminLayout = () => {
                 </header>
 
                 {/* Scrollable Canvas */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-12 bg-[#FDFDFD] dark:bg-[#0B0F1A]">
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-8 bg-[#FDFDFD] dark:bg-[#0B0F1A]">
                     <div className="max-w-[1600px] mx-auto">
                         <Outlet />
                     </div>

@@ -89,11 +89,11 @@ const Coupons = () => {
     return (
         <div className="space-y-12 pb-20 font-sans">
             {/* Action Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-white dark:bg-[#111827] p-8 lg:p-10 rounded-2xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white dark:bg-[#111827] p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="space-y-2 relative z-10 text-center md:text-left">
-                    <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white uppercase tracking-tighter  font-['Outfit'] leading-none">Coupons</h1>
+                    <h1 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white uppercase tracking-tight  font-['Outfit'] leading-none">Coupons</h1>
                     <div className="flex items-center justify-center md:justify-start gap-3">
                         <div className="w-2 h-2 rounded-full bg-indigo-600 shadow-[0_0_8px_#4f46e5]"></div>
                         <p className="text-xs font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest ">{coupons.length} Active Rewards</p>
@@ -103,7 +103,7 @@ const Coupons = () => {
                 <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={() => { setEditingId(null); setForm(initialFormState); setShowModal(true); }}
-                    className="relative z-10 w-full sm:w-auto bg-indigo-600 text-white px-8 lg:px-10 py-5 rounded-xl font-bold shadow-2xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-4 text-xs uppercase tracking-widest"
+                    className="relative z-10 w-full sm:w-auto bg-indigo-600 text-white px-6 py-2.5 rounded-lg font-bold shadow-2xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 text-xs uppercase tracking-widest"
                 >
                     <Plus size={20} strokeWidth={3} /> Add Coupon
                 </motion.button>
@@ -226,7 +226,7 @@ const Coupons = () => {
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto p-10 custom-scrollbar relative z-10 space-y-10">
+                            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar relative z-10 space-y-10">
                                 <form onSubmit={handleSubmit} className="space-y-10">
                                     {/* Code Field */}
                                     <div className="space-y-4">
@@ -259,7 +259,7 @@ const Coupons = () => {
                                             <input
                                                 required
                                                 type="number"
-                                                className="w-full h-18 bg-slate-50 dark:bg-white/5 px-8 rounded-xl focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-indigo-600 dark:text-indigo-400 text-2xl font-['Outfit']  shadow-inner border border-transparent focus:border-indigo-600/20"
+                                                className="w-full h-12 bg-slate-50 dark:bg-white/5 px-6 rounded-lg focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-indigo-600 dark:text-indigo-400 text-lg font-['Outfit']  shadow-inner border border-transparent focus:border-indigo-600/20"
                                                 value={form.value}
                                                 onChange={(e) => setForm({ ...form, value: e.target.value })}
                                             />
@@ -274,7 +274,7 @@ const Coupons = () => {
                                                 <input
                                                     required
                                                     type="number"
-                                                    className="w-full h-18 bg-slate-50 dark:bg-white/5 px-16 rounded-xl focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-lg shadow-inner border border-transparent focus:border-indigo-600/20"
+                                                    className="w-full h-12 bg-slate-50 dark:bg-white/5 px-12 rounded-lg focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-base shadow-inner border border-transparent focus:border-indigo-600/20"
                                                     value={form.min_order_amount}
                                                     onChange={(e) => setForm({ ...form, min_order_amount: e.target.value })}
                                                 />
@@ -287,7 +287,7 @@ const Coupons = () => {
                                                 <input
                                                     required
                                                     type="date"
-                                                    className="w-full h-18 bg-slate-50 dark:bg-white/5 px-16 rounded-xl focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-xs uppercase tracking-widest shadow-inner border border-transparent focus:border-indigo-600/20"
+                                                    className="w-full h-12 bg-slate-50 dark:bg-white/5 px-12 rounded-lg focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-xs uppercase tracking-widest shadow-inner border border-transparent focus:border-indigo-600/20"
                                                     value={form.expires_at}
                                                     onChange={(e) => setForm({ ...form, expires_at: e.target.value })}
                                                 />
@@ -299,11 +299,11 @@ const Coupons = () => {
                                     {/* Status Toggle */}
                                     <div
                                         onClick={() => setForm({ ...form, is_active: !form.is_active })}
-                                        className={`p-8 rounded-[36px] cursor-pointer transition-all border-2 flex items-center justify-between ${form.is_active ? 'bg-indigo-50 border-indigo-100 dark:bg-indigo-600/5 dark:border-indigo-600/20' : 'bg-slate-50 border-slate-100 dark:bg-white/5 dark:border-white/10'
+                                        className={`p-4 rounded-xl cursor-pointer transition-all border-2 flex items-center justify-between ${form.is_active ? 'bg-indigo-50 border-indigo-100 dark:bg-indigo-600/5 dark:border-indigo-600/20' : 'bg-slate-50 border-slate-100 dark:bg-white/5 dark:border-white/10'
                                             }`}
                                     >
                                         <div className="flex items-center gap-5">
-                                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${form.is_active ? 'bg-indigo-600 text-white' : 'bg-slate-200 dark:bg-gray-800 text-slate-400'}`}>
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${form.is_active ? 'bg-indigo-600 text-white' : 'bg-slate-200 dark:bg-gray-800 text-slate-400'}`}>
                                                 <Activity size={24} />
                                             </div>
                                             <div>
@@ -323,7 +323,7 @@ const Coupons = () => {
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                         type="submit"
-                                        className="w-full h-20 bg-slate-900 dark:bg-indigo-600 text-white rounded-[32px] font-bold text-[12px] uppercase tracking-widest shadow-2xl shadow-indigo-600/20 flex items-center justify-center gap-4 "
+                                        className="w-full h-14 bg-slate-900 dark:bg-indigo-600 text-white rounded-xl font-bold text-[11px] uppercase tracking-widest shadow-2xl shadow-indigo-600/20 flex items-center justify-center gap-4 "
                                     >
                                         <CheckCircle2 size={24} strokeWidth={3} /> {editingId ? 'Save Edits' : 'Deploy Coupon'}
                                     </motion.button>

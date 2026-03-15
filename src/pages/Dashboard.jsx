@@ -104,7 +104,7 @@ const Dashboard = () => {
             {/* Top Toolbar */}
             <div className="relative z-10 w-full flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">Dashboard</h1>
+                    <h1 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">Dashboard</h1>
                     <div className="flex items-center gap-3 mt-3">
                         <div className="w-8 h-8 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-600">
                             <Calendar size={14} strokeWidth={2.5} />
@@ -114,7 +114,7 @@ const Dashboard = () => {
                         </span>
                     </div>
                 </div>
-                <Link to="/orders" className="w-fit group flex items-center gap-4 bg-indigo-600 text-white px-8 lg:px-10 py-5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-600/20 active:scale-95">
+                <Link to="/orders" className="w-fit group flex items-center gap-4 bg-indigo-600 text-white px-6 py-3 rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-600/20 active:scale-95">
                     View Orders <ArrowRight size={18} strokeWidth={2.5} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
             </div>
@@ -131,14 +131,14 @@ const Dashboard = () => {
                     <motion.div
                         key={i}
                         whileHover={{ y: -5 }}
-                        className="bg-white dark:bg-[#111827] p-8 rounded-2xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden group"
+                        className="bg-white dark:bg-[#111827] p-4 lg:p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden group"
                     >
                         <div className={`absolute top-0 right-0 w-24 h-24 ${stat.bg}/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700`}></div>
-                        <div className={`w-14 h-14 ${stat.bg}/10 ${stat.color} rounded-xl flex items-center justify-center mb-6 border border-current/10`}>
-                            <stat.icon size={26} strokeWidth={2.5} />
+                        <div className={`w-10 h-10 ${stat.bg}/10 ${stat.color} rounded-lg flex items-center justify-center mb-4 border border-current/10`}>
+                            <stat.icon size={20} strokeWidth={2.5} />
                         </div>
                         <h3 className="text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest mb-2 font-['Outfit'] ">{stat.label}</h3>
-                        <p className="text-3xl font-bold text-gray-900 dark:text-white font-['Outfit'] tracking-tight leading-none truncate">{stat.val}</p>
+                        <p className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white font-['Outfit'] tracking-tight leading-none truncate">{stat.val}</p>
                         <p className="text-[10px] font-bold text-slate-300 dark:text-gray-700 uppercase tracking-widest mt-4 flex items-center gap-1.5">
                             <TrendingUp size={10} /> {stat.sub}
                         </p>
