@@ -176,7 +176,7 @@ const Products = () => {
     return (
         <div className="space-y-12 pb-20 font-sans">
             {/* Action Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#111827] p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#111827] p-4 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="space-y-2 relative z-10">
@@ -266,9 +266,9 @@ const Products = () => {
                             ) : (
                                 filtered.map((prod) => (
                                     <tr key={prod.id} className="group hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors">
-                                        <td className="px-12 py-2.5">
-                                            <div className="flex items-center gap-6">
-                                                <div className="w-10 h-10 bg-slate-50 dark:bg-gray-900 rounded-lg overflow-hidden shrink-0 border border-slate-100 dark:border-white/5 shadow-inner relative group-hover:scale-105 transition-all duration-500">
+                                        <td className="px-12 py-1.5">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-8 h-8 bg-slate-50 dark:bg-gray-900 rounded-lg overflow-hidden shrink-0 border border-slate-100 dark:border-white/5 shadow-inner relative group-hover:scale-105 transition-all duration-500">
                                                     {prod.image_url ? (
                                                         <img src={prod.image_url} alt={prod.name} className="w-full h-full object-cover" />
                                                     ) : (
@@ -281,20 +281,20 @@ const Products = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-2.5 px-6">
+                                        <td className="py-1.5 px-6">
                                             <div className="inline-flex px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-2xl text-[9px] font-bold uppercase text-indigo-600 dark:text-indigo-400 border border-slate-100 dark:border-white/5 ">
                                                 {prod.category?.name || 'Standard'}
                                             </div>
                                         </td>
-                                        <td className="py-2.5 px-6">
+                                        <td className="py-1.5 px-6">
                                             <div className="flex flex-col">
                                                 <div className="flex items-end gap-1">
                                                     <span className="text-xs font-bold text-slate-300 mb-1">₹</span>
-                                                    <span className="font-bold text-gray-900 dark:text-white tracking-tight text-xl font-['Outfit'] ">{parseFloat(prod.price).toFixed(0)}</span>
+                                                    <span className="font-bold text-gray-900 dark:text-white tracking-tight text-lg font-['Outfit'] ">{parseFloat(prod.price).toFixed(0)}</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-2.5 px-6">
+                                        <td className="py-1.5 px-6">
                                             <div className="flex flex-col items-center gap-3">
                                                 <span className={`font-bold text-sm uppercase tracking-tighter font-['Outfit']  ${prod.stock < 10 ? 'text-rose-500' : 'text-slate-900 dark:text-white'}`}>
                                                     {prod.stock} Units
@@ -308,14 +308,14 @@ const Products = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-2.5 px-6">
+                                        <td className="py-1.5 px-6">
                                             <div className={`inline-flex items-center gap-2.5 px-5 py-2 rounded-2xl text-[9px] font-bold uppercase tracking-widest shadow-sm ${prod.is_available ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400'
                                                 }`}>
                                                 <span className={`w-2 h-2 rounded-full ${prod.is_available ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
                                                 {prod.is_available ? 'Online' : 'Offline'}
                                             </div>
                                         </td>
-                                        <td className="px-12 py-2.5 text-right">
+                                        <td className="px-12 py-1.5 text-right">
                                             <div className="flex justify-end gap-3 translate-x-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
                                                 <motion.button
                                                     whileTap={{ scale: 0.9 }}

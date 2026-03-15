@@ -146,7 +146,7 @@ const Orders = () => {
         <Elements stripe={stripePromise}>
             <div className="space-y-12 pb-20 font-sans">
                 {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#111827] p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#111827] p-4 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                     <div className="space-y-2 relative z-10 text-center md:text-left">
@@ -185,7 +185,7 @@ const Orders = () => {
                                     <div className={`w-2.5 h-2.5 rounded-full ${isActive ? 'bg-white shadow-[0_0_8px_white]' : cfg.dot}`}></div>
                                     <span className={`text-[10px] font-bold uppercase tracking-widest leading-none  ${isActive ? 'text-indigo-200' : 'text-slate-400'}`}>{cfg.label}</span>
                                 </div>
-                                <p className={`text-xl lg:text-2xl font-bold tracking-tight font-['Outfit'] leading-none ${isActive ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+                                <p className={`text-lg lg:text-xl font-bold tracking-tight font-['Outfit'] leading-none ${isActive ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
                                     {count}
                                 </p>
                             </motion.button>
@@ -246,10 +246,10 @@ const Orders = () => {
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td className="py-2.5 px-6">
+                                                    <td className="py-1.5 px-6">
                                                         <div className="flex items-end gap-1">
                                                             <span className="text-xs font-bold text-indigo-600 mb-1">₹</span>
-                                                            <p className="text-2xl font-bold text-gray-900 dark:text-white font-['Outfit'] tracking-tight group-hover:text-indigo-600 transition-colors">
+                                                            <p className="text-xl font-bold text-gray-900 dark:text-white font-['Outfit'] tracking-tight group-hover:text-indigo-600 transition-colors">
                                                                 {parseFloat(order.total_price).toFixed(0)}
                                                             </p>
                                                         </div>

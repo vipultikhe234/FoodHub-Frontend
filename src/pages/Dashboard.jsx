@@ -131,14 +131,14 @@ const Dashboard = () => {
                     <motion.div
                         key={i}
                         whileHover={{ y: -5 }}
-                        className="bg-white dark:bg-[#111827] p-4 lg:p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden group"
+                        className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white dark:bg-[#111827] p-4 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden"
                     >
                         <div className={`absolute top-0 right-0 w-24 h-24 ${stat.bg}/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700`}></div>
                         <div className={`w-10 h-10 ${stat.bg}/10 ${stat.color} rounded-lg flex items-center justify-center mb-4 border border-current/10`}>
                             <stat.icon size={20} strokeWidth={2.5} />
                         </div>
                         <h3 className="text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest mb-2 font-['Outfit'] ">{stat.label}</h3>
-                        <p className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white font-['Outfit'] tracking-tight leading-none truncate">{stat.val}</p>
+                        <p className="text-lg font-bold text-gray-900 dark:text-white font-['Outfit'] tracking-tight leading-none truncate">{stat.val}</p>
                         <p className="text-[10px] font-bold text-slate-300 dark:text-gray-700 uppercase tracking-widest mt-4 flex items-center gap-1.5">
                             <TrendingUp size={10} /> {stat.sub}
                         </p>
@@ -162,7 +162,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                        <button className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest hover:bg-indigo-600 hover:text-white px-6 py-2.5 rounded-xl transition-all border border-indigo-500/20 active:scale-95">Export PDF</button>
+                        <button className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest hover:bg-indigo-600 hover:text-white px-6 py-1.5 rounded-xl transition-all border border-indigo-500/20 active:scale-95">Export PDF</button>
                     </div>
 
                     <div className="p-8">
@@ -181,7 +181,7 @@ const Dashboard = () => {
                                     const StatusIcon = cfg.icon;
                                     return (
                                         <div key={order.id} className="group p-6 bg-[#F9FAFB] dark:bg-white/[0.03] rounded-2xl border border-transparent hover:border-indigo-100 dark:hover:border-white/10 hover:bg-white dark:hover:bg-gray-800 focus-within:ring-2 focus-within:ring-indigo-500 transition-all duration-500 flex items-center gap-6">
-                                            <div className="w-16 h-16 bg-white dark:bg-gray-700 rounded-xl flex items-center justify-center text-indigo-600 shadow-premium border border-slate-50 dark:border-white/5 font-bold text-2xl font-['Outfit']  group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
+                                            <div className="w-8 h-8 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center shadow-premium border border-slate-100 dark:border-white/5 font-bold text-sm font-['Outfit']  text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
                                                 {order.user?.name?.[0]?.toUpperCase() || '?'}
                                             </div>
                                             <div className="flex-1 min-w-0">
@@ -209,7 +209,7 @@ const Dashboard = () => {
                                                 <select
                                                     value={order.status}
                                                     onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                                    className="appearance-none bg-white dark:bg-gray-900 border-none text-[9px] font-bold rounded-xl px-5 py-2.5 outline-none ring-1 ring-slate-100 dark:ring-white/10 focus:ring-2 focus:ring-indigo-500 dark:text-white uppercase cursor-pointer shadow-sm hover:shadow-xl transition-all"
+                                                    className="appearance-none bg-white dark:bg-gray-900 border-none text-[9px] font-bold rounded-xl px-5 py-1.5 outline-none ring-1 ring-slate-100 dark:ring-white/10 focus:ring-2 focus:ring-indigo-500 dark:text-white uppercase cursor-pointer shadow-sm hover:shadow-xl transition-all"
                                                 >
                                                     <option value="pending">Authorize</option>
                                                     <option value="preparing">Prepare</option>

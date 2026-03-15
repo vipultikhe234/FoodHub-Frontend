@@ -89,7 +89,7 @@ const Coupons = () => {
     return (
         <div className="space-y-12 pb-20 font-sans">
             {/* Action Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white dark:bg-[#111827] p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#111827] p-4 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="space-y-2 relative z-10 text-center md:text-left">

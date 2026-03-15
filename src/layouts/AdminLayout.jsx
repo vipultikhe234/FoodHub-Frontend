@@ -87,19 +87,17 @@ const AdminLayout = () => {
                     width: isSidebarOpen ? 288 : 0,
                     opacity: isSidebarOpen ? 1 : 0
                 }}
-                className={`fixed lg:relative h-full bg-white dark:bg-[#111827] flex flex-col border-r border-gray-100 dark:border-white/5 shrink-0 z-[70] overflow-hidden lg:translate-x-0 ${isSidebarOpen ? 'w-72' : 'w-0'}`}
+                className={`fixed lg:relative h-full bg-white dark:bg-[#111827] flex flex-col border-r border-gray-100 dark:border-white/5 shrink-0 z-[70] overflow-hidden lg:translate-x-0 ${isSidebarOpen ? 'w-64' : 'w-0'}`}
             >
                 {/* Brand Identity */}
-                <div className="px-6 py-6 flex items-center justify-between">
+                <div className="px-5 py-5 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center shadow-xl shadow-indigo-600/20 relative overflow-hidden group">
+                        <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-xl shadow-indigo-600/20 relative overflow-hidden group">
                             <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                             <Soup className="text-white relative z-10" size={24} strokeWidth={2.5} />
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-tight font-['Outfit']">
-                                FoodHub
-                            </h1>
+                            <h1 className="text-base font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">FoodHub</h1>
                             <p className="text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest leading-none">Enterprise Dashboard</p>
                         </div>
                     </div>
@@ -120,13 +118,13 @@ const AdminLayout = () => {
                             <Link
                                 key={to}
                                 to={to}
-                                className={`flex items-center gap-4 py-3 px-5 rounded-xl transition-all duration-200 group relative ${isActive
+                                className={`flex items-center gap-1 py-2 px-5 rounded-xl transition-all duration-200 group relative ${isActive
                                     ? 'bg-indigo-600 text-white'
                                     : 'text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-indigo-600'
                                     }`}
                             >
-                                <Icon size={20} strokeWidth={isActive ? 2.2 : 1.8} className={`transition-transform duration-200 ${isActive ? 'scale-105' : 'group-hover:scale-105'}`} />
-                                <span className={`text-sm font-semibold tracking-tight leading-none ${isActive ? 'text-white' : ''}`}>
+                                <Icon size={18} strokeWidth={isActive ? 2.2 : 1.8} className={`transition-transform duration-200 ${isActive ? 'scale-105' : 'group-hover:scale-105'}`} />
+                                <span className={`text-xs font-semibold tracking-tight leading-none ${isActive ? 'text-white' : ''}`}>
                                     {label}
                                 </span>
                             </Link>
@@ -143,14 +141,14 @@ const AdminLayout = () => {
                                 <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white dark:border-gray-900 rounded-full"></div>
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="font-bold text-gray-900 dark:text-white text-xs truncate mb-0.5">{user.name}</p>
+                                <p className="font-bold text-gray-900 dark:text-white text-[10px] truncate mb-0.5">{user.name}</p>
                                 <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider leading-none">{user.role || 'Administrator'}</p>
                             </div>
                         </div>
                     )}
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-rose-500 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-500 hover:text-white transition-all font-bold text-xs tracking-tight border border-rose-100 dark:border-rose-500/20"
+                        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-rose-500 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-500 hover:text-white transition-all font-bold text-[10px] tracking-tight border border-rose-100 dark:border-rose-500/20"
                     >
                         <LogOut size={16} strokeWidth={2} /> Logout
                     </button>
@@ -160,7 +158,7 @@ const AdminLayout = () => {
             {/* Stage Frame */}
             <main className="flex-1 flex flex-col overflow-hidden relative">
                 {/* Global Command Center Header */}
-                <header className="h-[64px] px-6 lg:px-8 flex justify-between items-center bg-white/80 dark:bg-[#0B0F1A]/80 backdrop-blur-2xl border-b border-gray-100 dark:border-white/5 sticky top-0 z-40">
+                <header className="h-[56px] px-6 lg:px-8 flex justify-between items-center bg-white/80 dark:bg-[#0B0F1A]/80 backdrop-blur-2xl border-b border-gray-100 dark:border-white/5 sticky top-0 z-40">
                     <div className="flex items-center gap-4 lg:gap-8">
                         <button
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -170,7 +168,7 @@ const AdminLayout = () => {
                         </button>
 
                         <div className="flex flex-col">
-                            <h2 className="text-lg lg:text-xl font-bold text-gray-900 dark:text-white tracking-tight leading-none font-['Outfit']">
+                            <h2 className="text-base lg:text-lg font-bold text-gray-900 dark:text-white tracking-tight leading-none font-['Outfit']">
                                 {currentPathLabel}
                             </h2>
                             <div className="flex items-center gap-2 mt-1.5 lg:mt-2">
@@ -183,12 +181,12 @@ const AdminLayout = () => {
                         <div className="hidden lg:block h-10 w-px bg-slate-100 dark:bg-white/10 mx-2"></div>
 
                         {/* Search Bar */}
-                        <div className="hidden xl:flex items-center gap-4 px-6 py-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-transparent focus-within:border-indigo-500/30 focus-within:bg-white dark:focus-within:bg-gray-800 transition-all w-80">
+                        <div className="hidden xl:flex items-center gap-4 px-5 py-2 bg-slate-50 dark:bg-white/5 rounded-lg border border-transparent focus-within:border-indigo-500/30 focus-within:bg-white dark:focus-within:bg-gray-800 transition-all w-72">
                             <Search size={18} className="text-slate-300 transition-colors" />
                             <input
                                 type="text"
                                 placeholder="Search records..."
-                                className="bg-transparent border-none outline-none text-xs font-bold text-gray-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-gray-600 w-full"
+                                className="bg-transparent border-none outline-none text-[10px] font-bold text-gray-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-gray-600 w-full"
                             />
                         </div>
                     </div>
@@ -214,7 +212,7 @@ const AdminLayout = () => {
                 </header>
 
                 {/* Scrollable Canvas */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-8 bg-[#FDFDFD] dark:bg-[#0B0F1A]">
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-5 lg:p-6 bg-[#FDFDFD] dark:bg-[#0B0F1A]">
                     <div className="max-w-[1600px] mx-auto">
                         <Outlet />
                     </div>

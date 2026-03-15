@@ -148,7 +148,7 @@ const Categories = () => {
     return (
         <div className="space-y-12 pb-20 font-sans">
             {/* Action Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#111827] p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-[#111827] p-4 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="space-y-2 relative z-10">
@@ -196,7 +196,7 @@ const Categories = () => {
                             whileHover={{ y: -8 }}
                             className="bg-white dark:bg-[#111827] rounded-2xl border border-gray-100 dark:border-white/5 shadow-premium hover:shadow-2xl transition-all group overflow-hidden"
                         >
-                            <div className="relative h-36 overflow-hidden">
+                            <div className="relative h-28 overflow-hidden">
                                 {cat.image_url ? (
                                     <img src={cat.image_url} alt={cat.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                                 ) : (

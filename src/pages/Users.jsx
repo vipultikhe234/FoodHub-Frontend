@@ -51,7 +51,7 @@ const Users = () => {
     return (
         <div className="space-y-12 pb-20 font-sans">
             {/* Header / Action Bar */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white dark:bg-[#111827] p-6 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white dark:bg-[#111827] p-4 rounded-xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="space-y-2 relative z-10 text-center md:text-left">
@@ -101,9 +101,9 @@ const Users = () => {
                             ) : (
                                 filtered.map((user) => (
                                     <tr key={user.id} className="group hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors">
-                                        <td className="px-12 py-2.5">
+                                        <td className="px-12 py-1.5">
                                             <div className="flex items-center gap-6">
-                                                <div className="w-10 h-10 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center shadow-premium border border-slate-100 dark:border-white/5 font-bold text-base font-['Outfit']  text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                                                <div className="w-8 h-8 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center shadow-premium border border-slate-100 dark:border-white/5 font-bold text-sm font-['Outfit']  text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                                                     {user.name?.[0]?.toUpperCase() || '?'}
                                                 </div>
                                                 <div className="min-w-0">
@@ -114,13 +114,13 @@ const Users = () => {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="py-2.5 px-6">
-                                            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-slate-50 dark:bg-white/5 rounded-2xl text-[10px] font-bold uppercase text-slate-400 dark:text-gray-300 border border-slate-100 dark:border-white/5 ">
+                                        <td className="py-1.5 px-6">
+                                            <div className="inline-flex items-center gap-2.5 px-5 py-1.5 bg-slate-50 dark:bg-white/5 rounded-2xl text-[10px] font-bold uppercase text-slate-400 dark:text-gray-300 border border-slate-100 dark:border-white/5 ">
                                                 <Phone size={12} className="opacity-40" />
                                                 {user.phone || 'Standard Null'}
                                             </div>
                                         </td>
-                                        <td className="py-2.5 px-6">
+                                        <td className="py-1.5 px-6">
                                             <div className="flex items-center gap-3 group/loc">
                                                 <div className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/5 flex items-center justify-center text-slate-300 group-hover/loc:bg-indigo-600 group-hover/loc:text-white transition-all">
                                                     <MapPin size={14} />
@@ -128,7 +128,7 @@ const Users = () => {
                                                 <p className="text-[10px] font-bold text-slate-400 dark:text-gray-400 uppercase tracking-widest max-w-[280px] truncate  leading-none">{user.address || 'Address not listed'}</p>
                                             </div>
                                         </td>
-                                        <td className="py-2.5 px-12 text-right">
+                                        <td className="py-1.5 px-12 text-right">
                                             <div className="flex flex-col items-end">
                                                 <div className="flex items-center gap-2">
                                                     <Calendar size={12} className="text-indigo-600 opacity-60" />
