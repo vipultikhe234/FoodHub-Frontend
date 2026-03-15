@@ -169,21 +169,21 @@ const Products = () => {
     if (loading) return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
             <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em] animate-pulse">Syncing Inventory...</p>
+            <p className="text-[10px] font-bold text-slate-300 uppercase tracking-widest animate-pulse">Syncing Inventory...</p>
         </div>
     );
 
     return (
         <div className="space-y-12 pb-20 font-sans">
             {/* Action Bar */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 bg-white dark:bg-[#111827] p-10 rounded-[48px] shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 bg-white dark:bg-[#111827] p-10 rounded-2xl shadow-premium border border-gray-100 dark:border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="space-y-2 relative z-10">
-                    <h1 className="text-4xl font-[900] text-gray-900 dark:text-white uppercase tracking-tighter italic font-['Outfit'] leading-none">Products</h1>
-                    <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 rounded-full bg-indigo-600 shadow-[0_0_8px_#4f46e5]"></div>
-                        <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest italic leading-none">{products.length} Items Total</p>
+                    <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">Products</h1>
+                    <div className="flex items-center justify-center md:justify-start gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-600 shadow-[0_0_8px_#4f46e5]"></div>
+                        <p className="text-xs font-semibold text-slate-400 dark:text-gray-500 uppercase tracking-widest">{products.length} Inventory Nodes</p>
                     </div>
                 </div>
 
@@ -197,7 +197,7 @@ const Products = () => {
                             placeholder="Search..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-slate-50 dark:bg-white/5 border border-transparent focus:border-indigo-600/20 py-4 pl-14 pr-6 rounded-[24px] text-xs font-bold text-gray-900 dark:text-white outline-none focus:ring-4 focus:ring-indigo-600/5 transition-all shadow-inner"
+                            className="w-full bg-slate-50 dark:bg-white/5 border border-transparent focus:border-indigo-600/20 py-4 pl-14 pr-6 rounded-xl text-xs font-bold text-gray-900 dark:text-white outline-none focus:ring-4 focus:ring-indigo-600/5 transition-all shadow-inner"
                         />
                     </div>
                     <motion.button
@@ -207,7 +207,7 @@ const Products = () => {
                             setNewProduct(initialProductState);
                             setShowModal(true);
                         }}
-                        className="w-full sm:w-auto bg-indigo-600 text-white px-10 py-4 rounded-[24px] font-black shadow-2xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 text-[10px] uppercase tracking-[0.2em] italic"
+                        className="w-full sm:w-auto bg-indigo-600 text-white px-8 lg:px-10 py-4 rounded-xl font-bold shadow-2xl shadow-indigo-600/20 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 text-xs uppercase tracking-widest"
                     >
                         <Plus size={18} strokeWidth={3} /> Add Product
                     </motion.button>
@@ -218,7 +218,7 @@ const Products = () => {
             <div className="flex items-center gap-3 overflow-x-auto pb-4 custom-scrollbar">
                 <button
                     onClick={() => setSelectedCategory('all')}
-                    className={`px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shrink-0 border-2 ${selectedCategory === 'all'
+                    className={`px-8 py-3.5 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all shrink-0 border-2 ${selectedCategory === 'all'
                         ? 'bg-slate-900 dark:bg-indigo-600 text-white border-transparent shadow-xl'
                         : 'bg-white dark:bg-gray-800 text-slate-400 border-gray-100 dark:border-white/5 hover:border-indigo-600/30'
                         }`}
@@ -229,7 +229,7 @@ const Products = () => {
                     <button
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
-                        className={`px-8 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shrink-0 border-2 ${selectedCategory === cat.id
+                        className={`px-8 py-3.5 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all shrink-0 border-2 ${selectedCategory === cat.id
                             ? 'bg-slate-900 dark:bg-indigo-600 text-white border-transparent shadow-xl'
                             : 'bg-white dark:bg-gray-800 text-slate-400 border-gray-100 dark:border-white/5 hover:border-indigo-600/30'
                             }`}
@@ -240,11 +240,11 @@ const Products = () => {
             </div>
 
             {/* Product Table Card */}
-            <div className="bg-white dark:bg-[#111827] rounded-[56px] shadow-premium border border-gray-100 dark:border-white/5 overflow-hidden">
+            <div className="bg-white dark:bg-[#111827] rounded-2xl shadow-premium border border-gray-100 dark:border-white/5 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full text-left">
                         <thead>
-                            <tr className="bg-slate-50/50 dark:bg-white/[0.02] text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] italic">
+                            <tr className="bg-slate-50/50 dark:bg-white/[0.02] text-[11px] font-bold text-slate-400 uppercase tracking-widest ">
                                 <th className="px-12 py-8">Product Name</th>
                                 <th className="py-8 px-6">Category</th>
                                 <th className="py-8 px-6">Valuation</th>
@@ -259,7 +259,7 @@ const Products = () => {
                                     <td colSpan="6" className="py-32 text-center text-slate-300">
                                         <div className="flex flex-col items-center justify-center opacity-30">
                                             <SearchX size={64} strokeWidth={1} />
-                                            <p className="text-[10px] font-black uppercase tracking-[0.4em] mt-6">Nothing found in inventory</p>
+                                            <p className="text-[10px] font-bold uppercase tracking-widest mt-6">Nothing found in inventory</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -268,7 +268,7 @@ const Products = () => {
                                     <tr key={prod.id} className="group hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors">
                                         <td className="px-12 py-7">
                                             <div className="flex items-center gap-6">
-                                                <div className="w-20 h-20 bg-slate-50 dark:bg-gray-900 rounded-[28px] overflow-hidden shrink-0 border border-slate-100 dark:border-white/5 shadow-inner relative group-hover:scale-105 transition-all duration-500">
+                                                <div className="w-20 h-20 bg-slate-50 dark:bg-gray-900 rounded-xl overflow-hidden shrink-0 border border-slate-100 dark:border-white/5 shadow-inner relative group-hover:scale-105 transition-all duration-500">
                                                     {prod.image_url ? (
                                                         <img src={prod.image_url} alt={prod.name} className="w-full h-full object-cover" />
                                                     ) : (
@@ -276,27 +276,27 @@ const Products = () => {
                                                     )}
                                                 </div>
                                                 <div className="min-w-0 pr-4">
-                                                    <p className="font-[900] text-gray-900 dark:text-white uppercase tracking-tighter text-xl leading-none mb-2 font-['Outfit'] italic">{prod.name}</p>
-                                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest truncate max-w-[240px] italic">{prod.description || 'No description provided'}</p>
+                                                    <p className="font-bold text-gray-900 dark:text-white uppercase tracking-tighter text-xl leading-none mb-2 font-['Outfit'] ">{prod.name}</p>
+                                                    <p className="text-xs text-slate-400 font-medium uppercase tracking-widest truncate max-w-[240px] ">{prod.description || 'No description provided'}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="py-7 px-6">
-                                            <div className="inline-flex px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-2xl text-[9px] font-black uppercase text-indigo-600 dark:text-indigo-400 border border-slate-100 dark:border-white/5 italic">
+                                            <div className="inline-flex px-4 py-2 bg-slate-50 dark:bg-white/5 rounded-2xl text-[9px] font-bold uppercase text-indigo-600 dark:text-indigo-400 border border-slate-100 dark:border-white/5 ">
                                                 {prod.category?.name || 'Standard'}
                                             </div>
                                         </td>
                                         <td className="py-7 px-6">
                                             <div className="flex flex-col">
                                                 <div className="flex items-end gap-1">
-                                                    <span className="text-xs font-black text-slate-300 mb-1">₹</span>
-                                                    <span className="font-[900] text-gray-900 dark:text-white tracking-tighter text-3xl font-['Outfit'] italic">{parseFloat(prod.price).toFixed(0)}</span>
+                                                    <span className="text-xs font-bold text-slate-300 mb-1">₹</span>
+                                                    <span className="font-bold text-gray-900 dark:text-white tracking-tighter text-3xl font-['Outfit'] ">{parseFloat(prod.price).toFixed(0)}</span>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="py-7 px-6">
                                             <div className="flex flex-col items-center gap-3">
-                                                <span className={`font-[900] text-sm uppercase tracking-tighter font-['Outfit'] italic ${prod.stock < 10 ? 'text-rose-500' : 'text-slate-900 dark:text-white'}`}>
+                                                <span className={`font-bold text-sm uppercase tracking-tighter font-['Outfit']  ${prod.stock < 10 ? 'text-rose-500' : 'text-slate-900 dark:text-white'}`}>
                                                     {prod.stock} Units
                                                 </span>
                                                 <div className="w-20 h-1.5 bg-slate-50 dark:bg-white/10 rounded-full overflow-hidden border border-slate-100 dark:border-white/5">
@@ -309,7 +309,7 @@ const Products = () => {
                                             </div>
                                         </td>
                                         <td className="py-7 px-6">
-                                            <div className={`inline-flex items-center gap-2.5 px-5 py-2 rounded-2xl text-[9px] font-black uppercase tracking-widest shadow-sm ${prod.is_available ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400'
+                                            <div className={`inline-flex items-center gap-2.5 px-5 py-2 rounded-2xl text-[9px] font-bold uppercase tracking-widest shadow-sm ${prod.is_available ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400'
                                                 }`}>
                                                 <span className={`w-2 h-2 rounded-full ${prod.is_available ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
                                                 {prod.is_available ? 'Online' : 'Offline'}
@@ -349,16 +349,16 @@ const Products = () => {
                             initial={{ opacity: 0, y: 100, scale: 0.9 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 100, scale: 0.9 }}
-                            className="bg-white dark:bg-gray-900 rounded-[56px] w-full max-w-2xl shadow-3xl border border-white/10 relative overflow-hidden flex flex-col max-h-[90vh]"
+                            className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-2xl shadow-3xl border border-white/10 relative overflow-hidden flex flex-col max-h-[90vh]"
                         >
                             <div className="flex justify-between items-center px-10 py-8 border-b border-gray-50 dark:border-white/5 relative z-10 bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl">
                                 <div>
-                                    <h2 className="text-3xl font-[900] text-gray-900 dark:text-white italic tracking-tighter uppercase font-['Outfit'] leading-none mb-1">
+                                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white  tracking-tighter uppercase font-['Outfit'] leading-none mb-1">
                                         {editingId ? 'Edit Product' : 'Add Product'}
                                     </h2>
                                     <div className="flex items-center gap-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-indigo-600"></div>
-                                        <p className="text-[10px] font-black text-slate-400 dark:text-gray-500 uppercase tracking-widest italic leading-none">Inventory Node</p>
+                                        <p className="text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest  leading-none">Inventory Node</p>
                                     </div>
                                 </div>
                                 <button
@@ -373,36 +373,36 @@ const Products = () => {
                                 <form onSubmit={handleSubmit} className="space-y-10">
                                     {/* Visual Representation */}
                                     <div className="space-y-4">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-2 block italic">Product Image</label>
-                                        <div className="relative group overflow-hidden bg-slate-50 dark:bg-gray-800/50 rounded-[44px] h-[280px] border-4 border-dashed border-slate-100 dark:border-white/5 flex flex-col items-center justify-center transition-all hover:border-indigo-600/30 shadow-inner">
+                                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2 block ">Product Image</label>
+                                        <div className="relative group overflow-hidden bg-slate-50 dark:bg-gray-800/50 rounded-2xl h-[280px] border-4 border-dashed border-slate-100 dark:border-white/5 flex flex-col items-center justify-center transition-all hover:border-indigo-600/30 shadow-inner">
                                             {imgLoading ? (
                                                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md z-20">
                                                     <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
                                                     <div className="flex items-center gap-3">
                                                         <Sparkles size={16} className="text-indigo-600 animate-pulse" />
-                                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] animate-pulse italic">AI Imagining...</p>
+                                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest animate-pulse ">AI Imagining...</p>
                                                     </div>
                                                 </div>
                                             ) : newProduct.image ? (
                                                 <div className="w-full h-full relative p-4">
                                                     <img
-                                                        src={newProduct.image.startsWith('http') || newProduct.image.startsWith('data:') ? newProduct.image : `http://localhost:8000/storage/${newProduct.image}`}
-                                                        className="w-full h-full object-cover rounded-[32px] shadow-2xl"
+                                                        src={newProduct.image.startsWith('http') || newProduct.image.startsWith('data:') ? newProduct.image : `${import.meta.env.VITE_API_URL.replace('/api', '')}/storage/${newProduct.image}`}
+                                                        className="w-full h-full object-cover rounded-2xl shadow-2xl"
                                                         alt="preview"
                                                     />
-                                                    <div className="absolute inset-4 rounded-[32px] bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                                    <div className="absolute inset-4 rounded-2xl bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                                                         <div className="flex items-center gap-2 text-white">
                                                             <ImageIcon size={20} />
-                                                            <span className="text-[10px] font-black uppercase tracking-widest leading-none">Choose New Image</span>
+                                                            <span className="text-[10px] font-bold uppercase tracking-widest leading-none">Choose New Image</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             ) : (
                                                 <div className="text-center p-8 flex flex-col items-center gap-6">
-                                                    <div className="w-20 h-20 bg-white dark:bg-gray-900 rounded-[32px] flex items-center justify-center shadow-premium border border-slate-50 dark:border-white/5 opacity-40">
+                                                    <div className="w-20 h-20 bg-white dark:bg-gray-900 rounded-2xl flex items-center justify-center shadow-premium border border-slate-50 dark:border-white/5 opacity-40">
                                                         <ImageIcon size={40} strokeWidth={1.5} className="text-slate-300" />
                                                     </div>
-                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] italic">Drop Image or let AI Generate</p>
+                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ">Drop Image or let AI Generate</p>
                                                 </div>
                                             )}
                                             <input
@@ -414,10 +414,10 @@ const Products = () => {
                                         <div className="flex justify-between items-center px-6">
                                             <div className="flex items-center gap-2 text-slate-300">
                                                 <AlertCircle size={10} />
-                                                <p className="text-[8px] font-black uppercase tracking-widest italic">Optimization Active</p>
+                                                <p className="text-[8px] font-bold uppercase tracking-widest ">Optimization Active</p>
                                             </div>
                                             {newProduct.name.trim() && !imgLoading && (
-                                                <button type="button" onClick={handleRetryImage} className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest flex items-center gap-2 bg-indigo-50 dark:bg-indigo-600/10 px-6 py-2.5 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
+                                                <button type="button" onClick={handleRetryImage} className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest flex items-center gap-2 bg-indigo-50 dark:bg-indigo-600/10 px-6 py-2.5 rounded-2xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm">
                                                     <Sparkles size={14} strokeWidth={2.5} /> Regenerate Image
                                                 </button>
                                             )}
@@ -427,19 +427,19 @@ const Products = () => {
                                     {/* Data Blocks */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                         <div className="space-y-4">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-2 block italic">Product Name</label>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2 block ">Product Name</label>
                                             <input
                                                 type="text" placeholder="e.g. Smash Burger" required
-                                                className="w-full h-16 bg-slate-50 dark:bg-white/5 px-8 rounded-[24px] focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-black text-gray-900 dark:text-white text-lg font-['Outfit'] italic shadow-inner border border-transparent focus:border-indigo-600/20"
+                                                className="w-full h-16 bg-slate-50 dark:bg-white/5 px-8 rounded-xl focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-lg font-['Outfit']  shadow-inner border border-transparent focus:border-indigo-600/20"
                                                 value={newProduct.name} onChange={handleNameChange}
                                             />
                                         </div>
 
                                         <div className="space-y-4">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-2 block italic">Product Category</label>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2 block ">Product Category</label>
                                             <div className="relative">
                                                 <select
-                                                    className="w-full h-16 bg-slate-50 dark:bg-white/5 px-8 rounded-[24px] focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-black text-gray-900 dark:text-white text-sm uppercase tracking-widest appearance-none cursor-pointer shadow-inner border border-transparent focus:border-indigo-600/20"
+                                                    className="w-full h-16 bg-slate-50 dark:bg-white/5 px-8 rounded-xl focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-sm uppercase tracking-widest appearance-none cursor-pointer shadow-inner border border-transparent focus:border-indigo-600/20"
                                                     required value={newProduct.category_id} onChange={(e) => setNewProduct({ ...newProduct, category_id: e.target.value })}
                                                 >
                                                     <option value="">Select Category...</option>
@@ -450,20 +450,20 @@ const Products = () => {
                                         </div>
 
                                         <div className="space-y-4">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-2 block italic">Market Price (₹)</label>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2 block ">Market Price (₹)</label>
                                             <input
                                                 type="number" step="0.01" placeholder="99.00" required
-                                                className="w-full h-16 bg-slate-50 dark:bg-white/5 px-8 rounded-[24px] focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-[900] text-indigo-600 dark:text-indigo-400 text-2xl font-['Outfit'] italic shadow-inner border border-transparent focus:border-indigo-600/20"
+                                                className="w-full h-16 bg-slate-50 dark:bg-white/5 px-8 rounded-xl focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-indigo-600 dark:text-indigo-400 text-2xl font-['Outfit']  shadow-inner border border-transparent focus:border-indigo-600/20"
                                                 value={newProduct.price} onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
                                             />
                                         </div>
 
                                         <div className="space-y-4">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] pl-2 block italic">Inventory Stock</label>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2 block ">Inventory Stock</label>
                                             <div className="relative">
                                                 <input
                                                     type="number" placeholder="0" required
-                                                    className="w-full h-16 bg-slate-50 dark:bg-white/5 px-16 rounded-[24px] focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-black text-gray-900 dark:text-white text-lg shadow-inner border border-transparent focus:border-indigo-600/20"
+                                                    className="w-full h-16 bg-slate-50 dark:bg-white/5 px-16 rounded-xl focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-lg shadow-inner border border-transparent focus:border-indigo-600/20"
                                                     value={newProduct.stock} onChange={(e) => setNewProduct({ ...newProduct, stock: parseInt(e.target.value) || 0 })}
                                                 />
                                                 <Box size={20} className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" />
@@ -473,7 +473,7 @@ const Products = () => {
 
                                     <div className="space-y-4">
                                         <div className="flex justify-between items-center px-2">
-                                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] block italic">Description</label>
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block ">Description</label>
                                             {newProduct.name.length > 3 && (
                                                 <button
                                                     type="button"
@@ -481,7 +481,7 @@ const Products = () => {
                                                         const desc = await generateAIDescription(newProduct.name);
                                                         setNewProduct(p => ({ ...p, description: desc }));
                                                     }}
-                                                    className="text-[10px] font-black text-indigo-600 flex items-center gap-2 hover:bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100 transition-all font-['Outfit'] italic uppercase"
+                                                    className="text-[10px] font-bold text-indigo-600 flex items-center gap-2 hover:bg-indigo-50 px-4 py-1.5 rounded-full border border-indigo-100 transition-all font-['Outfit']  uppercase"
                                                 >
                                                     <Sparkles size={12} /> Auto-Write
                                                 </button>
@@ -489,7 +489,7 @@ const Products = () => {
                                         </div>
                                         <textarea
                                             placeholder="Tell the story of this dish..."
-                                            className="w-full p-8 bg-slate-50 dark:bg-white/5 rounded-[32px] focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-sm h-32 shadow-inner border border-transparent focus:border-indigo-600/20 resize-none leading-relaxed"
+                                            className="w-full p-8 bg-slate-50 dark:bg-white/5 rounded-2xl focus:ring-4 focus:ring-indigo-600/5 transition-all outline-none font-bold text-gray-900 dark:text-white text-sm h-32 shadow-inner border border-transparent focus:border-indigo-600/20 resize-none leading-relaxed"
                                             value={newProduct.description} onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
                                         />
                                     </div>
@@ -498,7 +498,7 @@ const Products = () => {
                                         <button
                                             type="button"
                                             onClick={() => setNewProduct({ ...newProduct, is_available: !newProduct.is_available })}
-                                            className={`flex-1 h-18 rounded-[24px] font-black text-[11px] uppercase tracking-[0.2em] italic transition-all flex items-center justify-center gap-4 ${newProduct.is_available ? 'bg-emerald-50 text-emerald-600 shadow-emerald-600/10 border border-emerald-100' : 'bg-rose-50 text-rose-500 shadow-rose-500/10 border border-rose-100'
+                                            className={`flex-1 h-18 rounded-xl font-bold text-[11px] uppercase tracking-[0.2em]  transition-all flex items-center justify-center gap-4 ${newProduct.is_available ? 'bg-emerald-50 text-emerald-600 shadow-emerald-600/10 border border-emerald-100' : 'bg-rose-50 text-rose-500 shadow-rose-500/10 border border-rose-100'
                                                 }`}
                                         >
                                             <div className={`w-2.5 h-2.5 rounded-full ${newProduct.is_available ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
@@ -509,7 +509,7 @@ const Products = () => {
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
                                             type="submit"
-                                            className="flex-[1.5] h-18 bg-slate-900 dark:bg-indigo-600 text-white rounded-[24px] font-[900] text-[12px] uppercase tracking-[0.4em] shadow-2xl shadow-indigo-600/20 flex items-center justify-center gap-4 italic"
+                                            className="flex-[1.5] h-18 bg-slate-900 dark:bg-indigo-600 text-white rounded-xl font-bold text-[12px] uppercase tracking-widest shadow-2xl shadow-indigo-600/20 flex items-center justify-center gap-4 "
                                         >
                                             <CheckCircle2 size={24} strokeWidth={2.5} /> {editingId ? 'Update Item' : 'Publish Item'}
                                         </motion.button>
