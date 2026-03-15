@@ -14,7 +14,10 @@ import {
     Search,
     ShieldCheck,
     Menu,
-    X as CloseIcon
+    X as CloseIcon,
+    Moon,
+    Sun,
+    Command
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -23,6 +26,7 @@ const AdminLayout = () => {
     const location = useLocation();
     const [user, setUser] = useState(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
@@ -32,7 +36,22 @@ const AdminLayout = () => {
         }
         const storedUser = localStorage.getItem('user');
         if (storedUser) setUser(JSON.parse(storedUser));
+
+        // Sync dark mode state with document
+        if (document.documentElement.classList.contains('dark')) {
+            setIsDarkMode(true);
+        }
     }, [navigate]);
+
+    const toggleDarkMode = () => {
+        const newMode = !isDarkMode;
+        setIsDarkMode(newMode);
+        if (newMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    };
 
     // Close sidebar on mobile when route changes
     useEffect(() => {
@@ -62,10 +81,8 @@ const AdminLayout = () => {
         { to: '/users', label: 'Users', icon: UsersIcon },
     ];
 
-    const currentPathLabel = navLinks.find(l => l.to === location.pathname)?.label || 'Admin';
-
     return (
-        <div className="flex h-screen bg-[#FDFDFD] dark:bg-[#0B0F1A] overflow-hidden font-sans selection:bg-indigo-100 selection:text-indigo-900">
+        <div className="flex h-screen bg-zinc-50 dark:bg-zinc-950 overflow-hidden font-sans selection:bg-emerald-100 selection:text-emerald-900">
             {/* Sidebar Overlay for Mobile */}
             <AnimatePresence>
                 {isSidebarOpen && (
@@ -74,146 +91,135 @@ const AdminLayout = () => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setIsSidebarOpen(false)}
-                        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] lg:hidden"
+                        className="fixed inset-0 bg-zinc-950/40 backdrop-blur-sm z-[60] lg:hidden"
                     />
                 )}
             </AnimatePresence>
 
-            {/* Premium Sidebar */}
+            {/* Side Navigation */}
             <motion.aside
                 initial={false}
                 animate={{
                     x: isSidebarOpen ? 0 : -300,
-                    width: isSidebarOpen ? 288 : 0,
+                    width: isSidebarOpen ? 280 : 0,
                     opacity: isSidebarOpen ? 1 : 0
                 }}
-                className={`fixed lg:relative h-full bg-white dark:bg-[#111827] flex flex-col border-r border-gray-100 dark:border-white/5 shrink-0 z-[70] overflow-hidden lg:translate-x-0 ${isSidebarOpen ? 'w-64' : 'w-0'}`}
+                className={`fixed lg:relative h-full bg-white dark:bg-zinc-900 flex flex-col border-r border-zinc-200 dark:border-zinc-800 shrink-0 z-[70] overflow-hidden lg:translate-x-0 ${isSidebarOpen ? 'w-64' : 'w-0'}`}
             >
                 {/* Brand Identity */}
-                <div className="px-5 py-5 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-xl shadow-indigo-600/20 relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                            <Soup className="text-white relative z-10" size={24} strokeWidth={2.5} />
+                <div className="px-6 py-6 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                            <Command className="text-white" size={18} strokeWidth={2.5} />
                         </div>
                         <div>
-                            <h1 className="text-base font-bold text-gray-900 dark:text-white uppercase tracking-tight font-['Outfit'] leading-none">FoodHub</h1>
-                            <p className="text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest leading-none">Enterprise Dashboard</p>
+                            <h1 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-tight leading-none">FoodHub</h1>
+                            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-1">Admin Node</p>
                         </div>
                     </div>
-                    <button
-                        onClick={() => setIsSidebarOpen(false)}
-                        className="lg:hidden p-2 text-slate-400 hover:text-indigo-600 transition-colors"
-                    >
-                        <CloseIcon size={20} />
+                    <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden p-2 text-zinc-400">
+                        <CloseIcon size={18} />
                     </button>
                 </div>
 
                 {/* Navigation Menu */}
-                <nav className="flex-1 px-4 space-y-1 overflow-y-auto custom-scrollbar pt-6">
-                    <p className="px-5 mb-4 text-[10px] font-bold text-slate-400 dark:text-gray-500 uppercase tracking-widest">Main Menu</p>
+                <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto pt-6 custom-scrollbar">
+                    <p className="px-4 mb-4 text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">Global Register</p>
                     {navLinks.map(({ to, label, icon: Icon }) => {
                         const isActive = location.pathname === to || (to !== '/' && location.pathname.startsWith(to));
                         return (
                             <Link
                                 key={to}
                                 to={to}
-                                className={`flex items-center gap-1 py-2 px-5 rounded-xl transition-all duration-200 group relative ${isActive
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'text-slate-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-white/5 hover:text-indigo-600'
+                                className={`flex items-center gap-3 py-2.5 px-4 rounded-xl transition-all duration-200 group ${isActive
+                                    ? 'bg-zinc-900 dark:bg-emerald-500 text-white shadow-lg shadow-zinc-900/10 dark:shadow-emerald-500/10'
+                                    : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white'
                                     }`}
                             >
-                                <Icon size={18} strokeWidth={isActive ? 2.2 : 1.8} className={`transition-transform duration-200 ${isActive ? 'scale-105' : 'group-hover:scale-105'}`} />
-                                <span className={`text-xs font-semibold tracking-tight leading-none ${isActive ? 'text-white' : ''}`}>
-                                    {label}
-                                </span>
+                                <Icon size={18} strokeWidth={isActive ? 2.5 : 2} className={isActive ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white'} />
+                                <span className="text-xs font-bold tracking-tight">{label}</span>
                             </Link>
                         );
                     })}
                 </nav>
 
-                {/* User Context & Actions */}
-                <div className="p-4 mt-auto border-t border-gray-100 dark:border-white/5 bg-slate-50/30 dark:bg-white/[0.01]">
+                {/* User Context */}
+                <div className="p-4 mt-auto border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50">
                     {user && (
-                        <div className="mb-4 flex items-center gap-3">
-                            <div className="w-10 h-10 bg-white dark:bg-gray-800 rounded-xl flex items-center justify-center shadow-sm relative border border-gray-100 dark:border-white/5">
-                                <span className="font-bold text-indigo-600 dark:text-indigo-400 font-['Outfit'] text-sm">{user.name?.[0]?.toUpperCase()}</span>
-                                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white dark:border-gray-900 rounded-full"></div>
+                        <div className="mb-4 flex items-center gap-3 px-2">
+                            <div className="w-9 h-9 bg-white dark:bg-zinc-800 rounded-lg flex items-center justify-center border border-zinc-200 dark:border-zinc-700 shadow-sm relative shrink-0">
+                                <span className="font-bold text-zinc-900 dark:text-white text-xs">{user.name?.[0]?.toUpperCase()}</span>
+                                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-zinc-900 rounded-full"></div>
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="font-bold text-gray-900 dark:text-white text-[10px] truncate mb-0.5">{user.name}</p>
-                                <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider leading-none">{user.role || 'Administrator'}</p>
+                                <p className="font-bold text-zinc-900 dark:text-white text-[10px] truncate">{user.name}</p>
+                                <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest leading-none mt-1">Super Admin</p>
                             </div>
                         </div>
                     )}
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-rose-500 bg-rose-50 dark:bg-rose-500/10 hover:bg-rose-500 hover:text-white transition-all font-bold text-[10px] tracking-tight border border-rose-100 dark:border-rose-500/20"
+                        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all font-bold text-[10px] tracking-widest uppercase border border-transparent hover:border-red-100 dark:hover:border-red-900/50"
                     >
-                        <LogOut size={16} strokeWidth={2} /> Logout
+                        <LogOut size={16} /> Logout
                     </button>
                 </div>
             </motion.aside>
 
-            {/* Stage Frame */}
+            {/* Main Stage */}
             <main className="flex-1 flex flex-col overflow-hidden relative">
-                {/* Global Command Center Header */}
-                <header className="h-[56px] px-6 lg:px-8 flex justify-between items-center bg-white/80 dark:bg-[#0B0F1A]/80 backdrop-blur-2xl border-b border-gray-100 dark:border-white/5 sticky top-0 z-40">
-                    <div className="flex items-center gap-4 lg:gap-8">
+                {/* Header */}
+                <header className="h-[64px] px-6 lg:px-8 flex justify-between items-center bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl border-b border-zinc-200 dark:border-zinc-800 sticky top-0 z-40">
+                    <div className="flex items-center gap-6">
                         <button
                             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                            className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl text-slate-500 hover:text-indigo-600 transition-all border border-transparent hover:border-gray-100 lg:hidden"
+                            className="p-2.5 bg-zinc-50 dark:bg-zinc-900 rounded-lg text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-all border border-zinc-200 dark:border-zinc-800 lg:hidden"
                         >
                             <Menu size={20} />
                         </button>
 
-                        <div className="flex flex-col">
-                            <h2 className="text-base lg:text-lg font-bold text-gray-900 dark:text-white tracking-tight leading-none font-['Outfit']">
-                                {currentPathLabel}
-                            </h2>
-                            <div className="flex items-center gap-2 mt-1.5 lg:mt-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Live Status</span>
-                            </div>
+                        <div className="hidden lg:flex items-center gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
+                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">Node Sync Active</span>
                         </div>
 
-                        {/* Visual Separator */}
-                        <div className="hidden lg:block h-10 w-px bg-slate-100 dark:bg-white/10 mx-2"></div>
-
-                        {/* Search Bar */}
-                        <div className="hidden xl:flex items-center gap-4 px-5 py-2 bg-slate-50 dark:bg-white/5 rounded-lg border border-transparent focus-within:border-indigo-500/30 focus-within:bg-white dark:focus-within:bg-gray-800 transition-all w-72">
-                            <Search size={18} className="text-slate-300 transition-colors" />
+                        {/* Search Input */}
+                        <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 w-64 focus-within:ring-2 focus-within:ring-emerald-500/20 focus-within:border-emerald-500/50 transition-all">
+                            <Search size={16} className="text-zinc-400" />
                             <input
                                 type="text"
-                                placeholder="Search records..."
-                                className="bg-transparent border-none outline-none text-[10px] font-bold text-gray-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-gray-600 w-full"
+                                placeholder="Universal search..."
+                                className="bg-transparent border-none outline-none text-[10px] font-bold text-zinc-900 dark:text-white w-full uppercase tracking-wider"
                             />
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-4 lg:gap-8">
-                        <div className="flex items-center gap-2 lg:gap-4">
-                            <motion.button whileTap={{ scale: 0.9 }} className="w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-white dark:hover:bg-white/10 rounded-xl transition-all relative shadow-sm border border-transparent hover:border-gray-100">
-                                <Bell size={18} lg={20} strokeWidth={2.5} />
-                                <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white dark:border-[#0B0F1A]"></span>
-                            </motion.button>
-                            <motion.button whileTap={{ scale: 0.9 }} className="hidden sm:flex w-10 h-10 lg:w-12 lg:h-12 items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-white dark:hover:bg-white/10 rounded-xl transition-all shadow-sm border border-transparent hover:border-gray-100">
-                                <Settings size={18} lg={20} strokeWidth={2.5} />
-                            </motion.button>
+                    <div className="flex items-center gap-4 lg:gap-6">
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={toggleDarkMode}
+                                className="p-2.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-lg transition-all"
+                            >
+                                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                            </button>
+                            <button className="p-2.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-lg transition-all relative">
+                                <Bell size={20} />
+                                <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-zinc-950"></span>
+                            </button>
                         </div>
 
-                        <div className="hidden sm:block h-10 w-px bg-slate-100 dark:bg-white/10"></div>
+                        <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800 mx-2"></div>
 
-                        <div className="hidden md:flex bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-4 lg:px-6 py-2.5 lg:py-3 rounded-xl items-center gap-3 shadow-sm">
-                            <ShieldCheck size={16} strokeWidth={2.5} />
-                            <span className="text-[9px] font-bold uppercase tracking-[0.2em]">Secure Portal</span>
+                        <div className="hidden sm:flex bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 px-4 py-1.5 rounded-lg items-center gap-2 border border-emerald-100 dark:border-emerald-950">
+                            <ShieldCheck size={14} strokeWidth={2.5} />
+                            <span className="text-[9px] font-bold uppercase tracking-widest">Certified</span>
                         </div>
                     </div>
                 </header>
 
-                {/* Scrollable Canvas */}
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-5 lg:p-6 bg-[#FDFDFD] dark:bg-[#0B0F1A]">
-                    <div className="max-w-[1600px] mx-auto">
+                {/* Viewport */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar bg-zinc-50 dark:bg-zinc-950">
+                    <div className="max-w-[1600px] mx-auto p-6 lg:p-8">
                         <Outlet />
                     </div>
                 </div>
