@@ -14,20 +14,28 @@ import {
     AlertCircle,
     Activity,
     CheckCircle2,
-    ChevronRight
+    ChevronRight,
+    Store,
+    Bike
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const STATUS_CONFIG = {
-    pending: { text: 'text-amber-700', bg: 'bg-amber-100', icon: Clock },
-    preparing: { text: 'text-blue-700', bg: 'bg-blue-100', icon: Activity },
-    dispatched: { text: 'text-violet-700', bg: 'bg-violet-100', icon: TrendingUp },
+    placed: { text: 'text-zinc-700', bg: 'bg-zinc-100', icon: Package },
+    accepted: { text: 'text-blue-700', bg: 'bg-blue-100', icon: CheckCircle2 },
+    preparing: { text: 'text-amber-700', bg: 'bg-amber-100', icon: Activity },
+    ready: { text: 'text-emerald-700', bg: 'bg-emerald-100', icon: ShoppingBag },
+    out_for_delivery: { text: 'text-violet-700', bg: 'bg-violet-100', icon: Bike },
     delivered: { text: 'text-emerald-700', bg: 'bg-emerald-100', icon: CheckCircle2 },
+    picked_up: { text: 'text-teal-700', bg: 'bg-teal-100', icon: Store },
     cancelled: { text: 'text-red-700', bg: 'bg-red-100', icon: AlertCircle },
 };
 
+import { useMerchant } from '../contexts/MerchantContext';
+
 const Dashboard = () => {
-    const { orders, stats, loading, error } = useDashboardStats();
+    const { selectedMerchantId } = useMerchant();
+    const { orders, stats, loading, error } = useDashboardStats(selectedMerchantId);
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -66,15 +74,25 @@ const Dashboard = () => {
     );
 
     const totalOrders = stats?.total_orders ?? orders.length;
-    const totalRevenue = stats?.total_revenue ?? orders.reduce((s, o) => s + parseFloat(o.total_price || 0), 0);
-    const totalUsers = stats?.total_users ?? '0';
-    const totalProducts = stats?.total_products ?? '0';
+    const totalRevenue = stats?.total_revenue ?? 0;
+    const totalUsers = stats?.total_users ?? 0;
+    const totalProducts = stats?.total_products ?? 0;
+    const totalMerchants = stats?.total_Merchants ?? 0;
     const recentCount = stats?.recent_orders_count ?? 0;
 
-    const statusBreakdown = ['pending', 'preparing', 'dispatched', 'delivered', 'cancelled'].map(s => ({
+    const statusBreakdown = ['placed', 'accepted', 'preparing', 'ready', 'out_for_delivery', 'delivered', 'picked_up', 'cancelled'].map(s => ({
         status: s,
         count: orders.filter(o => o.status === s).length,
     }));
+
+    const statsConfig = [
+        { label: 'Revenue Flow', val: `₹${Number(totalRevenue).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, icon: Wallet, color: 'emerald', sub: '+12.5% Velocity', show: true },
+        { label: 'Rewards Burn', val: `₹${Number(stats?.total_discounts || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, icon: Ticket, color: 'amber', sub: 'Coupon utility', show: stats?.total_discounts !== undefined },
+        { label: 'Order Volume', val: totalOrders, icon: ShoppingBag, color: 'blue', sub: `${recentCount} recent`, show: true },
+        { label: 'Network Users', val: totalUsers, icon: UsersIcon, color: 'purple', sub: 'Total accounts', show: stats?.total_users !== undefined },
+        { label: 'Partner Outlets', val: totalMerchants, icon: Store, color: 'violet', sub: 'Active nodes', show: stats?.total_Merchants !== undefined },
+        { label: 'Inventory Assets', val: totalProducts, icon: Package, color: 'orange', sub: 'Active menu', show: true }
+    ].filter(s => s.show);
 
     return (
         <motion.div
@@ -101,14 +119,8 @@ const Dashboard = () => {
             </div>
 
             {/* Stat Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                {[
-                    { label: 'Revenue Flow', val: `₹${Number(totalRevenue).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, icon: Wallet, color: 'emerald', sub: '+12.5% Velocity' },
-                    { label: 'Rewards Burn', val: `₹${Number(stats?.total_discounts || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, icon: Ticket, color: 'amber', sub: 'Coupon utility' },
-                    { label: 'Order Volume', val: totalOrders, icon: ShoppingBag, color: 'blue', sub: `${recentCount} new today` },
-                    { label: 'Network Users', val: totalUsers, icon: UsersIcon, color: 'purple', sub: 'Total accounts' },
-                    { label: 'Inventory Assets', val: totalProducts, icon: Package, color: 'orange', sub: 'Active menu' }
-                ].map((stat, i) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-6 gap-6">
+                {statsConfig.map((stat, i) => (
                     <motion.div
                         key={i}
                         variants={itemVariants}
@@ -207,3 +219,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
