@@ -32,7 +32,13 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+// Move initialization inside component to prevent top-level module crash if env var is missing
+const getStripe = () => {
+    const key = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+    if (!key) return null;
+    return loadStripe(key);
+};
+const stripePromise = getStripe();
 
 const STATUS_CONFIG = {
     placed: { color: 'text-zinc-600', dot: 'bg-zinc-500', bg: 'bg-zinc-50 dark:bg-zinc-800/50', label: 'Placed' },
