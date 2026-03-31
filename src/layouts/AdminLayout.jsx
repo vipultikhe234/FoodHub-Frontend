@@ -23,7 +23,7 @@ import {
     Utensils,
     Store,
     Bike,
-    Globe,
+    Globe2,
     ChevronDown,
     Package,
     ClipboardList,
@@ -123,7 +123,7 @@ const ADMIN_NAV = [
         label: 'Platform Setup',
         icon: Settings2,
         items: [
-            { to: '/location-master', label: 'Location Master', icon: Globe, badge: 'Setup' },
+            { to: '/location-master', label: 'Location Master', icon: Globe2, badge: 'Setup' },
             { to: '/merchant-categories', label: 'Business Segments', icon: LayoutGrid, badge: 'Master' },
         ],
     },
