@@ -186,12 +186,7 @@ const Categories = () => {
 
     const filtered = categories.filter(c => c.name?.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    if (loading && categories.length === 0) return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-            <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
-            <p className="text-zinc-500 font-bold text-xs uppercase tracking-widest leading-none">Loading Categories...</p>
-        </div>
-    );
+    if (loading && categories.length === 0) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-6 pb-20 font-sans">

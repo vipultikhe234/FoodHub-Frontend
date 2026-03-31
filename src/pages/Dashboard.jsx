@@ -50,12 +50,7 @@ const Dashboard = () => {
         visible: { y: 0, opacity: 1 }
     };
 
-    if (loading) return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-            <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
-            <p className="text-zinc-500 font-medium text-sm animate-pulse tracking-tight">Synchronizing node data...</p>
-        </div>
-    );
+    if (loading) return <ApnaCartLoader />;
 
     if (error) return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-12 bg-white dark:bg-zinc-900 rounded-2xl border border-red-100 dark:border-red-900/20 max-w-xl mx-auto shadow-sm">

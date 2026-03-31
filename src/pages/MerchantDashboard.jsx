@@ -89,12 +89,7 @@ const MerchantDashboard = () => {
         }
     };
 
-    if (loading) return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-            <Loader2 className="w-10 h-10 text-zinc-900 dark:text-white animate-spin" />
-            <p className="text-zinc-500 font-medium text-sm animate-pulse tracking-tight">Loading Kitchen Intel...</p>
-        </div>
-    );
+    if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-8 pb-20 font-sans">

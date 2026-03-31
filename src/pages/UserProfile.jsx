@@ -72,13 +72,7 @@ const UserProfile = () => {
         }
     };
 
-    if (loading) {
-        return (
-            <div className="flex h-[60vh] items-center justify-center">
-                <Loader2 className="w-8 h-8 text-emerald-500 animate-spin" />
-            </div>
-        );
-    }
+    if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20 font-sans">

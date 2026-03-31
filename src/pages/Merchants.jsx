@@ -213,12 +213,7 @@ const Merchants = () => {
         (r?.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (loading) return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-            <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
-            <p className="text-zinc-500 font-bold text-xs uppercase tracking-widest">Loading Merchants...</p>
-        </div>
-    );
+    if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500 font-sans pb-20">

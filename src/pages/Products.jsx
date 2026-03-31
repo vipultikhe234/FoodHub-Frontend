@@ -237,12 +237,7 @@ const Products = () => {
         return matchCat && matchQuery;
     });
 
-    if (loading && products.length === 0) return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-            <Loader2 className="w-10 h-10 text-emerald-500 animate-spin" />
-            <p className="text-zinc-500 font-bold text-xs uppercase tracking-widest leading-none">Fetching Products...</p>
-        </div>
-    );
+    if (loading && products.length === 0) return <ApnaCartLoader />;
 
     const handleBulkUpload = async (e) => {
         const file = e.target.files[0];
