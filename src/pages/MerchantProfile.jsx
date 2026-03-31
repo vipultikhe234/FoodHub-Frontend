@@ -1,7 +1,7 @@
 import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Store, MapPin, Clock, Globe, Info, CheckCircle, Save, Loader2, Tag, Image as ImageIcon } from 'lucide-react';
+import { Store, MapPin, Clock, Globe2, Info, CheckCircle, Save, Loader2, Tag, Image as ImageIcon } from 'lucide-react';
 import { MerchantService, locationService } from '../services/api';
 import { toast } from 'react-hot-toast';
 
@@ -183,7 +183,7 @@ const MerchantProfile = () => {
                             {/* Location */}
                             <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
                                 <div className="flex items-center gap-3 mb-2">
-                                     <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg"><Globe size={18} className="text-zinc-500" /></div>
+                                     <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg"><Globe2 size={18} className="text-zinc-500" /></div>
                                      <div>
                                          <h2 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider">Service Location <span className="text-red-500">*</span></h2>
                                          <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mt-0.5">Required — customers discover your outlet by city</p>

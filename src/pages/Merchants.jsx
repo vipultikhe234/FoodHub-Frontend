@@ -13,7 +13,7 @@ import {
     XCircle,
     ArrowRight,
     Edit3,
-    Globe,
+    Globe2,
     RefreshCw,
     Eye,
     Mail,

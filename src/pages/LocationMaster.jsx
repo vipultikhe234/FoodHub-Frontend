@@ -3,7 +3,7 @@ import { locationService } from '../services/api';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Loader2, ChevronRight, X, Check, SearchX, RefreshCw
+    Loader2, ChevronRight, X, Check, SearchX, RefreshCw, Globe2, Map, Building2
 } from 'lucide-react';
 import ApnaCartLoader from '../components/ApnaCartLoader';
 
@@ -129,7 +129,7 @@ const CountriesTab = () => {
                 </button>
             </div>
             {loading ? <ApnaCartLoader centered={true} size={48} /> :
-                items.length === 0 ? <div className="text-center py-20 opacity-30"><Globe size={48} className="mx-auto mb-3 text-zinc-400" /><p className="text-xs font-black uppercase tracking-widest text-zinc-500">No countries yet</p></div> :
+                items.length === 0 ? <div className="text-center py-20 opacity-30"><Globe2 size={48} className="mx-auto mb-3 text-zinc-400" /><p className="text-xs font-black uppercase tracking-widest text-zinc-500">No countries yet</p></div> :
                 <AnimatePresence>{items.map(item => <Row key={item.id} item={item} onEdit={openEdit} onDelete={handleDelete} />)}</AnimatePresence>
             }
             <AnimatePresence>
@@ -376,7 +376,7 @@ const CitiesTab = () => {
 
 // ─── Main Page ─────────────────────────────────────────────────────────────
 const TABS = [
-    { key: 'countries', label: 'Countries', icon: Globe },
+    { key: 'countries', label: 'Countries', icon: Globe2 },
     { key: 'states',    label: 'States',    icon: Map },
     { key: 'cities',    label: 'Cities',    icon: Building2 },
 ];
@@ -402,7 +402,7 @@ const LocationMaster = () => {
                     </button>
                     
                     <div className="h-12 w-12 bg-emerald-500/10 text-emerald-500 rounded-2xl flex items-center justify-center border border-emerald-500/20 shadow-lg shadow-emerald-500/5">
-                        <Globe size={20} strokeWidth={3} />
+                        <Globe2 size={20} strokeWidth={3} />
                     </div>
                 </div>
             </div>
