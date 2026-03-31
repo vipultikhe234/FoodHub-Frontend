@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL;
+// Resilient API URL resolution with secondary fallback
+const API_URL = import.meta.env.VITE_API_URL || 'https://foodhub-backend-2alg.onrender.com/api';
 
 const api = axios.create({
     baseURL: API_URL,
