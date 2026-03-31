@@ -389,7 +389,7 @@ const Products = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                                {filtered.length === 0 ? (
+                                {filteredProducts.length === 0 ? (
                                     <tr>
                                         <td colSpan="7" className="py-32 text-center">
                                             <div className="flex flex-col items-center justify-center opacity-40">
@@ -399,7 +399,7 @@ const Products = () => {
                                         </td>
                                     </tr>
                                 ) : (
-                                    filtered.map((prod) => (
+                                    filteredProducts.map((prod) => (
                                         <tr key={prod.id} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50 transition-colors">
                                             <td className="px-8 py-5">
                                                 <div className="flex items-center gap-6">
