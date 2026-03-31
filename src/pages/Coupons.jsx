@@ -1,6 +1,6 @@
 import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
+import api, { merchantCategoryService } from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import {
@@ -20,8 +20,11 @@ import {
     Activity,
     Edit2,
     Loader2,
-    Clock,
-    Smartphone
+    Smartphone,
+    Search,
+    Archive,
+    ChevronDown,
+    RefreshCw
 } from 'lucide-react';
 
 import { useMerchant } from '../contexts/MerchantContext';
@@ -32,6 +35,11 @@ const Coupons = () => {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [merchantCategories, setMerchantCategories] = useState([]);
+    const [selectedMerchantCategoryId, setSelectedMerchantCategoryId] = useState('');
+    const [user] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
+    const isMerchant = user.role === 'merchant' || user.role === 'Merchant';
 
     const initialFormState = {
         code: '',
@@ -47,6 +55,9 @@ const Coupons = () => {
 
     useEffect(() => {
         fetchCoupons();
+        if (!isMerchant) {
+            merchantCategoryService.adminGetAll().then(res => setMerchantCategories(res.data.data || []));
+        }
     }, [selectedMerchantId]);
 
     const fetchCoupons = async () => {
@@ -103,18 +114,56 @@ const Coupons = () => {
     return (
         <div className="space-y-6 pb-20 font-sans">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Promo Engine</h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm">Configure rewards and discount manifests.</p>
+                    <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Promo Engine</h1>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Configure rewards and discount manifests.</p>
                 </div>
-                <button
-                    onClick={() => { setEditingId(null); setForm(initialFormState); setShowModal(true); }}
-                    className="bg-zinc-900 dark:bg-emerald-500 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 font-bold transition-all shadow-lg shadow-zinc-900/10 dark:shadow-emerald-500/20 text-[10px] uppercase tracking-[0.2em]"
-                >
-                    <Plus className="w-4 h-4" />
-                    Add Coupon
-                </button>
+                
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={fetchCoupons}
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                    >
+                        <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+                    </button>
+                    
+                    <div className="relative group hidden sm:block">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <input 
+                            type="text"
+                            placeholder="SEARCH PROMO CODES..."
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+
+                    {!isMerchant && (
+                        <div className="relative group hidden md:block">
+                            <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                            <select
+                                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
+                                value={selectedMerchantCategoryId}
+                                onChange={(e) => setSelectedMerchantCategoryId(e.target.value)}
+                            >
+                                <option value="">ALL SEGMENTS</option>
+                                {merchantCategories.map(cat => (
+                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                ))}
+                            </select>
+                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={14} />
+                        </div>
+                    )}
+                    
+                    <button 
+                        onClick={() => { setEditingId(null); setForm(initialFormState); setShowModal(true); }}
+                        className="bg-emerald-500 text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                    >
+                        <Plus size={18} strokeWidth={3} />
+                        Add Coupon
+                    </button>
+                </div>
             </div>
 
             {/* Coupons Grid */}
@@ -128,7 +177,24 @@ const Coupons = () => {
                         <Ticket size={48} className="text-zinc-400" />
                         <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No rewards configured</p>
                     </div>
-                ) : coupons.map((coupon) => (
+                ) : coupons.filter(coupon => {
+                    const matchesSearch = 
+                        (coupon.code || '').toLowerCase().includes(searchTerm.toLowerCase());
+                    const matchesMerchantCategory = !selectedMerchantCategoryId || 
+                        coupon.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
+                    return matchesSearch && matchesMerchantCategory;
+                }).length === 0 ? (
+                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
+                        <SearchX size={48} className="text-zinc-400" />
+                        <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No coupons match your filter</p>
+                    </div>
+                ) : coupons.filter(coupon => {
+                    const matchesSearch = 
+                        (coupon.code || '').toLowerCase().includes(searchTerm.toLowerCase());
+                    const matchesMerchantCategory = !selectedMerchantCategoryId || 
+                        coupon.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
+                    return matchesSearch && matchesMerchantCategory;
+                }).map((coupon) => (
                     <motion.div
                         key={coupon.id}
                         whileHover={{ y: -4 }}

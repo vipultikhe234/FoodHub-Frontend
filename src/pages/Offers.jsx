@@ -25,7 +25,11 @@ import {
     Store,
     LayoutGrid,
     Target,
-    Sparkles
+    Sparkles,
+    RefreshCw,
+    Search,
+    Archive,
+    ChevronDown
 } from 'lucide-react';
 
 import { useMerchant } from '../contexts/MerchantContext';
@@ -41,6 +45,7 @@ const Offers = () => {
     const [products, setProducts] = useState([]);
     const [merchants, setMerchants] = useState([]);
     const [generating, setGenerating] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const initialFormState = {
         title: '',
@@ -167,20 +172,41 @@ const Offers = () => {
     return (
         <div className="space-y-6 pb-20 font-sans">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight flex items-center gap-3">
-                        Live Offers <Zap className="text-amber-500 fill-amber-500" size={20} />
+                    <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase flex items-center gap-4">
+                        Live Offers <Zap className="text-amber-500 fill-amber-500" size={24} />
                     </h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm">Real-time marketplace promotions & blitz deals.</p>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Real-time marketplace promotions & blitz deals.</p>
                 </div>
-                <button
-                    onClick={() => { setEditingId(null); setForm(initialFormState); setShowModal(true); }}
-                    className="bg-zinc-900 dark:bg-emerald-500 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 font-bold transition-all shadow-lg shadow-zinc-900/10 dark:shadow-emerald-500/20 text-[10px] uppercase tracking-[0.2em]"
-                >
-                    <Plus className="w-4 h-4" />
-                    New Offer
-                </button>
+                
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={fetchOffers}
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                    >
+                        <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+                    </button>
+                    
+                    <div className="relative group hidden sm:block">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <input 
+                            type="text"
+                            placeholder="SEARCH PROMOTIONS..."
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    
+                    <button 
+                        onClick={() => { setEditingId(null); setForm(initialFormState); setShowModal(true); }}
+                        className="bg-emerald-500 text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                    >
+                        <Plus size={18} strokeWidth={3} />
+                        New Offer
+                    </button>
+                </div>
             </div>
 
             {/* Offers Grid */}
@@ -194,7 +220,10 @@ const Offers = () => {
                         <Zap size={48} className="text-zinc-400" />
                         <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No active promotions</p>
                     </div>
-                ) : offers.map((offer) => (
+                ) : offers.filter(offer => 
+                    offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    (offer.merchant?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
+                ).map((offer) => (
                     <motion.div
                         key={offer.id}
                         whileHover={{ y: -4 }}

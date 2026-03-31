@@ -15,6 +15,8 @@ import {
     Waves
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ApnaCartLoader from '../components/ApnaCartLoader';
+import { toast } from 'react-hot-toast';
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });

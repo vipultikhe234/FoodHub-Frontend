@@ -31,6 +31,7 @@ import {
     Activity,
     Truck,
     Settings2,
+    LayoutGrid,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -123,6 +124,7 @@ const ADMIN_NAV = [
         icon: Settings2,
         items: [
             { to: '/location-master', label: 'Location Master', icon: Globe, badge: 'Setup' },
+            { to: '/merchant-categories', label: 'Business Segments', icon: LayoutGrid, badge: 'Master' },
         ],
     },
     {

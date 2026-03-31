@@ -3,8 +3,7 @@ import { locationService } from '../services/api';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Globe, Map, Building2, Plus, Edit3, Trash2,
-    Loader2, ChevronRight, X, Check, SearchX
+    Loader2, ChevronRight, X, Check, SearchX, RefreshCw
 } from 'lucide-react';
 import ApnaCartLoader from '../components/ApnaCartLoader';
 
@@ -387,10 +386,25 @@ const LocationMaster = () => {
 
     return (
         <div className="space-y-8 pb-20 font-sans">
-            {/* Header */}
-            <div>
-                <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight uppercase leading-none">Location Master</h1>
-                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-2">Manage Countries · States · Cities for merchant onboarding</p>
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div>
+                    <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Location Master</h1>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Manage Countries · States · Cities for merchant onboarding</p>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={() => window.location.reload()}
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                    >
+                        <RefreshCw size={20} />
+                    </button>
+                    
+                    <div className="h-12 w-12 bg-emerald-500/10 text-emerald-500 rounded-2xl flex items-center justify-center border border-emerald-500/20 shadow-lg shadow-emerald-500/5">
+                        <Globe size={20} strokeWidth={3} />
+                    </div>
+                </div>
             </div>
 
             {/* Tabs */}

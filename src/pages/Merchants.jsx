@@ -1,6 +1,6 @@
 import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
-import { MerchantService, locationService } from '../services/api';
+import { MerchantService, locationService, merchantCategoryService } from '../services/api';
 import { toast } from 'react-hot-toast';
 import { 
     Store, 
@@ -26,7 +26,8 @@ import {
     Share2,
     Settings,
     Sparkles,
-    Archive
+    Archive,
+    ChevronDown
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -37,6 +38,7 @@ const Merchants = () => {
     const [merchants, setMerchantsList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategoryId, setSelectedCategoryId] = useState('');
     const [updatingId, setUpdatingId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -56,6 +58,7 @@ const Merchants = () => {
         image: '',
         opening_time: '09:00:00',
         closing_time: '22:00:00',
+        merchant_category_id: '',
         delivery_charge: 0,
         packaging_charge: 0,
         platform_fee: 0,
@@ -73,10 +76,12 @@ const Merchants = () => {
     const [countries, setCountries] = useState([]);
     const [formStates, setFormStates] = useState([]);
     const [formCities, setFormCities] = useState([]);
+    const [merchantCategories, setMerchantCategories] = useState([]);
 
     useEffect(() => {
         fetchMerchants();
         locationService.getCountries().then(r => setCountries(r.data)).catch(() => {});
+        merchantCategoryService.adminGetAll().then(r => setMerchantCategories(r.data.data)).catch(() => {});
     }, []);
 
     const fetchMerchants = async () => {
@@ -123,6 +128,7 @@ const Merchants = () => {
             image: rest.image || '',
             opening_time: rest.opening_time || '09:00:00',
             closing_time: rest.closing_time || '22:00:00',
+            merchant_category_id: rest.merchant_category_id || '',
             delivery_charge: rest.other_charges?.delivery_charge || 0,
             packaging_charge: rest.other_charges?.packaging_charge || 0,
             platform_fee: rest.other_charges?.platform_fee || 0,
@@ -208,11 +214,15 @@ const Merchants = () => {
         setIsViewModalOpen(true);
     };
 
-    const filtered = (merchants || []).filter(r => 
-        (r?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (r?.address || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (r?.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filtered = (merchants || []).filter(r => {
+        const matchesSearch = (r?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            (r?.address || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            (r?.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase());
+        
+        const matchesCategory = !selectedCategoryId || r.merchant_category_id?.toString() === selectedCategoryId.toString();
+        
+        return matchesSearch && matchesCategory;
+    });
 
     // if (loading) return <ApnaCartLoader />;
 
@@ -238,10 +248,25 @@ const Merchants = () => {
                         <input 
                             type="text"
                             placeholder="SEARCH MERCHANTS..."
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-64 transition-all dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
+                    </div>
+
+                    <div className="relative group hidden md:block">
+                        <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <select
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
+                            value={selectedCategoryId}
+                            onChange={(e) => setSelectedCategoryId(e.target.value)}
+                        >
+                            <option value="">ALL CATEGORIES</option>
+                            {merchantCategories.map(cat => (
+                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                            ))}
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={14} />
                     </div>
                     
                     <button 
@@ -266,6 +291,7 @@ const Merchants = () => {
                             <thead>
                                 <tr className="bg-zinc-50/50 dark:bg-zinc-800/60 text-zinc-400 text-[9px] uppercase tracking-[0.2em] font-black border-b border-zinc-100 dark:border-zinc-800">
                                     <th className="px-8 py-5">Merchant / Outlet</th>
+                                    <th className="py-5 px-6">Classification</th>
                                     <th className="py-5 px-6">Status</th>
                                     <th className="py-5 px-6">Location</th>
                                     <th className="py-5 px-6">Owner</th>
@@ -309,6 +335,18 @@ const Merchants = () => {
                                                             </span>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </td>
+
+                                            {/* Classification */}
+                                            <td className="py-5 px-6">
+                                                <div className="flex items-center gap-2">
+                                                    <div className="w-8 h-8 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-emerald-500 transition-colors">
+                                                        <Archive size={14} />
+                                                    </div>
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600 dark:text-zinc-300">
+                                                        {rest.merchant_category?.name || 'Unclassified'}
+                                                    </span>
                                                 </div>
                                             </td>
 
@@ -439,6 +477,20 @@ const Merchants = () => {
                                             <p className="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em]">Merchant Outlet</p>
                                             <div className="space-y-4">
                                                 <input required name="val_rest" type="text" placeholder="Merchant / Outlet Name" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.Merchant_name} onChange={(e) => setFormData({...formData, Merchant_name: e.target.value})} />
+                                                <div className="relative">
+                                                    <select 
+                                                        required 
+                                                        className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[12px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none uppercase tracking-widest"
+                                                        value={formData.merchant_category_id}
+                                                        onChange={(e) => setFormData({...formData, merchant_category_id: e.target.value})}
+                                                    >
+                                                        <option value="">Select Business Classification</option>
+                                                        {merchantCategories.map(cat => (
+                                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                                        ))}
+                                                    </select>
+                                                    <Settings size={16} className="absolute right-6 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                                                </div>
                                                 <input required name="val_addr" type="text" placeholder="Street Address" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.address} onChange={(e) => setFormData({...formData, address: e.target.value})} />
                                                 <div className="flex gap-4">
                                                     <div className="flex-1 relative">

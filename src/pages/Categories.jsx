@@ -1,6 +1,6 @@
 import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect, useRef } from 'react';
-import api, { productService, MerchantService } from '../services/api';
+import api, { productService, MerchantService, merchantCategoryService } from '../services/api';
 import { fetchRealFoodImage } from '../utils/aiHelpers';
 import {
     X,
@@ -17,8 +17,10 @@ import {
     Loader2,
     Filter,
     Store,
+    Archive,
     ChevronDown,
-    ArrowRight
+    ArrowRight,
+    RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
@@ -34,6 +36,8 @@ const Categories = () => {
     const [imgLoading, setImgLoading] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [merchantCategories, setMerchantCategories] = useState([]);
+    const [selectedMerchantCategoryId, setSelectedMerchantCategoryId] = useState('');
     const debounceRef = useRef(null);
 
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
@@ -52,6 +56,9 @@ const Categories = () => {
 
     useEffect(() => { 
         fetchData(); 
+        if (!isMerchant) {
+            merchantCategoryService.adminGetAll().then(res => setMerchantCategories(res.data.data || []));
+        }
     }, [selectedMerchantId]);
 
     const fetchData = async () => {
@@ -185,7 +192,13 @@ const Categories = () => {
         return merchant ? merchant.name : 'Select Merchant';
     };
 
-    const filtered = categories.filter(c => c.name?.toLowerCase().includes(searchQuery.toLowerCase()));
+    const filtered = categories.filter(c => {
+        const matchesSearch = c.name?.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesMerchantCategory = !selectedMerchantCategoryId || 
+                                      c.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
+        
+        return matchesSearch && matchesMerchantCategory;
+    });
 
     // Loading check handled inside the main return structure below
     // if (loading && categories.length === 0) return <ApnaCartLoader />;
@@ -193,41 +206,60 @@ const Categories = () => {
     return (
         <div className="space-y-6 pb-20 font-sans">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div>
                     <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Categories</h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-2">Manage all item groupings.</p>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Manage all item groupings.</p>
                 </div>
-                <div className="flex items-center gap-3">
-                    <button
+                
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={fetchData}
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                    >
+                        <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+                    </button>
+                    
+                    <div className="relative group hidden sm:block">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <input 
+                            type="text"
+                            placeholder="SEARCH CATEGORIES..."
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+
+                    {!isMerchant && (
+                        <div className="relative group hidden md:block">
+                            <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                            <select
+                                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
+                                value={selectedMerchantCategoryId}
+                                onChange={(e) => setSelectedMerchantCategoryId(e.target.value)}
+                            >
+                                <option value="">ALL SEGMENTS</option>
+                                {merchantCategories.map(cat => (
+                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                ))}
+                            </select>
+                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={14} />
+                        </div>
+                    )}
+                    
+                    <button 
                         onClick={() => {
                             setEditingId(null);
                             setNewCategory({ name: '', image: '', image_url: '', status: true, merchant_id: selectedMerchantId || '' });
                             setShowModal(true);
                         }}
-                        className="bg-emerald-500 text-white px-6 py-4 rounded-2xl flex items-center gap-3 font-black transition-all shadow-xl shadow-emerald-500/20 text-[10px] uppercase tracking-[0.2em] outline-none"
+                        className="bg-emerald-500 text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
-                        <Plus className="w-4 h-4" strokeWidth={3} />
+                        <Plus size={18} strokeWidth={3} />
                         Add Category
                     </button>
                 </div>
-            </div>
-
-            {/* Filter Bar */}
-            <div className="bg-white dark:bg-zinc-900 p-4 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center gap-6">
-                <div className="relative flex-1">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
-                    <input
-                        type="text"
-                        placeholder="Search existing categories..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3.5 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-700/50 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:border-zinc-900 dark:focus:border-emerald-500 transition-all dark:text-white placeholder:text-zinc-500"
-                    />
-                </div>
-                <button onClick={fetchData} className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95">
-                    <ApnaCartLoader centered={false} size={20} />
-                </button>
             </div>
 
             {/* Category Grid */}

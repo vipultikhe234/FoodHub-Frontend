@@ -12,7 +12,11 @@ import {
     SearchX, 
     Loader2, 
     X, 
-    CheckCircle2 
+    CheckCircle2,
+    Search,
+    RefreshCw,
+    Archive,
+    ChevronDown
 } from 'lucide-react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -28,6 +32,7 @@ const RiderStaff = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '', merchant_id: '' });
     const [submitting, setSubmitting] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         fetchInitialData();
@@ -80,20 +85,41 @@ const RiderStaff = () => {
 
     return (
         <div className="space-y-8 pb-20 font-sans">
-             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div>
-                   <h1 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight flex items-center gap-3">
-                        <Bike className="text-emerald-500" />
-                        Logistics Staff Force
-                   </h1>
-                   <p className="text-zinc-500 dark:text-zinc-400 text-sm mt-1 font-medium">Manage and onboard the delivery network across all merchant nodes.</p>
+                    <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase flex items-center gap-4">
+                        Logistics Force <Bike className="text-emerald-500" size={32} />
+                    </h1>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Manage and onboard the delivery network across all merchant nodes.</p>
                 </div>
-                <button 
-                    onClick={() => setIsModalOpen(true)}
-                    className="bg-zinc-900 dark:bg-emerald-500 text-white px-6 py-3 rounded-2xl flex items-center gap-2 font-bold transition-all shadow-lg hover:scale-[1.02] active:scale-[0.98] text-xs uppercase tracking-[0.2em]"
-                >
-                    <Plus size={18} strokeWidth={3} /> Onboard New Rider
-                </button>
+                
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={fetchInitialData}
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                    >
+                        <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+                    </button>
+                    
+                    <div className="relative group hidden sm:block">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <input 
+                            type="text"
+                            placeholder="SEARCH PERSONNEL..."
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    
+                    <button 
+                        onClick={() => setIsModalOpen(true)}
+                        className="bg-emerald-500 text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                    >
+                        <Plus size={18} strokeWidth={3} /> Onboard New Rider
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -102,13 +128,21 @@ const RiderStaff = () => {
                         <div className="col-span-full py-32 text-center">
                             <ApnaCartLoader centered={true} size={80} />
                         </div>
-                    ) : riders.length === 0 ? (
+                    ) : riders.filter(rider => 
+                        rider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        rider.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        rider.phone.toLowerCase().includes(searchTerm.toLowerCase())
+                    ).length === 0 ? (
                         <div className="col-span-full py-32 text-center opacity-30 select-none pointer-events-none">
                             <SearchX size={64} className="mx-auto text-zinc-600 mb-6" />
                             <p className="text-xs font-black uppercase tracking-[0.5em] text-zinc-500">Zero Personnel Detected</p>
                         </div>
                     ) : (
-                        riders.map((rider, idx) => (
+                        riders.filter(rider => 
+                            rider.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            rider.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            rider.phone.toLowerCase().includes(searchTerm.toLowerCase())
+                        ).map((rider, idx) => (
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}

@@ -17,7 +17,9 @@ import {
     Bike,
     User,
     ShieldAlert,
-    ChevronDown
+    ChevronDown,
+    RefreshCw,
+    Archive
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { authService } from '../services/api';
@@ -91,25 +93,43 @@ const Users = () => {
 
     return (
         <div className="space-y-6 pb-20 font-sans">
-            {/* ── Header ── */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            {/* Header Section */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight uppercase leading-none">Users</h1>
-                    <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-2">
-                        Platform-wide user management console
-                    </p>
+                    <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">User Directory</h1>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Platform-wide user management console</p>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-100 dark:border-emerald-900/40 shadow-sm">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <p className="text-[10px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">
-                        {users.length} Database Records
-                    </p>
+                
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={fetchUsers}
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                    >
+                        <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+                    </button>
+                    
+                    <div className="relative group hidden sm:block">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <input 
+                            type="text"
+                            placeholder="SEARCH USERS..."
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                    
+                    <div className="flex items-center gap-2 px-6 py-4 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-2xl border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-sm">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        <p className="text-[10px] font-black uppercase tracking-widest leading-none">
+                            {users.length} Records
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            {/* ── Role Filter Tabs + Search ── */}
-            <div className="bg-white dark:bg-zinc-900 p-5 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-5">
-                {/* Role pill tabs */}
+            {/* ── Role Filter Tabs ── */}
+            <div className="bg-white dark:bg-zinc-900 p-5 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm">
                 <div className="flex flex-wrap gap-2.5">
                     {ROLES.map(({ value, label, icon: Icon }) => {
                         const active = roleFilter === value;
@@ -117,9 +137,9 @@ const Users = () => {
                             <button
                                 key={value}
                                 onClick={() => setRoleFilter(value)}
-                                className={`flex items-center gap-2.5 px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border-2 ${
+                                className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border-2 ${
                                     active
-                                        ? 'bg-zinc-900 dark:bg-emerald-500 text-white border-transparent shadow-xl shadow-zinc-900/10 dark:shadow-emerald-500/20 scale-105'
+                                        ? 'bg-zinc-900 dark:bg-emerald-500 text-white border-transparent shadow-xl shadow-zinc-900/10 dark:shadow-emerald-500/20'
                                         : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border-zinc-100 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-500'
                                 }`}
                             >
@@ -131,18 +151,6 @@ const Users = () => {
                             </button>
                         );
                     })}
-                </div>
-
-                {/* Search */}
-                <div className="relative w-full max-w-xl">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-zinc-400" />
-                    <input
-                        type="text"
-                        placeholder="Search by name, email or mobile..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-6 py-4 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-[1.25rem] text-sm font-bold outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-zinc-800/50 transition-all dark:text-white placeholder:text-zinc-400 placeholder:font-normal"
-                    />
                 </div>
             </div>
 

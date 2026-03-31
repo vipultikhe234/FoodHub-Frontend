@@ -1,6 +1,6 @@
 import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect, useRef } from 'react';
-import api, { MerchantService } from '../services/api';
+import api, { MerchantService, merchantCategoryService } from '../services/api';
 import { toast } from 'react-hot-toast';
 import {
     Plus,
@@ -22,7 +22,8 @@ import {
     Box,
     Loader2,
     Sparkles,
-    Store
+    Store,
+    RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchRealFoodImage, generateAIDescription, generateProductNames } from '../utils/aiHelpers';
@@ -40,6 +41,8 @@ const Products = () => {
     const [uploading, setUploading] = useState(false);
     const [imgLoading, setImgLoading] = useState(false);
     const [nameSuggestions, setNameSuggestions] = useState([]);
+    const [merchantCategories, setMerchantCategories] = useState([]);
+    const [selectedMerchantCategoryId, setSelectedMerchantCategoryId] = useState('');
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
     const isMerchant = user.role === 'merchant' || user.role === 'Merchant';
 
@@ -76,6 +79,9 @@ const Products = () => {
     // Scoped Load - Fetch data when merchant selection changes
     useEffect(() => {
         fetchData();
+        if (!isMerchant) {
+            merchantCategoryService.adminGetAll().then(res => setMerchantCategories(res.data.data || []));
+        }
     }, [selectedMerchantId]);
 
     const fetchData = async () => {
@@ -231,11 +237,15 @@ const Products = () => {
         );
     };
 
-    const filtered = (Array.isArray(products) ? products : []).filter(p => {
-        const matchCat = selectedCategory === 'all' || p.category?.id === selectedCategory || p.category_id === selectedCategory;
-        const matchQuery = p.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.category?.name?.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchCat && matchQuery;
+    const filteredProducts = products.filter(product => {
+        const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                            product.description?.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesCategory = selectedCategory === 'all' || product.category_id?.toString() === selectedCategory.toString();
+        
+        const matchesMerchantCategory = !selectedMerchantCategoryId || 
+                                      product.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
+
+        return matchesSearch && matchesCategory && matchesMerchantCategory;
     });
 
     // Loading check handled inside the main return structure below
@@ -271,67 +281,91 @@ const Products = () => {
     return (
         <div className="space-y-6 pb-20 font-sans">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                 <div>
                     <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Products</h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-widest mt-2">Inventory Management.</p>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Inventory Management.</p>
                 </div>
-                <div className="flex items-center gap-3">
-                    <label className="flex items-center gap-3 px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-black text-[10px] uppercase tracking-[0.2em] transition-all hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer border border-zinc-200 dark:border-zinc-700 active:scale-95">
-                        <Archive className="w-4 h-4" />
+                
+                <div className="flex items-center gap-4">
+                    <button 
+                        onClick={fetchData}
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                    >
+                        <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+                    </button>
+                    
+                    <div className="relative group hidden sm:block">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <input 
+                            type="text"
+                            placeholder="SEARCH CATALOGUE..."
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+
+                    {!isMerchant && (
+                        <div className="relative group hidden md:block">
+                            <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                            <select
+                                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
+                                value={selectedMerchantCategoryId}
+                                onChange={(e) => setSelectedMerchantCategoryId(e.target.value)}
+                            >
+                                <option value="">ALL SEGMENTS</option>
+                                {merchantCategories.map(cat => (
+                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                ))}
+                            </select>
+                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={14} />
+                        </div>
+                    )}
+
+                    <label className="flex items-center gap-3 px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-black text-[10px] uppercase tracking-[0.2em] transition-all hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer border border-zinc-200 dark:border-zinc-700 active:scale-95 hidden xl:flex">
+                        <Archive size={16} />
                         Bulk Upload
                         <input type="file" className="hidden" accept=".xlsx,.xls,.csv" onChange={handleBulkUpload} />
                     </label>
-
-                    <button
+                    
+                    <button 
                         onClick={() => {
                             setEditingId(null);
                             setNewProduct({ ...initialProductState, merchant_id: selectedMerchantId || '' });
                             setShowModal(true);
                         }}
-                        className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-4 rounded-2xl flex items-center gap-3 font-black transition-all shadow-xl shadow-emerald-500/20 text-[10px] uppercase tracking-[0.2em] outline-none"
+                        className="bg-emerald-500 text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
-                        <Plus className="w-4 h-4" strokeWidth={3} />
+                        <Plus size={18} strokeWidth={3} />
                         Add Item
                     </button>
                 </div>
             </div>
 
-            {/* Sub Filter & Search Bar */}
-            <div className="bg-white dark:bg-zinc-900 p-4 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col lg:flex-row items-center gap-6">
-                <div className="relative flex-1 w-full">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
-                    <input
-                        type="text"
-                        placeholder="Search items..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3.5 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-700/50 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:border-zinc-900 dark:focus:border-emerald-500 transition-all dark:text-white placeholder:text-zinc-500"
-                    />
-                </div>
-                <div className="flex items-center gap-3 overflow-x-auto w-full lg:w-auto pb-2 lg:pb-0 no-scrollbar">
+            {/* Category Filter Bar */}
+            <div className="flex items-center gap-3 overflow-x-auto w-full pb-2 no-scrollbar">
+                <button
+                    onClick={() => setSelectedCategory('all')}
+                    className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${selectedCategory === 'all'
+                        ? 'bg-zinc-900 dark:bg-emerald-500 text-white border-zinc-900 dark:border-emerald-500'
+                        : 'bg-transparent text-zinc-500 border-zinc-100 dark:border-zinc-800 hover:border-emerald-500/30 hover:text-emerald-500'
+                        }`}
+                >
+                    All Items
+                </button>
+                {categories.map(cat => (
                     <button
-                        onClick={() => setSelectedCategory('all')}
-                        className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${selectedCategory === 'all'
+                        key={cat.id}
+                        onClick={() => setSelectedCategory(cat.id)}
+                        className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${selectedCategory === cat.id
                             ? 'bg-zinc-900 dark:bg-emerald-500 text-white border-zinc-900 dark:border-emerald-500'
                             : 'bg-transparent text-zinc-500 border-zinc-100 dark:border-zinc-800 hover:border-emerald-500/30 hover:text-emerald-500'
                             }`}
                     >
-                        All Items
+                        {cat.name}
                     </button>
-                    {categories.map(cat => (
-                        <button
-                            key={cat.id}
-                            onClick={() => setSelectedCategory(cat.id)}
-                            className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${selectedCategory === cat.id
-                                ? 'bg-zinc-900 dark:bg-emerald-500 text-white border-zinc-900 dark:border-emerald-500'
-                                : 'bg-transparent text-zinc-500 border-zinc-100 dark:border-zinc-800 hover:border-emerald-500/30 hover:text-emerald-500'
-                                }`}
-                        >
-                            {cat.name}
-                        </button>
-                    ))}
-                </div>
+                ))}
             </div>
 
             {/* Product Table Card */}

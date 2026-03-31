@@ -119,5 +119,17 @@ export const locationService = {
     adminDeleteCity: (id) => api.delete(`/admin/locations/cities/${id}`),
 };
 
+export const merchantCategoryService = {
+    // Public listing
+    getAll: () => api.get('/merchant-categories'),
+    
+    // Admin Master CRUD
+    adminGetAll: () => api.get('/admin/merchant-categories'),
+    adminCreate: (data) => api.post('/admin/merchant-categories', data),
+    adminUpdate: (id, data) => api.put(`/admin/merchant-categories/${id}`, data),
+    adminDelete: (id) => api.delete(`/admin/merchant-categories/${id}`),
+    adminToggleStatus: (id) => api.patch(`/admin/merchant-categories/${id}/toggle`),
+};
+
 export default api;
 
