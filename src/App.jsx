@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AdminLayout from './layouts/AdminLayout';
 import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
@@ -36,7 +36,6 @@ function App() {
                     color: '#fff', 
                     fontSize: '11px', 
                     fontWeight: '900', 
-                    textTransform: 'uppercase', 
                     letterSpacing: '0.05em', 
                     border: '1px solid #27272a',
                     borderRadius: '16px',
@@ -68,9 +67,10 @@ function App() {
           <Route path="users" element={<Users />} />
           <Route path="profile" element={<MerchantProfile />} />
           <Route path="my-profile" element={<UserProfile />} />
-          <Route path="Merchants" element={<Merchants />} />
+          <Route path="merchants" element={<Merchants />} />
           <Route path="location-master" element={<LocationMaster />} />
           <Route path="merchant-categories" element={<MerchantCategories />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Route>
         </Routes>
       </MerchantProvider>

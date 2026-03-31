@@ -131,7 +131,7 @@ const ADMIN_NAV = [
         label: 'Merchant Network',
         icon: Store,
         items: [
-            { to: '/Merchants', label: 'Merchant Partners', icon: Store },
+            { to: '/merchants', label: 'Merchant Partners', icon: Store },
             { to: '/categories', label: 'Categories', icon: FolderTree },
             { to: '/products', label: 'Product Catalog', icon: Soup },
             { to: '/offers', label: 'Live Offers', icon: Zap },
