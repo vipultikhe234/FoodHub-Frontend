@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
 import { MerchantService, locationService } from '../services/api';
 import { toast } from 'react-hot-toast';
@@ -213,7 +214,7 @@ const Merchants = () => {
         (r?.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (loading) return <ApnaCartLoader />;
+    // if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500 font-sans pb-20">
@@ -256,133 +257,139 @@ const Merchants = () => {
             {/* ── Table List View ── */}
             <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
-                    <table className="min-w-full text-left">
-                        <thead>
-                            <tr className="bg-zinc-50/50 dark:bg-zinc-800/60 text-zinc-400 text-[9px] uppercase tracking-[0.2em] font-black border-b border-zinc-100 dark:border-zinc-800">
-                                <th className="px-8 py-5">Merchant / Outlet</th>
-                                <th className="py-5 px-6">Status</th>
-                                <th className="py-5 px-6">Location</th>
-                                <th className="py-5 px-6">Owner</th>
-                                <th className="px-8 py-5 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                            {filtered.length === 0 ? (
-                                <tr>
-                                    <td colSpan="5" className="py-24 text-center">
-                                        <div className="flex flex-col items-center justify-center opacity-30">
-                                            <SearchX size={48} className="text-zinc-400" />
-                                            <p className="text-xs font-black uppercase tracking-widest mt-4 text-zinc-500">No merchants found</p>
-                                        </div>
-                                    </td>
+                    {loading ? (
+                        <div className="py-24 text-center">
+                            <ApnaCartLoader centered={true} size={80} />
+                        </div>
+                    ) : (
+                        <table className="min-w-full text-left">
+                            <thead>
+                                <tr className="bg-zinc-50/50 dark:bg-zinc-800/60 text-zinc-400 text-[9px] uppercase tracking-[0.2em] font-black border-b border-zinc-100 dark:border-zinc-800">
+                                    <th className="px-8 py-5">Merchant / Outlet</th>
+                                    <th className="py-5 px-6">Status</th>
+                                    <th className="py-5 px-6">Location</th>
+                                    <th className="py-5 px-6">Owner</th>
+                                    <th className="px-8 py-5 text-right">Actions</th>
                                 </tr>
-                            ) : (
-                                filtered.map((rest) => (
-                                    <motion.tr
-                                        key={rest.id}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="group hover:bg-zinc-50/40 dark:hover:bg-zinc-800/40 transition-colors"
-                                    >
-                                        {/* Merchant Name + Image */}
-                                        <td className="px-8 py-5">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 shadow-sm shrink-0">
-                                                    <img 
-                                                        src={rest.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5'} 
-                                                        alt={rest.name}
-                                                        className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500 scale-110 group-hover:scale-125"
-                                                    />
-                                                </div>
-                                                <div className="min-w-0">
-                                                    <p className="font-black text-zinc-900 dark:text-white tracking-tight text-[15px] mb-1 group-hover:text-emerald-500 transition-colors leading-none truncate">{rest.name}</p>
-                                                    <div className="flex items-center gap-2">
-                                                        <Clock size={10} className="text-zinc-400" />
-                                                        <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest font-mono">
-                                                            {rest.opening_time?.slice(0,5)} - {rest.closing_time?.slice(0,5)}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                            </thead>
+                            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                                {filtered.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="py-24 text-center">
+                                            <div className="flex flex-col items-center justify-center opacity-30">
+                                                <SearchX size={48} className="text-zinc-400" />
+                                                <p className="text-xs font-black uppercase tracking-widest mt-4 text-zinc-500">No merchants found</p>
                                             </div>
                                         </td>
-
-                                        {/* Status */}
-                                        <td className="py-5 px-6">
-                                            <div className="flex flex-col gap-1.5">
-                                                <button 
-                                                    onClick={() => handleToggleStatus(rest.id)}
-                                                    disabled={updatingId === rest.id}
-                                                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border transition-all ${
-                                                        rest.is_active 
-                                                            ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/40' 
-                                                            : 'bg-rose-50 dark:bg-rose-950/40 text-rose-500 dark:text-rose-400 border-rose-100 dark:border-rose-900/40'
-                                                    }`}
-                                                >
-                                                    {updatingId === rest.id ? <Loader2 size={10} className="animate-spin" /> : <div className={`w-1.5 h-1.5 rounded-full ${rest.is_active ? 'bg-emerald-500' : 'bg-rose-500'}`} />}
-                                                    {rest.is_active ? 'Active' : 'Inactive'}
-                                                </button>
-                                                <span className={`text-[8px] font-black uppercase tracking-widest ml-1 ${rest.is_open ? 'text-blue-500' : 'text-zinc-400'}`}>
-                                                    {rest.is_open ? '● Accepting Orders' : '● Closed'}
-                                                </span>
-                                            </div>
-                                        </td>
-
-                                        {/* Location */}
-                                        <td className="py-5 px-6">
-                                            <div className="space-y-1.5">
-                                                <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-300 text-[10px] uppercase font-black tracking-tight">
-                                                    <MapPin size={11} className="text-rose-500 shrink-0" />
-                                                    <span className="truncate max-w-[200px]">{rest.address}</span>
-                                                </div>
-                                                {rest.city && (
-                                                    <div className="flex items-center gap-2 text-zinc-400 text-[9px] uppercase font-bold tracking-widest ml-5">
-                                                        <span>{rest.city.name}, {rest.state?.name}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </td>
-
-                                        {/* Owner Info */}
-                                        <td className="py-5 px-6">
-                                            {rest.user ? (
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-8 h-8 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 font-black text-[10px] shrink-0 uppercase">
-                                                        {rest.user.name?.[0]}
+                                    </tr>
+                                ) : (
+                                    filtered.map((rest) => (
+                                        <motion.tr
+                                            key={rest.id}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="group hover:bg-zinc-50/40 dark:hover:bg-zinc-800/40 transition-colors"
+                                        >
+                                            {/* Merchant Name + Image */}
+                                            <td className="px-8 py-5">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 shadow-sm shrink-0">
+                                                        <img 
+                                                            src={rest.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5'} 
+                                                            alt={rest.name}
+                                                            className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500 scale-110 group-hover:scale-125"
+                                                        />
                                                     </div>
                                                     <div className="min-w-0">
-                                                        <p className="text-[11px] font-black text-zinc-900 dark:text-white leading-none mb-1 truncate">{rest.user.name}</p>
-                                                        <p className="text-[9px] text-zinc-400 font-medium truncate">{rest.user.email}</p>
+                                                        <p className="font-black text-zinc-900 dark:text-white tracking-tight text-[15px] mb-1 group-hover:text-emerald-500 transition-colors leading-none truncate">{rest.name}</p>
+                                                        <div className="flex items-center gap-2">
+                                                            <Clock size={10} className="text-zinc-400" />
+                                                            <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest font-mono">
+                                                                {rest.opening_time?.slice(0,5)} - {rest.closing_time?.slice(0,5)}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            ) : (
-                                                <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">—</span>
-                                            )}
-                                        </td>
+                                            </td>
 
-                                        {/* Actions */}
-                                        <td className="px-8 py-5 text-right">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <button 
-                                                    onClick={() => handleViewDetail(rest)}
-                                                    className="p-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-500 hover:text-white rounded-xl text-zinc-500 dark:text-zinc-400 transition-all shadow-sm"
-                                                    title="View Details"
-                                                >
-                                                    <Eye size={16} />
-                                                </button>
-                                                <button 
-                                                    onClick={() => openEditModal(rest)}
-                                                    className="p-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-emerald-500 hover:text-white rounded-xl text-zinc-500 dark:text-zinc-400 transition-all shadow-sm"
-                                                    title="Edit Merchant"
-                                                >
-                                                    <Edit3 size={16} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </motion.tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
+                                            {/* Status */}
+                                            <td className="py-5 px-6">
+                                                <div className="flex flex-col gap-1.5">
+                                                    <button 
+                                                        onClick={() => handleToggleStatus(rest.id)}
+                                                        disabled={updatingId === rest.id}
+                                                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border transition-all ${
+                                                            rest.is_active 
+                                                                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/40' 
+                                                                : 'bg-rose-50 dark:bg-rose-950/40 text-rose-500 dark:text-rose-400 border-rose-100 dark:border-rose-900/40'
+                                                        }`}
+                                                    >
+                                                        {updatingId === rest.id ? <ApnaCartLoader centered={false} size={10} /> : <div className={`w-1.5 h-1.5 rounded-full ${rest.is_active ? 'bg-emerald-500' : 'bg-rose-500'}`} />}
+                                                        {rest.is_active ? 'Active' : 'Inactive'}
+                                                    </button>
+                                                    <span className={`text-[8px] font-black uppercase tracking-widest ml-1 ${rest.is_open ? 'text-blue-500' : 'text-zinc-400'}`}>
+                                                        {rest.is_open ? '● Accepting Orders' : '● Closed'}
+                                                    </span>
+                                                </div>
+                                            </td>
+
+                                            {/* Location */}
+                                            <td className="py-5 px-6">
+                                                <div className="space-y-1.5">
+                                                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-300 text-[10px] uppercase font-black tracking-tight">
+                                                        <MapPin size={11} className="text-rose-500 shrink-0" />
+                                                        <span className="truncate max-w-[200px]">{rest.address}</span>
+                                                    </div>
+                                                    {rest.city && (
+                                                        <div className="flex items-center gap-2 text-zinc-400 text-[9px] uppercase font-bold tracking-widest ml-5">
+                                                            <span>{rest.city.name}, {rest.state?.name}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
+
+                                            {/* Owner Info */}
+                                            <td className="py-5 px-6">
+                                                {rest.user ? (
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-8 h-8 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 font-black text-[10px] shrink-0 uppercase">
+                                                            {rest.user.name?.[0]}
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-[11px] font-black text-zinc-900 dark:text-white leading-none mb-1 truncate">{rest.user.name}</p>
+                                                            <p className="text-[9px] text-zinc-400 font-medium truncate">{rest.user.email}</p>
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">—</span>
+                                                )}
+                                            </td>
+
+                                            {/* Actions */}
+                                            <td className="px-8 py-5 text-right">
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <button 
+                                                        onClick={() => handleViewDetail(rest)}
+                                                        className="p-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-500 hover:text-white rounded-xl text-zinc-500 dark:text-zinc-400 transition-all shadow-sm"
+                                                        title="View Details"
+                                                    >
+                                                        <Eye size={16} />
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => openEditModal(rest)}
+                                                        className="p-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-emerald-500 hover:text-white rounded-xl text-zinc-500 dark:text-zinc-400 transition-all shadow-sm"
+                                                        title="Edit Merchant"
+                                                    >
+                                                        <Edit3 size={16} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </motion.tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
             </div>
 
@@ -438,7 +445,7 @@ const Merchants = () => {
                                                         <input name="val_img" type="text" placeholder="Image URL (optional)" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm pr-14" value={formData.image} onChange={(e) => setFormData({...formData, image: e.target.value})} />
                                                         {formLoading && (
                                                             <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                                                                <Loader2 className="w-5 h-5 text-emerald-500 animate-spin" />
+                                                                <ApnaCartLoader centered={false} size={20} />
                                                             </div>
                                                         )}
                                                         {!formLoading && (
@@ -565,7 +572,7 @@ const Merchants = () => {
                                             type="submit" 
                                             className="w-full h-16 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-3xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                                         >
-                                            {formLoading ? <Loader2 size={24} className="animate-spin" /> : <>{editingId ? 'Update Merchant' : 'Save Merchant'} <ArrowRight size={20} strokeWidth={3} /></>}
+                                            {formLoading ? <ApnaCartLoader centered={false} size={24} /> : <>{editingId ? 'Update Merchant' : 'Save Merchant'} <ArrowRight size={20} strokeWidth={3} /></>}
                                         </button>
                                     </div>
                                 </form>

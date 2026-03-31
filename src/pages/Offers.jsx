@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -161,7 +162,7 @@ const Offers = () => {
         );
     };
 
-    if (loading) return <ApnaCartLoader />;
+    // if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-6 pb-20 font-sans">
@@ -184,7 +185,11 @@ const Offers = () => {
 
             {/* Offers Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {offers.length === 0 ? (
+                {loading ? (
+                    <div className="col-span-full py-24 text-center">
+                        <ApnaCartLoader centered={true} size={80} />
+                    </div>
+                ) : offers.length === 0 ? (
                     <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
                         <Zap size={48} className="text-zinc-400" />
                         <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No active promotions</p>
@@ -314,7 +319,7 @@ const Offers = () => {
                                                         className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl shadow-lg hover:rotate-12 transition-all disabled:opacity-30 disabled:rotate-0"
                                                         title="Generate Visual with AI"
                                                     >
-                                                        {generating ? <Loader2 size={12} className="animate-spin" /> : <Sparkles size={12} className="fill-current" />}
+                                                        {generating ? <ApnaCartLoader centered={false} size={12} /> : <Sparkles size={12} className="fill-current" />}
                                                     </button>
                                                 </div>
                                                 {form.banner_url && (

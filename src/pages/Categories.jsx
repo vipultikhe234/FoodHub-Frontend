@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect, useRef } from 'react';
 import api, { productService, MerchantService } from '../services/api';
 import { fetchRealFoodImage } from '../utils/aiHelpers';
@@ -186,7 +187,8 @@ const Categories = () => {
 
     const filtered = categories.filter(c => c.name?.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    if (loading && categories.length === 0) return <ApnaCartLoader />;
+    // Loading check handled inside the main return structure below
+    // if (loading && categories.length === 0) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-6 pb-20 font-sans">
@@ -224,68 +226,74 @@ const Categories = () => {
                     />
                 </div>
                 <button onClick={fetchData} className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95">
-                    <Loader2 size={20} className={loading ? "animate-spin" : ""} />
+                    <ApnaCartLoader centered={false} size={20} />
                 </button>
             </div>
 
             {/* Category Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
-                {filtered.length === 0 ? (
-                    <div className="col-span-full py-32 bg-zinc-50 dark:bg-zinc-900/40 rounded-[4rem] border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-40">
-                        <LayoutGrid size={48} className="text-zinc-300" />
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] mt-6 text-zinc-500">No Groups Found</p>
-                    </div>
-                ) : (
-                    filtered.map((cat) => (
-                        <motion.div
-                            key={cat.id}
-                            whileHover={{ y: -8 }}
-                            className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden group hover:shadow-2xl transition-all duration-500"
-                        >
-                            <div className="relative h-44 overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-                                {cat.image_url ? (
-                                    <img src={cat.image_url} alt={cat.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-zinc-300">
-                                        <LayoutGrid size={48} />
+            {loading ? (
+                <div className="py-20">
+                    <ApnaCartLoader centered={true} size={80} />
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
+                    {filtered.length === 0 ? (
+                        <div className="col-span-full py-32 bg-zinc-50 dark:bg-zinc-900/40 rounded-[4rem] border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-40">
+                            <LayoutGrid size={48} className="text-zinc-300" />
+                            <p className="text-[10px] font-black uppercase tracking-[0.3em] mt-6 text-zinc-500">No Groups Found</p>
+                        </div>
+                    ) : (
+                        filtered.map((cat) => (
+                            <motion.div
+                                key={cat.id}
+                                whileHover={{ y: -8 }}
+                                className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden group hover:shadow-2xl transition-all duration-500"
+                            >
+                                <div className="relative h-44 overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+                                    {cat.image_url ? (
+                                        <img src={cat.image_url} alt={cat.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-zinc-300">
+                                            <LayoutGrid size={48} />
+                                        </div>
+                                    )}
+                                    <div className="absolute top-6 left-6">
+                                        <span className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-wider backdrop-blur-xl border ${cat.status ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20 shadow-lg shadow-emerald-500/10' : 'bg-rose-500/20 text-rose-400 border-rose-500/20'}`}>
+                                            {cat.status ? 'Live' : 'Hidden'}
+                                        </span>
                                     </div>
-                                )}
-                                <div className="absolute top-6 left-6">
-                                    <span className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-wider backdrop-blur-xl border ${cat.status ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20 shadow-lg shadow-emerald-500/10' : 'bg-rose-500/20 text-rose-400 border-rose-500/20'}`}>
-                                        {cat.status ? 'Live' : 'Hidden'}
-                                    </span>
+                                    <div className="absolute top-6 right-6 flex items-center gap-2">
+                                        <div className="h-10 px-3 bg-white/20 backdrop-blur-xl rounded-xl flex items-center gap-2 border border-white/10 text-white shadow-xl">
+                                            <Store size={14} className="text-emerald-400" />
+                                            <span className="text-[10px] font-black uppercase tracking-tight">{cat.merchant?.name || 'Global'}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="absolute top-6 right-6 flex items-center gap-2">
-                                     <div className="h-10 px-3 bg-white/20 backdrop-blur-xl rounded-xl flex items-center gap-2 border border-white/10 text-white shadow-xl">
-                                        <Store size={14} className="text-emerald-400" />
-                                        <span className="text-[10px] font-black uppercase tracking-tight">{cat.merchant?.name || 'Global'}</span>
-                                     </div>
+                                <div className="p-8 flex items-center justify-between">
+                                    <div className="min-w-0 pr-4">
+                                        <h3 className="font-black text-zinc-900 dark:text-white tracking-tight uppercase text-[15px] leading-none truncate group-hover:text-emerald-500 transition-colors">{cat.name}</h3>
+                                        <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-3">Group ID #{cat.id}</p>
+                                    </div>
+                                    <div className="flex gap-3 shrink-0">
+                                        <button
+                                            onClick={() => handleEdit(cat)}
+                                            className="w-10 h-10 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
+                                        >
+                                            <Edit2 size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(cat.id)}
+                                            className="w-10 h-10 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="p-8 flex items-center justify-between">
-                                <div className="min-w-0 pr-4">
-                                    <h3 className="font-black text-zinc-900 dark:text-white tracking-tight uppercase text-[15px] leading-none truncate group-hover:text-emerald-500 transition-colors">{cat.name}</h3>
-                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-3">Group ID #{cat.id}</p>
-                                </div>
-                                <div className="flex gap-3 shrink-0">
-                                    <button
-                                        onClick={() => handleEdit(cat)}
-                                        className="w-10 h-10 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
-                                    >
-                                        <Edit2 size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(cat.id)}
-                                        className="w-10 h-10 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    ))
-                )}
-            </div>
+                            </motion.div>
+                        ))
+                    )}
+                </div>
+            )}
 
             {/* Modal */}
             <AnimatePresence>
@@ -336,7 +344,7 @@ const Categories = () => {
                                     <label className="text-[9px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.2em]">Visual Identification</label>
                                     <div className="relative h-32 bg-zinc-50 dark:bg-zinc-900 rounded-[1.5rem] border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center overflow-hidden transition-all hover:border-emerald-500/50 shadow-inner group">
                                         {imgLoading ? (
-                                            <Loader2 className="w-6 h-6 text-emerald-500 animate-spin" />
+                                            <ApnaCartLoader centered={false} size={24} />
                                         ) : newCategory.image_url ? (
                                             <div className="w-full h-full relative">
                                                 <img src={newCategory.image_url} className="w-full h-full object-cover" alt="preview" />

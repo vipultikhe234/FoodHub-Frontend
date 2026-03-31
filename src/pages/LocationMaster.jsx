@@ -6,6 +6,7 @@ import {
     Globe, Map, Building2, Plus, Edit3, Trash2,
     Loader2, ChevronRight, X, Check, SearchX
 } from 'lucide-react';
+import ApnaCartLoader from '../components/ApnaCartLoader';
 
 // ─── Shared Minimal Input ─────────────────────────────────────────────────────
 const Field = ({ label, children }) => (
@@ -128,7 +129,7 @@ const CountriesTab = () => {
                     <Plus size={14} strokeWidth={3} /> Add Country
                 </button>
             </div>
-            {loading ? <div className="flex justify-center py-16"><Loader2 className="animate-spin text-emerald-500" size={28} /></div> :
+            {loading ? <ApnaCartLoader centered={true} size={48} /> :
                 items.length === 0 ? <div className="text-center py-20 opacity-30"><Globe size={48} className="mx-auto mb-3 text-zinc-400" /><p className="text-xs font-black uppercase tracking-widest text-zinc-500">No countries yet</p></div> :
                 <AnimatePresence>{items.map(item => <Row key={item.id} item={item} onEdit={openEdit} onDelete={handleDelete} />)}</AnimatePresence>
             }
@@ -145,7 +146,7 @@ const CountriesTab = () => {
                                 <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Active</span>
                             </label>
                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 disabled:opacity-50">
-                                {saving ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} />} {editing ? 'Update' : 'Create'}
+                                {saving ? <ApnaCartLoader centered={false} size={16} /> : <Check size={16} />} {editing ? 'Update' : 'Create'}
                             </button>
                         </form>
                     </Modal>
@@ -213,7 +214,7 @@ const StatesTab = () => {
                     <Plus size={14} strokeWidth={3} /> Add State
                 </button>
             </div>
-            {loading ? <div className="flex justify-center py-16"><Loader2 className="animate-spin text-emerald-500" size={28} /></div> :
+            {loading ? <ApnaCartLoader centered={true} size={48} /> :
                 filtered.length === 0 ? <div className="text-center py-20 opacity-30"><Map size={48} className="mx-auto mb-3 text-zinc-400" /><p className="text-xs font-black uppercase tracking-widest text-zinc-500">No states yet</p></div> :
                 <AnimatePresence>{filtered.map(item => <Row key={item.id} item={item} subLabel={item.country?.name} onEdit={openEdit} onDelete={handleDelete} />)}</AnimatePresence>
             }
@@ -235,7 +236,7 @@ const StatesTab = () => {
                                 <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Active</span>
                             </label>
                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 disabled:opacity-50">
-                                {saving ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} />} {editing ? 'Update' : 'Create'}
+                                {saving ? <ApnaCartLoader centered={false} size={16} /> : <Check size={16} />} {editing ? 'Update' : 'Create'}
                             </button>
                         </form>
                     </Modal>
@@ -336,7 +337,7 @@ const CitiesTab = () => {
                     <Plus size={14} strokeWidth={3} /> Add City
                 </button>
             </div>
-            {loading ? <div className="flex justify-center py-16"><Loader2 className="animate-spin text-emerald-500" size={28} /></div> :
+            {loading ? <ApnaCartLoader centered={true} size={48} /> :
                 filtered.length === 0 ? <div className="text-center py-20 opacity-30"><Building2 size={48} className="mx-auto mb-3 text-zinc-400" /><p className="text-xs font-black uppercase tracking-widest text-zinc-500">No cities yet</p></div> :
                 <AnimatePresence>{filtered.map(item => <Row key={item.id} item={item} subLabel={`${item.state?.name || ''} · ${item.state?.country?.name || ''}`} onEdit={openEdit} onDelete={handleDelete} />)}</AnimatePresence>
             }
@@ -364,7 +365,7 @@ const CitiesTab = () => {
                                 <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Active</span>
                             </label>
                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 disabled:opacity-50">
-                                {saving ? <Loader2 className="animate-spin" size={16} /> : <Check size={16} />} {editing ? 'Update' : 'Create'}
+                                {saving ? <ApnaCartLoader centered={false} size={16} /> : <Check size={16} />} {editing ? 'Update' : 'Create'}
                             </button>
                         </form>
                     </Modal>

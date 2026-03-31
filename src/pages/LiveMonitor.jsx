@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -109,7 +110,7 @@ const LiveMonitor = () => {
         }
     }, [riders]);
 
-    if (loading) return <ApnaCartLoader />;
+    // if (loading) return <ApnaCartLoader />;
 
     const getDistance = (lat1, lon1, lat2, lon2) => {
         const R = 6371;
@@ -180,17 +181,25 @@ const LiveMonitor = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <div className="lg:col-span-3 h-[600px] bg-white dark:bg-zinc-900 rounded-[40px] border border-zinc-100 dark:border-zinc-800 shadow-xl relative overflow-hidden">
-                    <div ref={mapRef} style={{ height: '100%', width: '100%' }} />
-                    
-                    <div className="absolute top-6 left-6 z-[1000] bg-white/90 backdrop-blur-xl border border-zinc-100 px-6 py-4 rounded-[28px] shadow-2xl">
-                        <div className="flex items-center gap-3">
-                             <div className="w-10 h-10 bg-zinc-900 rounded-2xl flex items-center justify-center text-white"><Package size={18} /></div>
-                             <div>
-                                <h3 className="text-xs font-black uppercase italic tracking-widest text-zinc-900">Telemetry Feed</h3>
-                                <p className="text-[8px] font-bold text-zinc-400 uppercase tracking-[0.2em]">Alpha Sector Node</p>
-                             </div>
+                    {loading ? (
+                        <div className="w-full h-full flex items-center justify-center">
+                            <ApnaCartLoader centered={true} size={100} />
                         </div>
-                    </div>
+                    ) : (
+                        <>
+                            <div ref={mapRef} style={{ height: '100%', width: '100%' }} />
+                            
+                            <div className="absolute top-6 left-6 z-[1000] bg-white/90 backdrop-blur-xl border border-zinc-100 px-6 py-4 rounded-[28px] shadow-2xl">
+                                <div className="flex items-center gap-3">
+                                     <div className="w-10 h-10 bg-zinc-900 rounded-2xl flex items-center justify-center text-white"><Package size={18} /></div>
+                                     <div>
+                                        <h3 className="text-xs font-black uppercase italic tracking-widest text-zinc-900">Telemetry Feed</h3>
+                                        <p className="text-[8px] font-bold text-zinc-400 uppercase tracking-[0.2em]">Alpha Sector Node</p>
+                                     </div>
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <div className="space-y-6">
@@ -199,7 +208,11 @@ const LiveMonitor = () => {
                         Logistics Feed
                     </h3>
                     <div className="space-y-4">
-                        {riders.length === 0 ? (
+                        {loading ? (
+                            <div className="py-20 flex flex-col items-center justify-center">
+                                <ApnaCartLoader centered={true} size={40} />
+                            </div>
+                        ) : riders.length === 0 ? (
                             <div className="py-20 flex flex-col items-center justify-center text-center opacity-30">
                                  <SearchX size={48} className="text-zinc-600" />
                                  <p className="text-[9px] font-bold uppercase tracking-[0.3em] mt-4">Zero Couriers Online</p>

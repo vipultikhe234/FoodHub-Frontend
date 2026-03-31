@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import {
@@ -86,7 +87,7 @@ const Users = () => {
         'rider':    users.filter(u => u.role === 'rider').length,
     };
 
-    if (loading) return <ApnaCartLoader />;
+    // if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-6 pb-20 font-sans">
@@ -156,93 +157,99 @@ const Users = () => {
             {/* ── Table ── */}
             <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
-                    <table className="min-w-full text-left">
-                        <thead>
-                            <tr className="bg-zinc-50/50 dark:bg-zinc-800/60 text-zinc-400 text-[9px] uppercase tracking-[0.2em] font-black border-b border-zinc-100 dark:border-zinc-800">
-                                <th className="px-8 py-5">User Profile</th>
-                                <th className="py-5 px-6">System Role</th>
-                                <th className="py-5 px-6">Access Points</th>
-                                <th className="py-5 px-6">Location</th>
-                                <th className="px-8 py-5 text-right">Onboarding</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                            {filtered.length === 0 ? (
-                                <tr>
-                                    <td colSpan="5" className="py-24 text-center">
-                                        <div className="flex flex-col items-center justify-center opacity-30">
-                                            <SearchX size={48} className="text-zinc-400" />
-                                            <p className="text-xs font-black uppercase tracking-widest mt-4 text-zinc-500">No matching users</p>
-                                        </div>
-                                    </td>
+                    {loading ? (
+                        <div className="py-24 text-center">
+                            <ApnaCartLoader centered={true} size={80} />
+                        </div>
+                    ) : (
+                        <table className="min-w-full text-left">
+                            <thead>
+                                <tr className="bg-zinc-50/50 dark:bg-zinc-800/60 text-zinc-400 text-[9px] uppercase tracking-[0.2em] font-black border-b border-zinc-100 dark:border-zinc-800">
+                                    <th className="px-8 py-5">User Profile</th>
+                                    <th className="py-5 px-6">System Role</th>
+                                    <th className="py-5 px-6">Access Points</th>
+                                    <th className="py-5 px-6">Location</th>
+                                    <th className="px-8 py-5 text-right">Onboarding</th>
                                 </tr>
-                            ) : (
-                                filtered.map((user) => (
-                                    <motion.tr
-                                        key={user.id}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        className="group hover:bg-zinc-50/40 dark:hover:bg-zinc-800/40 transition-colors"
-                                    >
-                                        {/* Name + Avatar */}
-                                        <td className="px-8 py-5">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-11 h-11 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 group-hover:bg-zinc-900 dark:group-hover:bg-emerald-500 group-hover:text-white transition-all uppercase font-black text-sm shadow-sm">
-                                                    {user.name?.[0] || <UserCircle size={22} />}
-                                                </div>
-                                                <div className="min-w-0">
-                                                    <p className="font-black text-zinc-900 dark:text-white tracking-tight text-[14px] mb-0.5 group-hover:text-emerald-500 transition-colors">{user.name || 'Anonymous'}</p>
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-md">ID-{String(user.id).padStart(4, '0')}</span>
+                            </thead>
+                            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                                {filtered.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="py-24 text-center">
+                                            <div className="flex flex-col items-center justify-center opacity-30">
+                                                <SearchX size={48} className="text-zinc-400" />
+                                                <p className="text-xs font-black uppercase tracking-widest mt-4 text-zinc-500">No matching users</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    filtered.map((user) => (
+                                        <motion.tr
+                                            key={user.id}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="group hover:bg-zinc-50/40 dark:hover:bg-zinc-800/40 transition-colors"
+                                        >
+                                            {/* Name + Avatar */}
+                                            <td className="px-8 py-5">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-11 h-11 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 group-hover:bg-zinc-900 dark:group-hover:bg-emerald-500 group-hover:text-white transition-all uppercase font-black text-sm shadow-sm">
+                                                        {user.name?.[0] || <UserCircle size={22} />}
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <p className="font-black text-zinc-900 dark:text-white tracking-tight text-[14px] mb-0.5 group-hover:text-emerald-500 transition-colors">{user.name || 'Anonymous'}</p>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-md">ID-{String(user.id).padStart(4, '0')}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
+                                            </td>
 
-                                        {/* Role badge */}
-                                        <td className="py-5 px-6">
-                                            {rolePill(user.role)}
-                                        </td>
+                                            {/* Role badge */}
+                                            <td className="py-5 px-6">
+                                                {rolePill(user.role)}
+                                            </td>
 
-                                        {/* Contact */}
-                                        <td className="py-5 px-6">
-                                            <div className="flex flex-col gap-1.5">
-                                                <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.1em]">
-                                                    <Mail size={11} className="text-zinc-400 shrink-0" />
-                                                    {user.email || 'N/A'}
+                                            {/* Contact */}
+                                            <td className="py-5 px-6">
+                                                <div className="flex flex-col gap-1.5">
+                                                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.1em]">
+                                                        <Mail size={11} className="text-zinc-400 shrink-0" />
+                                                        {user.email || 'N/A'}
+                                                    </div>
+                                                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.1em]">
+                                                        <Phone size={11} className="text-zinc-400 shrink-0" />
+                                                        {user.phone || 'N/A'}
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.1em]">
-                                                    <Phone size={11} className="text-zinc-400 shrink-0" />
-                                                    {user.phone || 'N/A'}
-                                                </div>
-                                            </div>
-                                        </td>
+                                            </td>
 
-                                        {/* Address */}
-                                        <td className="py-5 px-6">
-                                            <div className="flex items-start gap-2 text-zinc-500 dark:text-zinc-400">
-                                                <MapPin size={13} className="text-rose-500 shrink-0 mt-0.5" />
-                                                <p className="text-[10px] font-bold uppercase tracking-widest max-w-[200px] leading-relaxed">
-                                                    {user.address || 'Not Provided'}
-                                                </p>
-                                            </div>
-                                        </td>
-
-                                        {/* Date */}
-                                        <td className="py-5 px-8 text-right">
-                                            <div className="flex flex-col items-end gap-1">
-                                                <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-black text-xs">
-                                                    <Calendar size={12} className="text-zinc-400" />
-                                                    {new Date(user.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                            {/* Address */}
+                                            <td className="py-5 px-6">
+                                                <div className="flex items-start gap-2 text-zinc-500 dark:text-zinc-400">
+                                                    <MapPin size={13} className="text-rose-500 shrink-0 mt-0.5" />
+                                                    <p className="text-[10px] font-bold uppercase tracking-widest max-w-[200px] leading-relaxed">
+                                                        {user.address || 'Not Provided'}
+                                                    </p>
                                                 </div>
-                                                <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.2em] bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md">Verified</span>
-                                            </div>
-                                        </td>
-                                    </motion.tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
+                                            </td>
+
+                                            {/* Date */}
+                                            <td className="py-5 px-8 text-right">
+                                                <div className="flex flex-col items-end gap-1">
+                                                    <div className="flex items-center gap-2 text-zinc-900 dark:text-white font-black text-xs">
+                                                        <Calendar size={12} className="text-zinc-400" />
+                                                        {new Date(user.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                    </div>
+                                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.2em] bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md">Verified</span>
+                                                </div>
+                                            </td>
+                                        </motion.tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
             </div>
 

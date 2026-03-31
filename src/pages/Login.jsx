@@ -196,7 +196,7 @@ const Login = () => {
                                 }`}
                             >
                                 {loading ? (
-                                    <Loader2 className="animate-spin" size={22} />
+                                    <ApnaCartLoader centered={false} size={22} />
                                 ) : (
                                     <>
                                         <span>Initialize Session</span>

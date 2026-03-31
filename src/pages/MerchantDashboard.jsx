@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
 import { orderService, MerchantService } from '../services/api';
 import { 
@@ -89,7 +90,7 @@ const MerchantDashboard = () => {
         }
     };
 
-    if (loading) return <ApnaCartLoader />;
+    // if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-8 pb-20 font-sans">
@@ -105,38 +106,46 @@ const MerchantDashboard = () => {
 
             {/* Merchant KPI Track */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm relative overflow-hidden group">
-                    <div className="relative z-10">
-                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-4">Gross Revenue</p>
-                        <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">₹{stats.revenue.toFixed(0)}</h2>
-                        <div className="mt-4 flex items-center gap-1.5 text-emerald-500 text-[10px] font-bold">
-                            <TrendingUp size={12} /> +18.4% this week
-                        </div>
+                {loading ? (
+                    <div className="col-span-full py-12 text-center">
+                        <ApnaCartLoader centered={true} size={60} />
                     </div>
-                    <IndianRupee className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-zinc-50 dark:text-white/5 -rotate-12" />
-                </div>
+                ) : (
+                    <>
+                        <div className="bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm relative overflow-hidden group">
+                            <div className="relative z-10">
+                                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-4">Gross Revenue</p>
+                                <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">₹{stats.revenue.toFixed(0)}</h2>
+                                <div className="mt-4 flex items-center gap-1.5 text-emerald-500 text-[10px] font-bold">
+                                    <TrendingUp size={12} /> +18.4% this week
+                                </div>
+                            </div>
+                            <IndianRupee className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-zinc-50 dark:text-white/5 -rotate-12" />
+                        </div>
 
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm relative overflow-hidden group">
-                    <div className="relative z-10 text-white">
-                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-4">Active in Kitchen</p>
-                        <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">{stats.activeOrders}</h2>
-                        <div className="mt-4 flex items-center gap-1.5 text-blue-500 text-[10px] font-bold">
-                            <Activity size={12} className="animate-pulse" /> High volume alert
+                        <div className="bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm relative overflow-hidden group">
+                            <div className="relative z-10 text-white">
+                                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-4">Active in Kitchen</p>
+                                <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">{stats.activeOrders}</h2>
+                                <div className="mt-4 flex items-center gap-1.5 text-blue-500 text-[10px] font-bold">
+                                    <Activity size={12} className="animate-pulse" /> High volume alert
+                                </div>
+                            </div>
+                            <Clock className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-zinc-50 dark:text-white/5 rotate-12" />
                         </div>
-                    </div>
-                    <Clock className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-zinc-50 dark:text-white/5 rotate-12" />
-                </div>
 
-                <div className="bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm relative overflow-hidden group">
-                    <div className="relative z-10">
-                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-4">Customer Trust</p>
-                        <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">4.9/5.0</h2>
-                        <div className="mt-4 flex items-center gap-1.5 text-amber-500 text-[10px] font-bold">
-                            <Users size={12} /> 124 Repeat customers
+                        <div className="bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm relative overflow-hidden group">
+                            <div className="relative z-10">
+                                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-4">Customer Trust</p>
+                                <h2 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tighter">4.9/5.0</h2>
+                                <div className="mt-4 flex items-center gap-1.5 text-amber-500 text-[10px] font-bold">
+                                    <Users size={12} /> 124 Repeat customers
+                                </div>
+                            </div>
+                            <CheckCircle2 className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-zinc-50 dark:text-white/5 -rotate-12" />
                         </div>
-                    </div>
-                    <CheckCircle2 className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-zinc-50 dark:text-white/5 -rotate-12" />
-                </div>
+                    </>
+                )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -152,7 +161,11 @@ const MerchantDashboard = () => {
 
                     <div className="grid gap-4">
                         <AnimatePresence mode="popLayout">
-                            {orders.filter(o => !['delivered', 'picked_up', 'cancelled'].includes(o.status)).length === 0 ? (
+                            {loading ? (
+                                <div className="py-24 text-center">
+                                    <ApnaCartLoader centered={true} size={80} />
+                                </div>
+                            ) : orders.filter(o => !['delivered', 'picked_up', 'cancelled'].includes(o.status)).length === 0 ? (
                                 <motion.div 
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}

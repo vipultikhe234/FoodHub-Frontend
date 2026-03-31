@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
 import { 
     Bike, 
@@ -75,7 +76,7 @@ const RiderStaff = () => {
         }
     };
 
-    if (loading) return <ApnaCartLoader />;
+    // if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-8 pb-20 font-sans">
@@ -97,7 +98,11 @@ const RiderStaff = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <AnimatePresence>
-                    {riders.length === 0 ? (
+                    {loading ? (
+                        <div className="col-span-full py-32 text-center">
+                            <ApnaCartLoader centered={true} size={80} />
+                        </div>
+                    ) : riders.length === 0 ? (
                         <div className="col-span-full py-32 text-center opacity-30 select-none pointer-events-none">
                             <SearchX size={64} className="mx-auto text-zinc-600 mb-6" />
                             <p className="text-xs font-black uppercase tracking-[0.5em] text-zinc-500">Zero Personnel Detected</p>
@@ -259,7 +264,7 @@ const RiderStaff = () => {
                                         disabled={submitting}
                                         className="w-full h-14 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 mt-4 hover:opacity-90 transition-all disabled:opacity-50"
                                     >
-                                        {submitting ? <Loader2 className="animate-spin" /> : <>Initialize Onboarding <CheckCircle2 size={18} /></>}
+                                        {submitting ? <ApnaCartLoader centered={false} size={20} /> : <>Initialize Onboarding <CheckCircle2 size={18} /></>}
                                     </button>
                                 </form>
                             </div>

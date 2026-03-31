@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect, useRef } from 'react';
 import api, { MerchantService } from '../services/api';
 import { toast } from 'react-hot-toast';
@@ -237,7 +238,8 @@ const Products = () => {
         return matchCat && matchQuery;
     });
 
-    if (loading && products.length === 0) return <ApnaCartLoader />;
+    // Loading check handled inside the main return structure below
+    // if (loading && products.length === 0) return <ApnaCartLoader />;
 
     const handleBulkUpload = async (e) => {
         const file = e.target.files[0];
@@ -335,111 +337,117 @@ const Products = () => {
             {/* Product Table Card */}
             <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
-                    <table className="min-w-full text-left">
-                        <thead>
-                            <tr className="bg-zinc-50 dark:bg-zinc-800/30 text-zinc-400 text-[10px] uppercase tracking-widest font-black">
-                                <th className="px-8 py-6 text-zinc-500 dark:text-zinc-300">Product Information</th>
-                                <th className="py-6 px-4">Merchant</th>
-                                <th className="py-6 px-4">Category</th>
-                                <th className="py-6 px-4">Price</th>
-                                <th className="py-6 px-4 text-center">Stock</th>
-                                <th className="py-6 px-4">Availability</th>
-                                <th className="px-8 py-6 text-right">Edit</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                            {filtered.length === 0 ? (
-                                <tr>
-                                    <td colSpan="7" className="py-32 text-center">
-                                        <div className="flex flex-col items-center justify-center opacity-40">
-                                            <Box size={48} className="text-zinc-300" />
-                                            <p className="text-[10px] font-black uppercase tracking-[0.3em] mt-6 text-zinc-500">Inventory Empty</p>
-                                        </div>
-                                    </td>
+                    {loading ? (
+                        <div className="py-32">
+                            <ApnaCartLoader centered={true} size={80} />
+                        </div>
+                    ) : (
+                        <table className="min-w-full text-left">
+                            <thead>
+                                <tr className="bg-zinc-50 dark:bg-zinc-800/30 text-zinc-400 text-[10px] uppercase tracking-widest font-black">
+                                    <th className="px-8 py-6 text-zinc-500 dark:text-zinc-300">Product Information</th>
+                                    <th className="py-6 px-4">Merchant</th>
+                                    <th className="py-6 px-4">Category</th>
+                                    <th className="py-6 px-4">Price</th>
+                                    <th className="py-6 px-4 text-center">Stock</th>
+                                    <th className="py-6 px-4">Availability</th>
+                                    <th className="px-8 py-6 text-right">Edit</th>
                                 </tr>
-                            ) : (
-                                filtered.map((prod) => (
-                                    <tr key={prod.id} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50 transition-colors">
-                                        <td className="px-8 py-5">
-                                            <div className="flex items-center gap-6">
-                                                <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-[1.25rem] overflow-hidden shrink-0 border border-zinc-200 dark:border-zinc-700 shadow-sm relative group-hover:scale-105 transition-all duration-500">
-                                                    {prod.image_url ? (
-                                                        <img src={prod.image_url} alt={prod.name} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center text-zinc-300"><ImageIcon size={20} /></div>
-                                                    )}
-                                                </div>
-                                                <div className="min-w-0 pr-4">
-                                                    <div className="flex items-center gap-2 mb-1">
-                                                        <div className={`w-2 h-2 rounded-full ${prod.is_veg ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                                                        <p className="font-black text-zinc-900 dark:text-white uppercase tracking-tight text-[13px]">{prod.name}</p>
-                                                    </div>
-                                                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest truncate max-w-[200px] ">{prod.description || 'No description'}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="py-5 px-4">
-                                            <div className="flex items-center gap-2">
-                                                <Store size={14} className="text-emerald-500" />
-                                                <span className="text-[10px] font-black uppercase text-zinc-900 dark:text-zinc-100">
-                                                    {prod.merchant?.name || 'Global'}
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td className="py-5 px-4">
-                                            <span className="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl text-[9px] font-black uppercase text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700">
-                                                {prod.category?.name || 'Uncategorized'}
-                                            </span>
-                                        </td>
-                                        <td className="py-5 px-4">
-                                            <span className="font-black text-zinc-900 dark:text-white tracking-tighter text-lg">₹{parseFloat(prod.price || 0).toFixed(0)}</span>
-                                        </td>
-                                        <td className="py-5 px-4 text-center">
-                                            <div className="flex flex-col items-center">
-                                                <span className={`font-black text-[11px] uppercase tracking-wider ${prod.stock < 10 ? 'text-rose-500' : 'text-zinc-800 dark:text-zinc-200'}`}>
-                                                    {prod.has_variants 
-                                                        ? (prod.variants?.reduce((acc, v) => acc + parseInt(v.stock || 0), 0) || 0)
-                                                        : prod.stock
-                                                    } Units
-                                                </span>
-                                                {prod.has_variants && (
-                                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.1em] mt-1 bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                                                        {prod.variants?.length || 0} Variants
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td className="py-5 px-4">
-                                            <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.1em] border-2 ${
-                                                prod.is_available 
-                                                ? 'bg-emerald-50/50 text-emerald-600 border-emerald-500/10' 
-                                                : 'bg-rose-50/50 text-rose-600 border-rose-500/10'
-                                            }`}>
-                                                <span className={`w-1.5 h-1.5 rounded-full ${prod.is_available ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
-                                                {prod.is_available ? 'Live' : 'Hidden'}
-                                            </span>
-                                        </td>
-                                        <td className="px-8 py-5 text-right">
-                                            <div className="flex justify-end gap-3">
-                                                <button
-                                                    onClick={() => handleEdit(prod)}
-                                                    className="w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
-                                                >
-                                                    <Edit2 size={16} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(prod.id)}
-                                                    className="w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
+                            </thead>
+                            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                                {filtered.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="7" className="py-32 text-center">
+                                            <div className="flex flex-col items-center justify-center opacity-40">
+                                                <Box size={48} className="text-zinc-300" />
+                                                <p className="text-[10px] font-black uppercase tracking-[0.3em] mt-6 text-zinc-500">Inventory Empty</p>
                                             </div>
                                         </td>
                                     </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
+                                ) : (
+                                    filtered.map((prod) => (
+                                        <tr key={prod.id} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50 transition-colors">
+                                            <td className="px-8 py-5">
+                                                <div className="flex items-center gap-6">
+                                                    <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-[1.25rem] overflow-hidden shrink-0 border border-zinc-200 dark:border-zinc-700 shadow-sm relative group-hover:scale-105 transition-all duration-500">
+                                                        {prod.image_url ? (
+                                                            <img src={prod.image_url} alt={prod.name} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <div className="w-full h-full flex items-center justify-center text-zinc-300"><ImageIcon size={20} /></div>
+                                                        )}
+                                                    </div>
+                                                    <div className="min-w-0 pr-4">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <div className={`w-2 h-2 rounded-full ${prod.is_veg ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                                                            <p className="font-black text-zinc-900 dark:text-white uppercase tracking-tight text-[13px]">{prod.name}</p>
+                                                        </div>
+                                                        <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest truncate max-w-[200px] ">{prod.description || 'No description'}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="py-5 px-4">
+                                                <div className="flex items-center gap-2">
+                                                    <Store size={14} className="text-emerald-500" />
+                                                    <span className="text-[10px] font-black uppercase text-zinc-900 dark:text-zinc-100">
+                                                        {prod.merchant?.name || 'Global'}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td className="py-5 px-4">
+                                                <span className="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl text-[9px] font-black uppercase text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700">
+                                                    {prod.category?.name || 'Uncategorized'}
+                                                </span>
+                                            </td>
+                                            <td className="py-5 px-4">
+                                                <span className="font-black text-zinc-900 dark:text-white tracking-tighter text-lg">₹{parseFloat(prod.price || 0).toFixed(0)}</span>
+                                            </td>
+                                            <td className="py-5 px-4 text-center">
+                                                <div className="flex flex-col items-center">
+                                                    <span className={`font-black text-[11px] uppercase tracking-wider ${prod.stock < 10 ? 'text-rose-500' : 'text-zinc-800 dark:text-zinc-200'}`}>
+                                                        {prod.has_variants 
+                                                            ? (prod.variants?.reduce((acc, v) => acc + parseInt(v.stock || 0), 0) || 0)
+                                                            : prod.stock
+                                                        } Units
+                                                    </span>
+                                                    {prod.has_variants && (
+                                                        <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.1em] mt-1 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                                                            {prod.variants?.length || 0} Variants
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td className="py-5 px-4">
+                                                <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.1em] border-2 ${
+                                                    prod.is_available 
+                                                    ? 'bg-emerald-50/50 text-emerald-600 border-emerald-500/10' 
+                                                    : 'bg-rose-50/50 text-rose-600 border-rose-500/10'
+                                                }`}>
+                                                    <span className={`w-1.5 h-1.5 rounded-full ${prod.is_available ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
+                                                    {prod.is_available ? 'Live' : 'Hidden'}
+                                                </span>
+                                            </td>
+                                            <td className="px-8 py-5 text-right">
+                                                <div className="flex justify-end gap-3">
+                                                    <button
+                                                        onClick={() => handleEdit(prod)}
+                                                        className="w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
+                                                    >
+                                                        <Edit2 size={16} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(prod.id)}
+                                                        className="w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
             </div>
 
@@ -484,7 +492,7 @@ const Products = () => {
                                             )}
                                             {(uploading || imgLoading) && (
                                                 <div className="absolute inset-0 bg-zinc-950/60 backdrop-blur-sm flex items-center justify-center">
-                                                    <Loader2 className="w-6 h-6 text-white animate-spin" />
+                                                    <ApnaCartLoader centered={false} size={24} />
                                                 </div>
                                             )}
                                         </div>

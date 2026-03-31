@@ -1,0 +1,5 @@
+﻿ca7d13f feat: implement admin panel pages and merchant profile management system
+40fc9b1 feat: update admin favicon to new SVG logo
+0a71a40 feat: add favicon to admin dashboard index page
+ec45b7f feat: implement Offers management page with CRUD functionality, AI image generation, and merchant/category/product linking.
+9105a51 chore: update react-leaflet dependency version.

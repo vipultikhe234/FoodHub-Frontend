@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserCircle, Mail, Phone, MapPin, Save, Loader2, ShieldCheck } from 'lucide-react';
@@ -72,7 +73,7 @@ const UserProfile = () => {
         }
     };
 
-    if (loading) return <ApnaCartLoader />;
+    // if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20 font-sans">
@@ -88,73 +89,80 @@ const UserProfile = () => {
             </div>
 
             <form onSubmit={handleSave} className="bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 md:p-10 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-8">
-                
-                <div className="flex items-center gap-6 pb-8 border-b border-zinc-100 dark:border-zinc-800">
-                    <div className="w-20 h-20 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center text-zinc-400 shadow-inner">
-                        <UserCircle size={40} />
+                {loading ? (
+                    <div className="py-24 text-center">
+                        <ApnaCartLoader centered={true} size={80} />
                     </div>
-                    <div>
-                        <h2 className="text-xl font-black text-zinc-900 dark:text-white uppercase tracking-tight">{formData.name || 'Anonymous User'}</h2>
-                        <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] mt-1">{formData.email}</p>
-                    </div>
-                </div>
+                ) : (
+                    <>
+                        <div className="flex items-center gap-6 pb-8 border-b border-zinc-100 dark:border-zinc-800">
+                            <div className="w-20 h-20 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center text-zinc-400 shadow-inner">
+                                <UserCircle size={40} />
+                            </div>
+                            <div>
+                                <h2 className="text-xl font-black text-zinc-900 dark:text-white uppercase tracking-tight">{formData.name || 'Anonymous User'}</h2>
+                                <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] mt-1">{formData.email}</p>
+                            </div>
+                        </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2.5">
-                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><UserCircle size={14} /> Full Name</label>
-                        <input
-                            required
-                            type="text"
-                            value={formData.name}
-                            onChange={(e) => setFormData({...formData, name: e.target.value})}
-                            className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-wide"
-                            placeholder="Enter your name"
-                        />
-                    </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2.5">
+                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><UserCircle size={14} /> Full Name</label>
+                                <input
+                                    required
+                                    type="text"
+                                    value={formData.name}
+                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-wide"
+                                    placeholder="Enter your name"
+                                />
+                            </div>
 
-                    <div className="space-y-2.5">
-                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Mail size={14} /> Identity Email</label>
-                        <input
-                            type="email"
-                            disabled
-                            value={formData.email}
-                            className="w-full bg-zinc-100 dark:bg-zinc-900/50 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-500 outline-none cursor-not-allowed uppercase tracking-wide"
-                        />
-                    </div>
+                            <div className="space-y-2.5">
+                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Mail size={14} /> Identity Email</label>
+                                <input
+                                    type="email"
+                                    disabled
+                                    value={formData.email}
+                                    className="w-full bg-zinc-100 dark:bg-zinc-900/50 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-500 outline-none cursor-not-allowed uppercase tracking-wide"
+                                />
+                            </div>
 
-                    <div className="space-y-2.5">
-                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Phone size={14} /> Contact Matrix</label>
-                        <input
-                            type="text"
-                            value={formData.phone}
-                            onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                            className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all font-mono"
-                            placeholder="e.g. +91 98765 43210"
-                        />
-                    </div>
+                            <div className="space-y-2.5">
+                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><Phone size={14} /> Contact Matrix</label>
+                                <input
+                                    type="text"
+                                    value={formData.phone}
+                                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all font-mono"
+                                    placeholder="e.g. +91 98765 43210"
+                                />
+                            </div>
 
-                    <div className="space-y-2.5 md:col-span-2">
-                        <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><MapPin size={14} /> Registered Address</label>
-                        <textarea
-                            value={formData.address}
-                            onChange={(e) => setFormData({...formData, address: e.target.value})}
-                            rows="3"
-                            className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-wide leading-relaxed"
-                            placeholder="Enter physical address details"
-                        />
-                    </div>
-                </div>
+                            <div className="space-y-2.5 md:col-span-2">
+                                <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest flex items-center gap-2"><MapPin size={14} /> Registered Address</label>
+                                <textarea
+                                    value={formData.address}
+                                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                                    rows="3"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-wide leading-relaxed"
+                                    placeholder="Enter physical address details"
+                                />
+                            </div>
+                        </div>
 
-                <div className="pt-4 flex justify-end">
-                    <button
-                        type="submit"
-                        disabled={saving}
-                        className="w-full md:w-auto px-8 bg-zinc-900 dark:bg-emerald-500 text-white dark:text-zinc-900 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-zinc-900/10 dark:shadow-emerald-500/20 flex items-center justify-center gap-3 active:scale-[0.98] transition-all disabled:opacity-50"
-                    >
-                        {saving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
-                        {saving ? 'Transmitting...' : 'Update Context'}
-                    </button>
-                </div>
+                        <div className="pt-4 flex justify-end">
+                            <button
+                                type="submit"
+                                disabled={saving}
+                                className="w-full md:w-auto px-8 bg-zinc-900 dark:bg-emerald-500 text-white dark:text-zinc-900 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-zinc-900/10 dark:shadow-emerald-500/20 flex items-center justify-center gap-3 active:scale-[0.98] transition-all disabled:opacity-50"
+                            >
+                                {saving ? <ApnaCartLoader centered={false} size={16} /> : <Save size={16} />}
+                                {saving ? 'Transmitting...' : 'Update Context'}
+                            </button>
+                        </div>
+                    </>
+                )}
             </form>
         </div>
     );

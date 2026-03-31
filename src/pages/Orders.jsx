@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
 import { orderService } from '../services/api';
 import { loadStripe } from '@stripe/stripe-js';
@@ -148,7 +149,7 @@ const Orders = () => {
         return acc;
     }, {});
 
-    if (loading) return <ApnaCartLoader />;
+    // if (loading) return <ApnaCartLoader />;
 
     return (
         <Elements stripe={stripePromise}>
@@ -212,7 +213,13 @@ const Orders = () => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                                {filteredOrders.length === 0 ? (
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="7" className="py-24 text-center">
+                                            <ApnaCartLoader centered={true} size={80} />
+                                        </td>
+                                    </tr>
+                                ) : filteredOrders.length === 0 ? (
                                     <tr>
                                         <td colSpan="7" className="py-24 text-center">
                                             <div className="flex flex-col items-center justify-center opacity-30">

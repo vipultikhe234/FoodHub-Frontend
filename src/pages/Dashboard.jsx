@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDashboardStats } from '../hooks/useDashboardStats';
@@ -50,7 +51,8 @@ const Dashboard = () => {
         visible: { y: 0, opacity: 1 }
     };
 
-    if (loading) return <ApnaCartLoader />;
+    // Removed top-level loading check to keep header visible
+    // if (loading) return <ApnaCartLoader />;
 
     if (error) return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-12 bg-white dark:bg-zinc-900 rounded-2xl border border-red-100 dark:border-red-900/20 max-w-xl mx-auto shadow-sm">
@@ -113,102 +115,110 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Stat Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-6 gap-6">
-                {statsConfig.map((stat, i) => (
-                    <motion.div
-                        key={i}
-                        variants={itemVariants}
-                        className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow group"
-                    >
-                        <div className="flex items-center justify-between mb-4">
-                            <div className={`p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 group-hover:scale-110 transition-transform`}>
-                                <stat.icon className="w-5 h-5" />
-                            </div>
-                            <div className={`flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2.5 py-1 rounded-full uppercase tracking-wider`}>
-                                <TrendingUp className="w-3 h-3" />
-                                12%
-                            </div>
-                        </div>
-                        <p className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-1">{stat.label}</p>
-                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">{stat.val}</h3>
-                        <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-2 font-medium">{stat.sub}</p>
-                    </motion.div>
-                ))}
-            </div>
-
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                {/* Orders Overview */}
-                <motion.div variants={itemVariants} className="xl:col-span-2 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-                    <div className="px-8 py-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
-                        <div>
-                            <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Recent Orders</h3>
-                            <p className="text-xs text-zinc-500 font-medium">Tracking live node activity</p>
-                        </div>
-                        <Link to="/orders" className="text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors uppercase tracking-widest flex items-center gap-1">
-                            View All <ChevronRight className="w-3 h-3" />
-                        </Link>
-                    </div>
-
-                    <div className="p-6">
-                        {orders.length === 0 ? (
-                            <div className="py-20 text-center">
-                                <ShoppingCart size={48} className="text-zinc-100 mx-auto mb-4" />
-                                <p className="text-sm font-medium text-zinc-400 uppercase tracking-widest">No recent traffic</p>
-                            </div>
-                        ) : (
-                            <div className="space-y-3">
-                                {orders.slice(0, 5).map((order) => {
-                                    const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
-                                    return (
-                                        <div key={order.id} className="flex items-center justify-between p-4 bg-zinc-50/50 dark:bg-zinc-800/30 rounded-xl border border-zinc-100 dark:border-zinc-800 hover:border-emerald-200 dark:hover:border-emerald-900/50 transition-all group">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center font-bold text-zinc-400 text-xs">
-                                                    #{order.id.toString().slice(-3)}
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-tight">{order.user?.name || 'Guest User'}</p>
-                                                    <p className="text-[10px] text-zinc-400 font-medium uppercase tracking-widest">{new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • ₹{order.total_price}</p>
-                                                </div>
-                                            </div>
-                                            <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${cfg.bg} ${cfg.text}`}>
-                                                {order.status}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                    </div>
-                </motion.div>
-
-                {/* Status Breakdown */}
-                <motion.div variants={itemVariants} className="space-y-6">
-                    <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-                        <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-6">Distribution</h3>
-                        <div className="space-y-6">
-                            {statusBreakdown.map((s) => {
-                                const cfg = STATUS_CONFIG[s.status];
-                                return (
-                                    <div key={s.status} className="space-y-2.5">
-                                        <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.1em]">
-                                            <span className="text-zinc-500">{s.status}</span>
-                                            <span className="text-zinc-900 dark:text-white">{s.count}</span>
-                                        </div>
-                                        <div className="h-2 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{ width: `${Math.min((s.count / (orders.length || 1)) * 100, 100)}%` }}
-                                                className={`h-full ${cfg.bg.replace('100', '500')}`}
-                                            />
-                                        </div>
+            {loading ? (
+                <div className="py-20">
+                    <ApnaCartLoader centered={true} size={80} />
+                </div>
+            ) : (
+                <>
+                    {/* Stat Cards Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-6 gap-6">
+                        {statsConfig.map((stat, i) => (
+                            <motion.div
+                                key={i}
+                                variants={itemVariants}
+                                className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow group"
+                            >
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className={`p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 group-hover:scale-110 transition-transform`}>
+                                        <stat.icon className="w-5 h-5" />
                                     </div>
-                                );
-                            })}
-                        </div>
+                                    <div className={`flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2.5 py-1 rounded-full uppercase tracking-wider`}>
+                                        <TrendingUp className="w-3 h-3" />
+                                        12%
+                                    </div>
+                                </div>
+                                <p className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-1">{stat.label}</p>
+                                <h3 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">{stat.val}</h3>
+                                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-2 font-medium">{stat.sub}</p>
+                            </motion.div>
+                        ))}
                     </div>
-                </motion.div>
-            </div>
+
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                        {/* Orders Overview */}
+                        <motion.div variants={itemVariants} className="xl:col-span-2 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+                            <div className="px-8 py-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
+                                <div>
+                                    <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Recent Orders</h3>
+                                    <p className="text-xs text-zinc-500 font-medium">Tracking live node activity</p>
+                                </div>
+                                <Link to="/orders" className="text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors uppercase tracking-widest flex items-center gap-1">
+                                    View All <ChevronRight className="w-3 h-3" />
+                                </Link>
+                            </div>
+
+                            <div className="p-6">
+                                {orders.length === 0 ? (
+                                    <div className="py-20 text-center">
+                                        <ShoppingCart size={48} className="text-zinc-100 mx-auto mb-4" />
+                                        <p className="text-sm font-medium text-zinc-400 uppercase tracking-widest">No recent traffic</p>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        {orders.slice(0, 5).map((order) => {
+                                            const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
+                                            return (
+                                                <div key={order.id} className="flex items-center justify-between p-4 bg-zinc-50/50 dark:bg-zinc-800/30 rounded-xl border border-zinc-100 dark:border-zinc-800 hover:border-emerald-200 dark:hover:border-emerald-900/50 transition-all group">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-10 h-10 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center font-bold text-zinc-400 text-xs">
+                                                            #{order.id.toString().slice(-3)}
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-tight">{order.user?.name || 'Guest User'}</p>
+                                                            <p className="text-[10px] text-zinc-400 font-medium uppercase tracking-widest">{new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • ₹{order.total_price}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${cfg.bg} ${cfg.text}`}>
+                                                        {order.status}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+
+                        {/* Status Breakdown */}
+                        <motion.div variants={itemVariants} className="space-y-6">
+                            <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
+                                <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-6">Distribution</h3>
+                                <div className="space-y-6">
+                                    {statusBreakdown.map((s) => {
+                                        const cfg = STATUS_CONFIG[s.status];
+                                        return (
+                                            <div key={s.status} className="space-y-2.5">
+                                                <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.1em]">
+                                                    <span className="text-zinc-500">{s.status}</span>
+                                                    <span className="text-zinc-900 dark:text-white">{s.count}</span>
+                                                </div>
+                                                <div className="h-2 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                                                    <motion.div
+                                                        initial={{ width: 0 }}
+                                                        animate={{ width: `${Math.min((s.count / (orders.length || 1)) * 100, 100)}%` }}
+                                                        className={`h-full ${cfg.bg.replace('100', '500')}`}
+                                                    />
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </>
+            )}
         </motion.div>
     );
 };

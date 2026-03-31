@@ -17,6 +17,7 @@ import UserProfile from './pages/UserProfile';
 import LocationMaster from './pages/LocationMaster';
 import Offers from './pages/Offers';
 import ApnaCartLoader from './components/ApnaCartLoader';
+import OriginalApnaCartLoader from './components/OriginalApnaCartLoader'; // add original loader
 
 import { MerchantProvider } from './contexts/MerchantContext';
 
@@ -51,6 +52,7 @@ function App() {
         <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/loader-preview" element={<ApnaCartLoader />} />
+        <Route path="/original-loader" element={<OriginalApnaCartLoader />} />
         <Route path="/" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />

@@ -1,3 +1,4 @@
+import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -97,7 +98,7 @@ const Coupons = () => {
         );
     };
 
-    if (loading) return <ApnaCartLoader />;
+    // if (loading) return <ApnaCartLoader />;
 
     return (
         <div className="space-y-6 pb-20 font-sans">
@@ -118,7 +119,11 @@ const Coupons = () => {
 
             {/* Coupons Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {coupons.length === 0 ? (
+                {loading ? (
+                    <div className="col-span-full py-24 text-center">
+                        <ApnaCartLoader centered={true} size={80} />
+                    </div>
+                ) : coupons.length === 0 ? (
                     <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
                         <Ticket size={48} className="text-zinc-400" />
                         <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No rewards configured</p>
@@ -329,4 +334,3 @@ const Coupons = () => {
 };
 
 export default Coupons;
-
