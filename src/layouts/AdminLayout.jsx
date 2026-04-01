@@ -32,6 +32,7 @@ import {
     Truck,
     Settings2,
     LayoutGrid,
+    MessageSquare,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -158,6 +159,7 @@ const ADMIN_NAV = [
         icon: UsersIcon,
         items: [
             { to: '/users', label: 'Users', icon: UsersIcon },
+            { to: '/reviews', label: 'Platform Feedbacks', icon: MessageSquare },
         ],
     },
 ];
@@ -199,6 +201,7 @@ const MERCHANT_NAV = [
         icon: Truck,
         items: [
             { to: '/rider-staff', label: 'My Riders', icon: Bike },
+            { to: '/reviews', label: 'Customer Word', icon: MessageSquare },
         ],
     },
 ];

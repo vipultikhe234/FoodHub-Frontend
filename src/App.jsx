@@ -17,6 +17,7 @@ import UserProfile from './pages/UserProfile';
 import LocationMaster from './pages/LocationMaster';
 import Offers from './pages/Offers';
 import MerchantCategories from './pages/MerchantCategories';
+import Reviews from './pages/Reviews';
 import ApnaCartLoader from './components/ApnaCartLoader';
 import OriginalApnaCartLoader from './components/OriginalApnaCartLoader'; // add original loader
 
@@ -70,6 +71,7 @@ function App() {
           <Route path="merchants" element={<Merchants />} />
           <Route path="location-master" element={<LocationMaster />} />
           <Route path="merchant-categories" element={<MerchantCategories />} />
+          <Route path="reviews" element={<Reviews />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Route>
         </Routes>

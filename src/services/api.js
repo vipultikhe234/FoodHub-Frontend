@@ -92,6 +92,21 @@ export const MerchantService = {
     getProfile: () => api.get('/merchant/profile'), // Merchant view their own
     updateProfile: (data) => api.put('/merchant/profile', data),
     toggleStatus: (id) => api.patch(`/admin/merchants/${id}/toggle`),
+    getStats: (MerchantId = null) => api.get('/stats', { params: { merchant_id: MerchantId } }),
+};
+
+export const reviewService = {
+    getAll: (params = {}) => {
+        const isAdmin = JSON.parse(localStorage.getItem('user'))?.role === 'admin';
+        const url = isAdmin ? '/admin/reviews' : '/merchant/reviews';
+        return api.get(url, { params });
+    },
+    getStats: (MerchantId = null) => {
+        const isAdmin = JSON.parse(localStorage.getItem('user'))?.role === 'admin';
+        const url = isAdmin ? '/admin/reviews/stats' : '/merchant/reviews/stats';
+        return api.get(url, { params: { merchant_id: MerchantId } });
+    },
+    delete: (id) => api.delete(`/admin/reviews/${id}`),
 };
 
 // Public cascading dropdown endpoints (no auth needed)
