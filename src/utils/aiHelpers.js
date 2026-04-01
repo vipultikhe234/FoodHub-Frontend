@@ -1,3 +1,9 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+// Initialize Gemini with API Key from .env
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "");
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
 /**
  * ── Generate Ultra-High Professional Prompt (15 Lines) ──────────────────────
  * Produces highly detailed prompt according to the module type.
@@ -6,7 +12,6 @@ const generateProfessionalPrompt = (name, type = 'product', description = '') =>
     const basePromptChunks = [
         "Masterpiece quality, 8k resolution, ultra-detailed photography.",
         "Cinematic lighting with professional studio setup.",
-        "Shot on Phase One XF with 100MP sensor, 80mm lens, f/8 aperture.",
         "Macro photography capturing extreme fine textures and realistic depth.",
         "Perfect color balance, high dynamic range (HDR), ray-traced reflections.",
         "Sharp focus on subject, soft dreamy bokeh in the background.",
@@ -25,12 +30,10 @@ const generateProfessionalPrompt = (name, type = 'product', description = '') =>
     } else if (type === 'offer') {
         specificContext = `Dynamic promotional banner for "${name}". High-contrast, vibrant, professional graphic design. Gourmet app discount style.`;
     } else if (type === 'category') {
-        // FLAT VECTOR STYLE FOR CATEGORIES
-        return `Flat vector food illustration for "${name}" category. 
-        Modern 2D graphic design, vibrant colors, thick lines, minimalist aesthetic. 
-        Clean solid color background, high-contrast, professional mobile app icon style. 
-        Creative and appetizing visualization of ${name} in a premium flat art style. 
-        Zero digital noise, sharp edges, vector quality, masterpiece.`.trim();
+        // CONCISE PREMIUM ICON STYLE (MORE RELIABLE)
+        return `Premium 3D food icon for "${name}". 
+        High quality, 8k resolution, isometric, modern clay style, 
+        vibrant colors, social media rendering, clean minimalist white background.`.trim();
     } else {
         // Product (default)
         specificContext = `High-end gourmet food photography of "${name}". 
@@ -42,82 +45,83 @@ const generateProfessionalPrompt = (name, type = 'product', description = '') =>
     return `${basePromptChunks.join("\n")}\n${specificContext}\nExtreme detail, 8k, photorealistic, premium feel.`.trim();
 };
 
-// ── Fetch a REAL food image ───────────────────────────────────────────────
-export const fetchRealFoodImage = async (name, randomize = false, description = '', type = 'product') => {
-    if (!name.trim()) return '';
-    const cleanName = name.trim().toLowerCase();
-    
-    // Deterministic random seed
-    const seed = randomize ? Math.floor(Math.random() * 99999) + 1 : cleanName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 5000;
+/**
+ * BANANA AI (GOOGLE IMAGEN 3) IMAGE GENERATOR
+ * Uses the official Google AI key to produce high-end 3D assets.
+ */
+export const fetchBananaImage = async (name) => {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    if (!apiKey) throw new Error("Google AI Key missing");
 
-    const professionalPrompt = generateProfessionalPrompt(name, type, description);
-    
-    // Using Flux model for exact 8k generation via Pollinations
-    return `https://image.pollinations.ai/prompt/${encodeURIComponent(professionalPrompt)}?width=1280&height=720&seed=${seed}&nologo=true&model=flux&enhance=true`;
-};
+    try {
+        // Correct Official Nano Banana / Imagen 3 Endpoint
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3:generateImages?key=${apiKey}`;
 
-// ── Generate AI Composition Metadata (Text) ───────────────────────────────
-export const generateAIDescription = (name) => {
-    return new Promise(async (resolve) => {
-        if (!name.trim()) return resolve('');
+        const professionalPrompt = `3D clay rendered icon of ${name}, isometric, clean white background, vibrant warm colors, soft ambient occlusion, modern app icon aesthetic, 8k resolution.`;
 
-        const isDrink = name.toLowerCase().includes('drink') || name.toLowerCase().includes('juice') || name.toLowerCase().includes('shake') || name.toLowerCase().includes('beverage') || name.toLowerCase().includes('coffee') || name.toLowerCase().includes('soda') || name.toLowerCase().includes('cold');
+        const response = await axios.post(endpoint, {
+            prompt: professionalPrompt,
+            number_of_images: 1,
+            aspect_ratio: "1:1",
+            safety_setting: "BLOCK_MEDIUM_AND_ABOVE"
+        });
 
-        const beverageHooks = [
-            `This refreshing ${name.toLowerCase()} is served chilled and is the perfect way to quench your thirst. Made with premium ingredients for a crisp and clean taste. Very refreshing and highly recommended for a hot day.`,
-            `Our signature ${name.toLowerCase()} is a crowd favorite! It has the perfect balance of sweetness and flavor, served in a large portion size. MUST try if you enjoy high-quality beverages with your meal.`,
-            `Experience the cool and zesty flavors of our ${name.toLowerCase()}. Prepared fresh and served with ice to give you that instant energy boost. Perfect for families and kids who want something yummy and cold.`
-        ];
+        // Google returns base64 or a blob link depending on account type
+        const imageData = response.data?.images?.[0]?.url || response.data?.images?.[0]?.base64;
 
-        const foodHooks = [
-            `This ${name.toLowerCase()} is prepared with our secret masala and fresh local ingredients. It has a very nice balance of spices and is perfect if you want something filling and tasty. High quality food that you will surely order again and again.`,
-            `Our special ${name.toLowerCase()} is made fresh daily to ensure the best quality. It is very soft, full of flavors, and has that perfect home-style touch which makes it great for everyone. A must try dish for a satisfying meal experience.`,
-            `If you want something yummy and healthy, then this ${name.toLowerCase()} is the best option for you. We use clean oil and very fresh vegetables to keep it light yet very delicious. It is a value for money item that never disappoints.`,
-            `A very popular choice among our regular customers, this ${name.toLowerCase()} has a great aroma and a spicy kick. It is served hot and fresh, making it ideal for your lunch or dinner. Very satisfying portions at a great price point.`,
-            `Full of authentic taste and prepared with love, our ${name.toLowerCase()} is soft on the inside and perfectly cooked. We use premium quality ingredients to give you a Merchant-style feel at home. Highly recommended for foodies.`,
-            `This ${name.toLowerCase()} is a total crowd-pleaser! It's made with a perfect blend of spices and fresh produce. Whether you're eating alone or with friends, this dish is sure to make your day better. Try it with our special chutney.`
-        ];
-
-        const culinaryHooks = isDrink ? beverageHooks : foodHooks;
-        const template = culinaryHooks[Math.floor(Math.random() * culinaryHooks.length)];
-        const timer = setTimeout(() => resolve(template), 4000);
-
-        try {
-            const secondaryHooks = [
-                "It is prepared in a very hygienic kitchen and served with proper packaging.",
-                "The taste is very authentic and it will remind you of home-cooked food.",
-                "We have made sure to keep it healthy while maintaining the great flavor.",
-                "It is a very popular dish in our menu and loved by children and adults alike.",
-                "Perfect for any time of the day, whether it is for a snack or a full meal."
-            ];
-
-            const hook1 = culinaryHooks[Math.floor(Math.random() * culinaryHooks.length)];
-            const hook2 = secondaryHooks[Math.floor(Math.random() * secondaryHooks.length)];
-
-            const finalDesc = `${hook1} ${hook2} Only the best quality items are used for yours.`;
-            await new Promise(r => setTimeout(r, 800));
-            clearTimeout(timer);
-            resolve(finalDesc);
-        } catch (_) {
-            clearTimeout(timer);
-            resolve(template);
+        if (imageData) {
+            return imageData.startsWith('http') ? imageData : `data:image/png;base64,${imageData}`;
         }
-    });
+
+        throw new Error("Empty response from Google AI");
+    } catch (error) {
+        console.warn("Banana AI falling back to high-res proxy...", error);
+        // Fallback to our high-res proxy if the key has restricted Imagen access
+        const seed = Math.floor(Math.random() * 1000000);
+        return `https://image.pollinations.ai/prompt/3D%20clay%20icon%20of%20${encodeURIComponent(name)}%2C%20vibrant%2C%20white%20background%2C%20isometric?width=1024&height=1024&seed=${seed}&nologo=true`;
+    }
 };
 
-// ── Generate AI Naming Suggestions (Production Grade) ─────────────────────
-export const generateProductNames = (keyword) => {
+/**
+ * FETCH FOOD IMAGE (Wrapper)
+ */
+export const fetchRealFoodImage = async (name, isRetry = false, description = '', type = 'product') => {
+    if (type === 'category') {
+        return await fetchBananaImage(name);
+    }
+
+    // Default product image logic
+    const seed = isRetry ? Math.floor(Math.random() * 1000000) : 42;
+    const professionalPrompt = `High quality 3D food icon of ${name}. ${description}. 8k resolution, isometric, modern clay style, vibrant colors, clean white background.`;
+
+    return `https://image.pollinations.ai/prompt/${encodeURIComponent(professionalPrompt)}?width=1024&height=1024&seed=${seed}&nologo=true`;
+};
+
+// ── Generate REAL AI Content using Gemini ───────────────────────────────
+export const generateAIDescription = async (name) => {
+    if (!name.trim()) return "";
+    try {
+        const prompt = `Write a premium, mouth-watering marketing description for a food item named "${name}". Keep it appetizing, under 40 words. Focus on freshness and quality for a delivery app. No emojis.`;
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        return response.text();
+    } catch (error) {
+        console.error("Gemini description error:", error);
+        return `Delicious ${name} prepared with fresh ingredients and authentic flavors. Perfect for a satisfying meal. Order now!`;
+    }
+};
+
+// ── Generate REAL AI Naming Suggestions using Gemini ───────────────────────
+export const generateProductNames = async (keyword) => {
     if (!keyword || keyword.length < 3) return [];
-
-    const prefixes = ['Signature', 'Royal', 'Chef\'s Special', 'Authentic', 'Gourmet', 'Classic', 'Zesty', 'Smoky', 'Crunchy', 'Melted'];
-    const suffixes = ['Delight', 'Fusion', 'Symphony', 'Medley', 'Temptation', 'Supreme', 'Masterpiece', 'Bowl', 'Platter', 'Wrap'];
-
-    const suggestions = [
-        `${prefixes[Math.floor(Math.random() * prefixes.length)]} ${keyword}`,
-        `${keyword} ${suffixes[Math.floor(Math.random() * suffixes.length)]}`,
-        `${prefixes[Math.floor(Math.random() * prefixes.length)]} ${keyword} ${suffixes[Math.floor(Math.random() * suffixes.length)]}`
-    ];
-
-    return [...new Set(suggestions)];
+    try {
+        const prompt = `Suggest 3 creative, high-end names for a food product related to "${keyword}". Standard delivery app style. Return only the names separated by commas. No extra text. No numbering.`;
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        return response.text().split(",").map(n => n.trim()).filter(n => n);
+    } catch (error) {
+        console.error("Gemini naming error:", error);
+        return [`Signature ${keyword}`, `${keyword} Delight`, `Grand ${keyword}`];
+    }
 };
 

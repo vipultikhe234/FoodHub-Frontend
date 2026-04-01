@@ -72,7 +72,7 @@ export const orderService = {
     getUserOrders: () => api.get('/orders'),
     getOrder: (id) => api.get(`/orders/${id}`),
     getAllOrders: (MerchantId = null) => api.get('/orders', { params: { merchant_id: MerchantId } }),
-    getStats: (MerchantId = null) => api.get('/stats', { params: { merchant_id: MerchantId } }), 
+    getStats: (MerchantId = null) => api.get('/stats', { params: { merchant_id: MerchantId } }),
     updateStatus: (id, status) => api.patch(`/orders/${id}/status`, { status }),
     updatePaymentStatus: (id, status) => api.patch(`/orders/${id}/payment-status`, { status }),
     initiatePayment: (id) => api.post(`/orders/${id}/initiate-payment`),
@@ -91,7 +91,7 @@ export const MerchantService = {
     updateMerchant: (id, data) => api.put(`/admin/merchants/${id}`, data), // Admin update
     getProfile: () => api.get('/merchant/profile'), // Merchant view their own
     updateProfile: (data) => api.put('/merchant/profile', data),
-    toggleStatus: (id) => api.patch(`/admin/merchants/${id}/toggle`), 
+    toggleStatus: (id) => api.patch(`/admin/merchants/${id}/toggle`),
 };
 
 // Public cascading dropdown endpoints (no auth needed)
@@ -123,7 +123,7 @@ export const locationService = {
 export const merchantCategoryService = {
     // Public listing
     getAll: () => api.get('/merchant-categories'),
-    
+
     // Admin Master CRUD
     adminGetAll: () => api.get('/admin/merchant-categories'),
     adminCreate: (data) => api.post('/admin/merchant-categories', data),

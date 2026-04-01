@@ -34,6 +34,7 @@ const Categories = () => {
     const [showModal, setShowModal] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [imgLoading, setImgLoading] = useState(false);
+    const [imgLoaded, setImgLoaded] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [merchantCategories, setMerchantCategories] = useState([]);
@@ -54,8 +55,8 @@ const Categories = () => {
         }
     }, [showModal, selectedMerchantId, editingId]);
 
-    useEffect(() => { 
-        fetchData(); 
+    useEffect(() => {
+        fetchData();
         if (!isMerchant) {
             merchantCategoryService.adminGetAll().then(res => setMerchantCategories(res.data.data || []));
         }
@@ -86,6 +87,7 @@ const Categories = () => {
             setImgLoading(false);
             return;
         }
+        setImgLoaded(false);
         setImgLoading(true);
         debounceRef.current = setTimeout(async () => {
             const url = await fetchRealFoodImage(name, false, '', 'category');
@@ -96,6 +98,7 @@ const Categories = () => {
 
     const handleRetryImage = async () => {
         if (!newCategory.name.trim()) return;
+        setImgLoaded(false);
         setImgLoading(true);
         const url = await fetchRealFoodImage(newCategory.name, true, '', 'category');
         setNewCategory(prev => ({ ...prev, image: url, image_url: url }));
@@ -135,6 +138,7 @@ const Categories = () => {
             status: cat.status ?? true,
             merchant_id: cat.merchant_id || ''
         });
+        setImgLoaded(true);
         setShowModal(true);
     };
 
@@ -142,20 +146,20 @@ const Categories = () => {
         e.preventDefault();
         if (!newCategory.name.trim()) return toast.error('Category name required');
         try {
-            const payload = { 
-                name: newCategory.name, 
-                image: newCategory.image, 
+            const payload = {
+                name: newCategory.name,
+                image: newCategory.image,
                 status: newCategory.status,
                 merchant_id: newCategory.merchant_id
             };
-            
+
             if (selectedMerchantId && !payload.merchant_id) {
                 payload.merchant_id = selectedMerchantId;
             }
 
             if (editingId) await api.put(`/categories/${editingId}`, payload);
             else await api.post('/categories', payload);
-            
+
             setShowModal(false);
             setEditingId(null);
             fetchData();
@@ -169,10 +173,10 @@ const Categories = () => {
     const handleDelete = async (id) => {
         toast(
             (t) => (
-                <span style={{display:'flex',alignItems:'center',gap:'12px'}}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     Delete this category?
-                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/categories/${id}`); setCategories(prev => prev.filter(c => c.id !== id)); toast.success('Category deleted'); } catch { toast.error('Error deleting category'); }}} style={{background:'#ef4444',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>YES</button>
-                    <button onClick={() => toast.dismiss(t.id)} style={{background:'#27272a',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>NO</button>
+                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/categories/${id}`); setCategories(prev => prev.filter(c => c.id !== id)); toast.success('Category deleted'); } catch { toast.error('Error deleting category'); } }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}>YES</button>
+                    <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}>NO</button>
                 </span>
             ),
             { duration: 6000 }
@@ -184,6 +188,7 @@ const Categories = () => {
         setEditingId(null);
         setNewCategory({ name: '', image: '', image_url: '', status: true, merchant_id: '' });
         setImgLoading(false);
+        setImgLoaded(false);
         clearTimeout(debounceRef.current);
     };
 
@@ -194,9 +199,9 @@ const Categories = () => {
 
     const filtered = categories.filter(c => {
         const matchesSearch = c.name?.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesMerchantCategory = !selectedMerchantCategoryId || 
-                                      c.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
-        
+        const matchesMerchantCategory = !selectedMerchantCategoryId ||
+            c.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
+
         return matchesSearch && matchesMerchantCategory;
     });
 
@@ -211,18 +216,18 @@ const Categories = () => {
                     <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Categories</h1>
                     <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Manage all item groupings.</p>
                 </div>
-                
+
                 <div className="flex items-center gap-4">
-                    <button 
+                    <button
                         onClick={fetchData}
                         className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
                     </button>
-                    
+
                     <div className="relative group hidden sm:block">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
-                        <input 
+                        <input
                             type="text"
                             placeholder="SEARCH CATEGORIES..."
                             className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
@@ -247,8 +252,8 @@ const Categories = () => {
                             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={14} />
                         </div>
                     )}
-                    
-                    <button 
+
+                    <button
                         onClick={() => {
                             setEditingId(null);
                             setNewCategory({ name: '', image: '', image_url: '', status: true, merchant_id: selectedMerchantId || '' });
@@ -375,11 +380,20 @@ const Categories = () => {
                                 <div className="space-y-3">
                                     <label className="text-[9px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.2em]">Visual Identification</label>
                                     <div className="relative h-32 bg-zinc-50 dark:bg-zinc-900 rounded-[1.5rem] border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center overflow-hidden transition-all hover:border-emerald-500/50 shadow-inner group">
-                                        {imgLoading ? (
-                                            <ApnaCartLoader centered={false} size={24} />
-                                        ) : newCategory.image_url ? (
+                                        {(imgLoading || (newCategory.image_url && !imgLoaded)) && (
+                                            <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-900">
+                                                <ApnaCartLoader centered={false} size={24} />
+                                            </div>
+                                        )}
+                                        {newCategory.image_url ? (
                                             <div className="w-full h-full relative">
-                                                <img src={newCategory.image_url} className="w-full h-full object-cover" alt="preview" />
+                                                <img
+                                                    src={newCategory.image_url}
+                                                    className={`w-full h-full object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                                                    alt="preview"
+                                                    onLoad={() => setImgLoaded(true)}
+                                                    onError={() => { setImgLoaded(true); toast.error('Image generation delay... please wait.'); }}
+                                                />
                                                 <div className="absolute inset-0 bg-zinc-950/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all backdrop-blur-[2px]">
                                                     <p className="text-[9px] font-black text-white uppercase tracking-widest">Change</p>
                                                 </div>
@@ -425,9 +439,9 @@ const Categories = () => {
                                         onClick={() => setNewCategory(prev => ({ ...prev, status: !prev.status }))}
                                         className={`w-10 h-5 rounded-full relative transition-all ${newCategory.status ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'}`}
                                     >
-                                        <motion.div 
+                                        <motion.div
                                             animate={{ x: newCategory.status ? 20 : 4 }}
-                                            className="absolute top-1 w-3 h-3 bg-white rounded-full shadow-sm" 
+                                            className="absolute top-1 w-3 h-3 bg-white rounded-full shadow-sm"
                                         />
                                     </button>
                                 </div>

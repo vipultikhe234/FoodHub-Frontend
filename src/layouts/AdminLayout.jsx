@@ -214,7 +214,7 @@ const AdminLayout = () => {
         try { return saved ? JSON.parse(saved) : null; }
         catch (e) { return null; }
     });
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1024);
     const [isDarkMode, setIsDarkMode] = useState(false);
 
     useEffect(() => {
@@ -257,8 +257,14 @@ const AdminLayout = () => {
     };
 
     useEffect(() => {
-        if (window.innerWidth < 1024) setIsSidebarOpen(false);
-    }, [location.pathname]);
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) setIsSidebarOpen(true);
+            else setIsSidebarOpen(false);
+        };
+        handleResize(); // Initial check
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleLogout = async () => {
         try { await authService.logout(); }

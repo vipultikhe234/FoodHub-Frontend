@@ -92,7 +92,7 @@ const Products = () => {
                 api.get(`/products${query}`),
                 api.get(`/categories${query}`)
             ]);
-            
+
             setProducts(prodRes.data.data || prodRes.data || []);
             setCategories(catRes.data.data || catRes.data || []);
         } catch (error) {
@@ -227,10 +227,10 @@ const Products = () => {
     const handleDelete = async (id) => {
         toast(
             (t) => (
-                <span style={{display:'flex',alignItems:'center',gap:'12px'}}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     Delete this product?
-                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/products/${id}`); setProducts(products.filter(p => p.id !== id)); toast.success("Product deleted"); } catch { toast.error("Error deleting product"); }}} style={{background:'#ef4444',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>YES</button>
-                    <button onClick={() => toast.dismiss(t.id)} style={{background:'#27272a',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>NO</button>
+                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/products/${id}`); setProducts(products.filter(p => p.id !== id)); toast.success("Product deleted"); } catch { toast.error("Error deleting product"); } }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}>YES</button>
+                    <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}>NO</button>
                 </span>
             ),
             { duration: 6000 }
@@ -239,11 +239,11 @@ const Products = () => {
 
     const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            product.description?.toLowerCase().includes(searchQuery.toLowerCase());
+            product.description?.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesCategory = selectedCategory === 'all' || product.category_id?.toString() === selectedCategory.toString();
-        
-        const matchesMerchantCategory = !selectedMerchantCategoryId || 
-                                      product.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
+
+        const matchesMerchantCategory = !selectedMerchantCategoryId ||
+            product.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
 
         return matchesSearch && matchesCategory && matchesMerchantCategory;
     });
@@ -286,18 +286,18 @@ const Products = () => {
                     <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Products</h1>
                     <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Inventory Management.</p>
                 </div>
-                
+
                 <div className="flex items-center gap-4">
-                    <button 
+                    <button
                         onClick={fetchData}
                         className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
                     </button>
-                    
+
                     <div className="relative group hidden sm:block">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
-                        <input 
+                        <input
                             type="text"
                             placeholder="SEARCH CATALOGUE..."
                             className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
@@ -328,8 +328,8 @@ const Products = () => {
                         Bulk Upload
                         <input type="file" className="hidden" accept=".xlsx,.xls,.csv" onChange={handleBulkUpload} />
                     </label>
-                    
-                    <button 
+
+                    <button
                         onClick={() => {
                             setEditingId(null);
                             setNewProduct({ ...initialProductState, merchant_id: selectedMerchantId || '' });
@@ -438,7 +438,7 @@ const Products = () => {
                                             <td className="py-5 px-4 text-center">
                                                 <div className="flex flex-col items-center">
                                                     <span className={`font-black text-[11px] uppercase tracking-wider ${prod.stock < 10 ? 'text-rose-500' : 'text-zinc-800 dark:text-zinc-200'}`}>
-                                                        {prod.has_variants 
+                                                        {prod.has_variants
                                                             ? (prod.variants?.reduce((acc, v) => acc + parseInt(v.stock || 0), 0) || 0)
                                                             : prod.stock
                                                         } Units
@@ -451,11 +451,10 @@ const Products = () => {
                                                 </div>
                                             </td>
                                             <td className="py-5 px-4">
-                                                <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.1em] border-2 ${
-                                                    prod.is_available 
-                                                    ? 'bg-emerald-50/50 text-emerald-600 border-emerald-500/10' 
-                                                    : 'bg-rose-50/50 text-rose-600 border-rose-500/10'
-                                                }`}>
+                                                <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.1em] border-2 ${prod.is_available
+                                                        ? 'bg-emerald-50/50 text-emerald-600 border-emerald-500/10'
+                                                        : 'bg-rose-50/50 text-rose-600 border-rose-500/10'
+                                                    }`}>
                                                     <span className={`w-1.5 h-1.5 rounded-full ${prod.is_available ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
                                                     {prod.is_available ? 'Live' : 'Hidden'}
                                                 </span>
@@ -544,7 +543,7 @@ const Products = () => {
                                             </button>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="space-y-4">
                                         <div className="space-y-2">
                                             <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">{isMerchant ? 'Assigned Node' : 'Partner Node'}</label>
@@ -699,9 +698,9 @@ const Products = () => {
                                             onClick={() => setNewProduct({ ...newProduct, has_variants: !newProduct.has_variants })}
                                             className={`w-12 h-6 rounded-full relative transition-all ${newProduct.has_variants ? 'bg-emerald-500' : 'bg-zinc-200 dark:bg-zinc-800'}`}
                                         >
-                                            <motion.div 
-                                                animate={{ x: newProduct.has_variants ? 26 : 4 }} 
-                                                className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm" 
+                                            <motion.div
+                                                animate={{ x: newProduct.has_variants ? 26 : 4 }}
+                                                className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-sm"
                                             />
                                         </button>
                                     </div>
@@ -750,11 +749,11 @@ const Products = () => {
                                             ) : (
                                                 <div className="space-y-3">
                                                     {newProduct.variants.map((v, idx) => (
-                                                        <motion.div 
+                                                        <motion.div
                                                             layout
                                                             initial={{ opacity: 0, x: -10 }}
                                                             animate={{ opacity: 1, x: 0 }}
-                                                            key={idx} 
+                                                            key={idx}
                                                             className="p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 relative group/v"
                                                         >
                                                             <div className="grid grid-cols-[1fr_100px_80px] gap-3">
