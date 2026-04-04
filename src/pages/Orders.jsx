@@ -165,6 +165,7 @@ const Orders = () => {
 
     const filteredOrders = orders.filter(order => {
         const matchesSearch = 
+            (order.order_number || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
             String(order.id).toLowerCase().includes(searchTerm.toLowerCase()) || 
             (order.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
             (order.merchant?.name || '').toLowerCase().includes(searchTerm.toLowerCase());
@@ -307,7 +308,7 @@ const Orders = () => {
                                                 <tr className={`group transition-all duration-300 ${isExpanded ? 'bg-zinc-50/50 dark:bg-zinc-800/20' : 'hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30'}`}>
                                                     <td className="px-8 py-6">
                                                         <div className="flex flex-col">
-                                                            <p className="font-black text-zinc-900 dark:text-white tracking-tighter text-sm mb-1 uppercase">#ORD-{String(order.id).padStart(4, '0')}</p>
+                                                            <p className="font-black text-zinc-900 dark:text-white tracking-tighter text-sm mb-1 uppercase">#{order.order_number || `ORD-${String(order.id).padStart(4, '0')}`}</p>
                                                             <div className="flex items-center gap-2">
                                                                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">{new Date(order.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</p>
                                                                 {order.merchant && (
@@ -449,7 +450,7 @@ const Orders = () => {
                                                                             <div className="space-y-4 pt-4 border-t border-white/5">
                                                                                 <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-60">
                                                                                     <span>Value Flow</span>
-                                                                                    <span className="text-white">₹{(order.total_price + (parseFloat(order.discount) || 0)).toFixed(0)}</span>
+                                                                                    <span className="text-white">₹{(parseFloat(order.total_price) + (parseFloat(order.discount) || 0)).toFixed(0)}</span>
                                                                                 </div>
                                                                                 {parseFloat(order.discount) > 0 && (
                                                                                     <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-emerald-400">

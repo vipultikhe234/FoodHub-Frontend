@@ -15,6 +15,7 @@
     "@stripe/stripe-js": "^8.9.0",
     "axios": "^1.6.0",
     "framer-motion": "^12.35.2",
+    "html5-qrcode": "^2.3.8",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.577.0",
     "react": "^18.2.0",

@@ -1,5 +1,6 @@
 import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect, useRef } from 'react';
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from "html5-qrcode";
 import api, { MerchantService, merchantCategoryService } from '../services/api';
 import { toast } from 'react-hot-toast';
 import {
@@ -23,7 +24,9 @@ import {
     Loader2,
     Sparkles,
     Store,
-    RefreshCw
+    RefreshCw,
+    ScanBarcode,
+    Camera
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchRealFoodImage, generateAIDescription, generateProductNames } from '../utils/aiHelpers';
@@ -68,6 +71,9 @@ const Products = () => {
     };
 
     const [newProduct, setNewProduct] = useState(initialProductState);
+    const [showScanner, setShowScanner] = useState(false);
+    const [scannedBarcode, setScannedBarcode] = useState('');
+    const scannerRef = useRef(null);
 
     const getImageUrl = (path) => {
         if (!path) return null;
@@ -145,12 +151,153 @@ const Products = () => {
         }
     };
 
+    // ── Scanner Lifecycle Management ──────────────────────────────────────────
+    useEffect(() => {
+        let scanner = null;
+        if (showScanner) {
+            // Ensure the DOM element 'reader' exists before starting
+            const checkExist = setInterval(() => {
+                const element = document.getElementById("reader");
+                if (element) {
+                    clearInterval(checkExist);
+                    scanner = new Html5Qrcode("reader");
+                    scanner.start(
+                        { facingMode: "environment" },
+                        { 
+                            fps: 30, // Max frequency for fast detection
+                            qrbox: { width: 260, height: 160 }, // Rectangular for linear barcodes
+                            aspectRatio: 1.0,
+                            formatsToSupport: [ 
+                                Html5QrcodeSupportedFormats.EAN_13, 
+                                Html5QrcodeSupportedFormats.EAN_8, 
+                                Html5QrcodeSupportedFormats.UPC_A, 
+                                Html5QrcodeSupportedFormats.UPC_E,
+                                Html5QrcodeSupportedFormats.CODE_128,
+                                Html5QrcodeSupportedFormats.CODE_39,
+                                Html5QrcodeSupportedFormats.QR_CODE
+                            ],
+                            videoConstraints: {
+                                width: { min: 1280, ideal: 1920 },
+                                height: { min: 720, ideal: 1080 },
+                                // Focus mode for modern webcams
+                                focusMode: { ideal: "continuous" }
+                            }
+                        },
+                        (decodedText) => {
+                            setScannedBarcode(decodedText);
+                            handleBarcodeLookup(decodedText);
+                        },
+                        () => {} // Silent fail for frame-by-frame scans
+                    ).catch(err => console.error("Scanner Start Error:", err));
+                }
+            }, 100);
+        }
+
+        return () => {
+            if (scanner) {
+                scanner.stop().then(() => scanner.clear()).catch(e => console.warn("Scanner Cleanup:", e));
+            }
+        };
+    }, [showScanner]);
+
     // SYNC NEW PRODUCT WITH SELECTED MERCHANT
     useEffect(() => {
         if (showModal && !editingId && selectedMerchantId) {
             setNewProduct(prev => ({ ...prev, merchant_id: selectedMerchantId }));
         }
     }, [showModal, selectedMerchantId, editingId]);
+
+    const handleBarcodeLookup = async (barcode) => {
+        const toastId = toast.loading("Checking Global Database...");
+        try {
+            const res = await api.get(`/products/barcode-lookup/${barcode}`);
+            const data = res.data.data;
+            processBarcodeData(data, toastId);
+        } catch (error) {
+            // BACKUP: AI INTELLIGENT SEARCH
+            toast.loading("API Empty. Searching AI Catalog...", { id: toastId });
+            try {
+                const { GoogleGenerativeAI } = await import("@google/generative-ai");
+                const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "");
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+                
+                const prompt = `Identify this retail barcode: ${barcode}. 
+                Return a RAW JSON object (no markdown, no backticks) with these fields: 
+                "name" (full product name), 
+                "brand" (manufacturer), 
+                "category" (choose most fitting: Dairy, Bakery, Snacks, Beverages, Staples, Personal Care, Household).
+                If unknown, provide reasonable guesses based on manufacturer prefixes.`;
+                
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+                const aiData = JSON.parse(text);
+                
+                processBarcodeData({
+                    name: aiData.name,
+                    brand: aiData.brand,
+                    category_guess: aiData.category,
+                    image: null // AI can't fetch real-time URLs reliably, we'll use placeholder or AI gen later
+                }, toastId);
+            } catch (aiErr) {
+                console.error("AI Fallback failed:", aiErr);
+                toast.error("Product not found in any catalog. Please enter manually.", { id: toastId });
+                // Still open modal so user can enter manually
+                setNewProduct(prev => ({ ...prev, name: '' }));
+                setShowScanner(false);
+                setShowModal(true);
+            }
+        }
+    };
+
+    const processBarcodeData = async (data, toastId) => {
+        // 1. Check for Duplicate by Name
+        const exists = products.find(p => p.name.toLowerCase() === data.name.toLowerCase());
+        if (exists) {
+            toast.error("Product already exists in your inventory", { id: toastId });
+            return;
+        }
+
+        // 2. Handle Category Matching / Creation
+        let targetCategory = null;
+        const categoryName = data.category_guess || 'Grocery';
+        
+        // Search in existing categories
+        const foundCat = categories.find(c => c.name.toLowerCase() === categoryName.toLowerCase());
+        if (foundCat) {
+            targetCategory = foundCat.id;
+        } else {
+            // Auto-create category
+            toast.loading(`Drafting category: ${categoryName}...`, { id: toastId });
+            try {
+                const catPayload = {
+                    name: categoryName,
+                    merchant_id: selectedMerchantId || '',
+                    description: `Automatically created for ${data.name}`
+                };
+                const catRes = await api.post('/categories', catPayload);
+                const newCat = catRes.data.data;
+                setCategories(prev => [...prev, newCat]);
+                targetCategory = newCat.id;
+            } catch (e) {
+                console.error("Cat creation failed", e);
+            }
+        }
+
+        // 3. Pre-fill Form
+        setNewProduct(prev => ({
+            ...prev,
+            name: data.name,
+            description: `Brand: ${data.brand || 'N/A'}. ${data.name}. Freshly categorized as ${categoryName}.`,
+            category_id: targetCategory,
+            image: data.image
+        }));
+
+        toast.success(`Identified: ${data.name}`, { id: toastId });
+        setScannedBarcode(''); // CLEAR FOR NEXT SCAN
+        setShowScanner(false);
+        setShowModal(true); // Open the product modal to allow manual override
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -330,6 +477,14 @@ const Products = () => {
                     </label>
 
                     <button
+                        onClick={() => { setScannedBarcode(''); setShowScanner(true); }}
+                        className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl transition-all active:scale-95"
+                    >
+                        <ScanBarcode size={18} strokeWidth={3} />
+                        Scan
+                    </button>
+
+                    <button
                         onClick={() => {
                             setEditingId(null);
                             setNewProduct({ ...initialProductState, merchant_id: selectedMerchantId || '' });
@@ -484,7 +639,114 @@ const Products = () => {
                 </div>
             </div>
 
-            {/* Product Modal */}
+            {/* Barcode Scanner Modal */}
+            <AnimatePresence>
+                {showScanner && (
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setShowScanner(false)}
+                            className="fixed inset-0 bg-zinc-950/90 backdrop-blur-xl"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden shadow-2xl border border-zinc-200 dark:border-zinc-800"
+                        >
+                            <div className="p-8 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
+                                <div>
+                                    <h3 className="text-xl font-black text-zinc-900 dark:text-white uppercase tracking-tighter">Barcode Terminal</h3>
+                                    <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-1">Scan or enter manually below</p>
+                                </div>
+                                <button onClick={() => setShowScanner(false)} className="p-3 hover:text-rose-500 transition-colors"><X size={20} /></button>
+                            </div>
+
+                            <div className="p-8 space-y-8">
+                                {/* Manual Entry */}
+                                <div className="space-y-3">
+                                    <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Manual Barcode Input</label>
+                                    <div className="flex gap-3">
+                                        <input 
+                                            type="text"
+                                            placeholder="ENTER CODE..."
+                                            className="flex-1 h-12 bg-zinc-100 dark:bg-zinc-800 border-2 border-transparent focus:border-emerald-500 rounded-2xl px-6 text-sm font-black tracking-widest outline-none transition-all dark:text-white"
+                                            value={scannedBarcode}
+                                            onChange={(e) => setScannedBarcode(e.target.value)}
+                                            onKeyDown={(e) => e.key === 'Enter' && handleBarcodeLookup(scannedBarcode)}
+                                        />
+                                        <button 
+                                            onClick={() => handleBarcodeLookup(scannedBarcode)}
+                                            className="px-6 bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
+                                        >
+                                            FETCH
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="relative">
+                                    <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-zinc-100 dark:border-zinc-800"></div></div>
+                                    <div className="relative flex justify-center text-[8px] font-black uppercase tracking-[0.4em] text-zinc-400 bg-white dark:bg-zinc-900 px-4">OR USE CAMERA</div>
+                                </div>
+
+                                {/* Camera Viewfinder */}
+                                <div className="relative aspect-square max-w-[300px] mx-auto bg-zinc-100 dark:bg-zinc-800 rounded-[2rem] overflow-hidden border-2 border-zinc-200 dark:border-zinc-800">
+                                    <div id="reader" className="w-full h-full"></div>
+                                    <div className="absolute inset-0 border-[30px] border-black/20 pointer-events-none"></div>
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-0.5 bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] animate-bounce" />
+                                </div>
+
+                                <button 
+                                    onClick={() => {
+                                        const scanner = new Html5QrcodeScanner("reader", { 
+                                            fps: 30, 
+                                            qrbox: { width: 320, height: 160 },
+                                            rememberLastUsedCamera: true,
+                                            aspectRatio: 1.0,
+                                            videoConstraints: {
+                                                width: { min: 1280, ideal: 1920 },
+                                                height: { min: 720, ideal: 1080 },
+                                                facingMode: "environment"
+                                            },
+                                            formatsToSupport: [ 
+                                                0, // QR_CODE
+                                                4, // EAN_13
+                                                5, // EAN_8
+                                                11, // UPC_A
+                                                12, // UPC_E
+                                                13, // UPC_EAN_EXTENSION
+                                                1, // AZTEC
+                                                2, // CODABAR
+                                                3, // CODE_39
+                                                6, // CODE_93
+                                                7, // CODE_128
+                                                8, // DATA_MATRIX
+                                                9, // ITP
+                                                10 // PDF_417
+                                            ]
+                                        });
+                                        
+                                        scanner.render((data) => {
+                                            setScannedBarcode(data);
+                                            toast.success(`Success! Code: ${data}`, { icon: '✅', duration: 1500 });
+                                            handleBarcodeLookup(data);
+                                            scanner.clear();
+                                        }, (err) => {
+                                            // Handle error
+                                        });
+                                    }}
+                                    className="w-full py-4 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all border border-zinc-200 dark:border-zinc-700"
+                                >
+                                    <Camera size={18} />
+                                    Launch Scanner
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
             <AnimatePresence>
                 {showModal && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 lg:p-12 overflow-y-auto">
