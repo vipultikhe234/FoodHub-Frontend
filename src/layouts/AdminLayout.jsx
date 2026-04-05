@@ -296,18 +296,18 @@ const AdminLayout = () => {
 
     return (
         <div className="flex h-screen bg-zinc-50 dark:bg-zinc-950 overflow-hidden font-sans selection:bg-emerald-100 selection:text-emerald-900">
-            {/* Mobile overlay - Only render if sidebar is open AND we are on a mobile/tablet view */}
-            <AnimatePresence>
-                {isSidebarOpen && window.innerWidth < 1024 && (
+            {/* Mobile overlay - Restricted to small screens ONLY to prevent 'Ghost Wall' on desktop */}
+            {isSidebarOpen && window.innerWidth < 1024 && (
+                <AnimatePresence>
                     <motion.div
                         initial={{ opacity: 0 }} 
                         animate={{ opacity: 1 }} 
                         exit={{ opacity: 0 }}
                         onClick={() => setIsSidebarOpen(false)}
-                        className="fixed inset-0 bg-zinc-950/40 backdrop-blur-sm z-[60] lg:hidden"
+                        className="fixed inset-0 bg-zinc-950/40 backdrop-blur-sm z-[60] lg:hidden pointer-events-auto"
                     />
-                )}
-            </AnimatePresence>
+                </AnimatePresence>
+            )}
 
             {/* ── SIDEBAR ── */}
             <motion.aside
