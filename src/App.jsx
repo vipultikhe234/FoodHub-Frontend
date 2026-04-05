@@ -7,6 +7,7 @@ import Categories from './pages/Categories';
 import Login from './pages/Login';
 import Orders from './pages/Orders';
 import MerchantDashboard from './pages/MerchantDashboard';
+import MerchantPOS from './pages/MerchantPOS';
 import LiveMonitor from './pages/LiveMonitor';
 import RiderStaff from './pages/RiderStaff';
 import Coupons from './pages/Coupons';
@@ -19,7 +20,6 @@ import Offers from './pages/Offers';
 import MerchantCategories from './pages/MerchantCategories';
 import Reviews from './pages/Reviews';
 import ApnaCartLoader from './components/ApnaCartLoader';
-import OriginalApnaCartLoader from './components/OriginalApnaCartLoader'; // add original loader
 
 import { MerchantProvider } from './contexts/MerchantContext';
 
@@ -53,11 +53,11 @@ function App() {
         <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/loader-preview" element={<ApnaCartLoader />} />
-        <Route path="/original-loader" element={<OriginalApnaCartLoader />} />
         <Route path="/" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="merchant-dashboard" element={<MerchantDashboard />} />
+          <Route path="merchant-pos" element={<MerchantPOS />} />
           <Route path="live-monitor" element={<LiveMonitor />} />
           <Route path="rider-staff" element={<RiderStaff />} />
           <Route path="products" element={<Products />} />

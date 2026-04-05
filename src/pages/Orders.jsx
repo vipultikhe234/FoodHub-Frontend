@@ -28,7 +28,8 @@ import {
     Target,
     Search,
     XCircle,
-    Archive
+    Archive,
+    History as HistoryIcon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -51,11 +52,11 @@ const STATUS_CONFIG = {
     cancelled: { color: 'text-red-600', dot: 'bg-red-500', bg: 'bg-red-50 dark:bg-red-900/20', label: 'Cancelled' },
 };
 
-const PAY_STATUS = {
-    paid: 'bg-emerald-500 text-white',
-    pending: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400',
-    failed: 'bg-red-500 text-white',
-    refunded: 'bg-zinc-900 text-white',
+const PAY_STATUS_COLORS = {
+    paid: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+    pending: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700',
+    failed: 'bg-red-500/10 text-red-600 border-red-500/20',
+    refunded: 'bg-zinc-900 text-white border-zinc-800',
 };
 
 import { useMerchant } from '../contexts/MerchantContext';
@@ -66,10 +67,6 @@ const Orders = () => {
     const [loading, setLoading] = useState(true);
     const [filterStatus, setFilterStatus] = useState('all');
     const [expandedId, setExpandedId] = useState(null);
-    const [updatingId, setUpdatingId] = useState(null);
-    const [stripeModal, setStripeModal] = useState({ show: false, orderId: null });
-    const [clientSecret, setClientSecret] = useState('');
-    const [pendingStatusUpdate, setPendingStatusUpdate] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [merchantCategories, setMerchantCategories] = useState([]);
     const [selectedMerchantCategoryId, setSelectedMerchantCategoryId] = useState('');
@@ -95,71 +92,6 @@ const Orders = () => {
             setOrders([]);
         } finally {
             setLoading(false);
-        }
-    };
-
-    const handleStatusChange = async (id, newStatus) => {
-        const order = orders.find(o => o.id === id);
-        if (!order) return;
-
-        if (newStatus === 'delivered' && order.payment_status !== 'paid') {
-            setUpdatingId(id);
-            try {
-                const response = await orderService.initiatePayment(id);
-                setClientSecret(response.data.data.client_secret);
-                setPendingStatusUpdate({ id, status: newStatus });
-                setStripeModal({ show: true, orderId: id });
-                return;
-            } catch (error) {
-                toast.error(`Failed to initiate payment: ${error.message}`);
-                setUpdatingId(null);
-                return;
-            }
-        }
-
-        const prevStatus = order.status;
-        setOrders(prev => prev.map(o => o.id === id ? { ...o, status: newStatus } : o));
-        setUpdatingId(id);
-        try {
-            await orderService.updateStatus(id, newStatus);
-            toast.success("Order status updated");
-        } catch (error) {
-            setOrders(prev => prev.map(o => o.id === id ? { ...o, status: prevStatus } : o));
-            toast.error(`Status update failed`);
-        } finally {
-            setUpdatingId(null);
-        }
-    };
-
-    const handlePaymentSuccess = async () => {
-        if (!pendingStatusUpdate) return;
-        const { id, status } = pendingStatusUpdate;
-
-        try {
-            await orderService.updateStatus(id, status);
-            setOrders(prev => prev.map(o => o.id === id ? { ...o, status, payment_status: 'paid' } : o));
-            setStripeModal({ show: false, orderId: null });
-            setPendingStatusUpdate(null);
-            toast.success("Payment verified and order updated");
-        } catch (error) {
-            toast.error(`Update failed`);
-        } finally {
-            setUpdatingId(null);
-        }
-    };
-
-    const handlePaymentStatusChange = async (id, newPayStatus) => {
-        const prevPayStatus = orders.find(o => o.id === id)?.payment_status;
-        setOrders(prev => prev.map(o => o.id === id ? { ...o, payment_status: newPayStatus } : o));
-        setUpdatingId(id);
-        try {
-            await orderService.updatePaymentStatus(id, newPayStatus);
-            toast.success("Payment status updated");
-        } catch (error) {
-            setOrders(prev => prev.map(o => o.id === id ? { ...o, payment_status: prevPayStatus } : o));
-            toast.error(`Payment update failed`);
-        } finally {
-            setUpdatingId(null);
         }
     };
 
@@ -189,8 +121,8 @@ const Orders = () => {
                 {/* Header Section */}
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Order Management</h1>
-                        <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Monitor and manage live customer transactions.</p>
+                        <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Order Record Hub</h1>
+                        <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Professional archive of all merchant transactions.</p>
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -205,32 +137,15 @@ const Orders = () => {
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
                             <input 
                                 type="text"
-                                placeholder="SEARCH TRANSACTIONS..."
+                                placeholder="SEARCH ARCHIVES..."
                                 className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-
-                        {!isMerchant && (
-                            <div className="relative group hidden md:block">
-                                <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
-                                <select
-                                    className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
-                                    value={selectedMerchantCategoryId}
-                                    onChange={(e) => setSelectedMerchantCategoryId(e.target.value)}
-                                >
-                                    <option value="">ALL SEGMENTS</option>
-                                    {merchantCategories.map(cat => (
-                                        <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                    ))}
-                                </select>
-                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={14} />
-                            </div>
-                        )}
                         
                         <div className="h-12 w-12 bg-emerald-500/10 text-emerald-500 rounded-2xl flex items-center justify-center border border-emerald-500/20 shadow-lg shadow-emerald-500/5">
-                            <Package size={20} strokeWidth={3} />
+                            <HistoryIcon size={20} strokeWidth={3} />
                         </div>
                     </div>
                 </div>
@@ -258,9 +173,6 @@ const Orders = () => {
                                 <p className={`text-2xl font-black tracking-tight leading-none ${isActive ? 'text-white' : 'text-zinc-900 dark:text-white'}`}>
                                     {count}
                                 </p>
-                                <div className={`absolute bottom-0 right-0 w-12 h-12 flex items-center justify-center opacity-10 group-hover:scale-110 transition-transform ${isActive ? 'text-white' : 'text-emerald-500'}`}>
-                                    <Package size={32} />
-                                </div>
                             </motion.button>
                         );
                     })}
@@ -272,28 +184,27 @@ const Orders = () => {
                         <table className="min-w-full text-left order-collapse">
                             <thead>
                                 <tr className="bg-zinc-50 dark:bg-zinc-800/50 text-zinc-400 text-[10px] uppercase tracking-[0.2em] font-black">
-                                    <th className="px-8 py-6">Reference</th>
-                                    <th className="py-6 px-4">Customer</th>
-                                    <th className="py-6 px-4">Valuation</th>
-                                    <th className="py-6 px-4 text-center">Payment</th>
-                                    <th className="py-6 px-4 text-center">Status</th>
-                                    <th className="py-6 px-4 text-center">Update</th>
-                                    <th className="px-8 py-6 text-right">Details</th>
+                                    <th className="px-8 py-6">Transaction Ref</th>
+                                    <th className="py-6 px-4">Customer Entity</th>
+                                    <th className="py-6 px-4">Financials</th>
+                                    <th className="py-6 px-4 text-center">Settlement Status</th>
+                                    <th className="py-6 px-4 text-center">Current Phase</th>
+                                    <th className="px-8 py-6 text-right">View Log</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                                 {loading ? (
                                     <tr>
-                                        <td colSpan="7" className="py-24 text-center">
+                                        <td colSpan="6" className="py-24 text-center">
                                             <ApnaCartLoader centered={true} size={80} />
                                         </td>
                                     </tr>
                                 ) : filteredOrders.length === 0 ? (
                                     <tr>
-                                        <td colSpan="7" className="py-24 text-center">
+                                        <td colSpan="6" className="py-24 text-center">
                                             <div className="flex flex-col items-center justify-center opacity-30">
                                                 <SearchX size={48} className="text-zinc-400" />
-                                                <p className="text-[10px] font-black uppercase tracking-[0.3em] mt-6 text-zinc-500">No matching transactions</p>
+                                                <p className="text-[10px] font-black uppercase tracking-[0.3em] mt-6 text-zinc-500">No matching records</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -301,21 +212,15 @@ const Orders = () => {
                                     filteredOrders.map((order) => {
                                         const isExpanded = expandedId === order.id;
                                         const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG.placed;
-                                        const isUpdating = updatingId === order.id;
 
                                         return (
                                             <React.Fragment key={order.id}>
                                                 <tr className={`group transition-all duration-300 ${isExpanded ? 'bg-zinc-50/50 dark:bg-zinc-800/20' : 'hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30'}`}>
                                                     <td className="px-8 py-6">
                                                         <div className="flex flex-col">
-                                                            <p className="font-black text-zinc-900 dark:text-white tracking-tighter text-sm mb-1 uppercase">#{order.order_number || `ORD-${String(order.id).padStart(4, '0')}`}</p>
+                                                            <p className="font-black text-zinc-900 dark:text-white tracking-tighter text-sm mb-1 uppercase">#{order.order_number || `ORD-${order.id}`}</p>
                                                             <div className="flex items-center gap-2">
                                                                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">{new Date(order.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</p>
-                                                                {order.merchant && (
-                                                                    <span className="text-[8px] font-black text-emerald-600 bg-emerald-50 dark:bg-emerald-900/40 px-2 py-0.5 rounded-lg uppercase tracking-widest">
-                                                                        {order.merchant.name}
-                                                                    </span>
-                                                                )}
                                                             </div>
                                                         </div>
                                                     </td>
@@ -326,7 +231,7 @@ const Orders = () => {
                                                             </div>
                                                             <div className="min-w-0">
                                                                 <p className="font-black text-zinc-900 dark:text-white text-[11px] truncate uppercase tracking-tight">{order.user?.name || 'Guest User'}</p>
-                                                                <p className="text-[9px] text-zinc-400 font-bold tracking-widest truncate max-w-[120px] uppercase mt-0.5">{order.user?.phone || 'Private Number'}</p>
+                                                                <p className="text-[9px] text-zinc-400 font-bold tracking-widest uppercase mt-0.5">{order.user?.phone || 'Private'}</p>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -335,45 +240,17 @@ const Orders = () => {
                                                     </td>
                                                     <td className="py-6 px-4 text-center">
                                                         <div className="flex flex-col items-center gap-2">
-                                                            <select
-                                                                value={order.payment_status || 'pending'}
-                                                                onChange={(e) => handlePaymentStatusChange(order.id, e.target.value)}
-                                                                disabled={isUpdating}
-                                                                className={`px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest outline-none border-none shadow-sm cursor-pointer ${PAY_STATUS[order.payment_status] || PAY_STATUS.pending}`}
-                                                            >
-                                                                <option value="pending" className="bg-white text-zinc-900">Pending</option>
-                                                                <option value="paid" className="bg-white text-zinc-900">Paid</option>
-                                                                <option value="failed" className="bg-white text-zinc-900">Failed</option>
-                                                                <option value="refunded" className="bg-white text-zinc-900">Refunded</option>
-                                                            </select>
-                                                            <span className="text-[8px] font-black text-zinc-400 uppercase tracking-widest">{order.payment?.payment_method || 'COD'}</span>
+                                                            <span className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border border-dashed ${PAY_STATUS_COLORS[order.payment_status] || PAY_STATUS_COLORS.pending}`}>
+                                                                {order.payment_status?.toUpperCase() || 'PENDING'}
+                                                            </span>
+                                                            <span className="text-[8px] font-black text-zinc-400 uppercase tracking-widest">{order.payment_method || 'COD'}</span>
                                                         </div>
                                                     </td>
                                                     <td className="py-6 px-4 text-center">
-                                                        <span className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest ${cfg.bg} ${cfg.color} border border-transparent shadow-sm`}>
+                                                        <span className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest ${cfg.bg} ${cfg.color} border border-transparent shadow-sm`}>
                                                             <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot}`}></span>
                                                             {cfg.label}
                                                         </span>
-                                                    </td>
-                                                    <td className="py-6 px-4 text-center">
-                                                        <div className="relative group/select">
-                                                            <select
-                                                                value={order.status}
-                                                                onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                                                disabled={isUpdating}
-                                                                className="w-24 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white text-[9px] font-black uppercase rounded-xl px-3 py-2 outline-none border border-zinc-200 dark:border-zinc-700 tracking-widest cursor-pointer shadow-inner appearance-none text-center"
-                                                            >
-                                                                <option value="placed">Placed</option>
-                                                                <option value="accepted">Accept</option>
-                                                                <option value="preparing">Prep</option>
-                                                                <option value="ready">Ready</option>
-                                                                <option value="out_for_delivery">Ship</option>
-                                                                <option value="delivered">Done</option>
-                                                                <option value="picked_up">Pick</option>
-                                                                <option value="cancelled">Void</option>
-                                                            </select>
-                                                            <ChevronDown size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none opacity-0 group-hover/select:opacity-100 transition-opacity" />
-                                                        </div>
                                                     </td>
                                                     <td className="px-8 py-6 text-right">
                                                         <button
@@ -393,17 +270,17 @@ const Orders = () => {
                                                             exit={{ opacity: 0, height: 0 }}
                                                             className="bg-zinc-50/30 dark:bg-zinc-950/20"
                                                         >
-                                                            <td colSpan={7} className="p-10">
+                                                            <td colSpan={6} className="p-10">
                                                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                                                                     <div className="space-y-6">
                                                                         <div className="flex items-center gap-3 px-2">
                                                                             <Package size={16} className="text-emerald-500" />
-                                                                            <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.3em]">Package Manifest</span>
+                                                                            <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.3em]">Full Package Manifest</span>
                                                                         </div>
                                                                         <div className="space-y-3">
                                                                             {order.items?.map(item => (
-                                                                                <div key={item.id} className="flex items-center gap-5 bg-white dark:bg-zinc-900 p-5 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm group hover:shadow-md transition-shadow">
-                                                                                    <div className="w-14 h-14 bg-zinc-50 dark:bg-zinc-800 rounded-2xl overflow-hidden shrink-0 border border-zinc-100 dark:border-zinc-800 group-hover:scale-105 transition-transform">
+                                                                                <div key={item.id} className="flex items-center gap-5 bg-white dark:bg-zinc-900 p-5 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm">
+                                                                                    <div className="w-14 h-14 bg-zinc-50 dark:bg-zinc-800 rounded-2xl overflow-hidden shrink-0 border border-zinc-100 dark:border-zinc-800">
                                                                                         {item.product?.image_url ? (
                                                                                             <img src={item.product.image_url} className="w-full h-full object-cover" alt={item.product.name} />
                                                                                         ) : (
@@ -414,7 +291,6 @@ const Orders = () => {
                                                                                         <p className="font-black text-zinc-900 dark:text-white text-[13px] uppercase tracking-tight truncate">{item.product_name || item.product?.name || 'Deluxe Item'}</p>
                                                                                         <div className="flex items-center gap-3 mt-1.5">
                                                                                             <span className="px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 rounded-md text-[9px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">Qty: {item.quantity}</span>
-                                                                                            {item.variant_name && <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-tighter truncate max-w-[100px]">{item.variant_name}</span>}
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="text-right">
@@ -431,41 +307,28 @@ const Orders = () => {
                                                                                 <MapPin size={16} className="text-rose-500" />
                                                                                 <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.3em]">Logistics Terminal</span>
                                                                             </div>
-                                                                            <div className="bg-zinc-50 dark:bg-zinc-900 p-6 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-inner relative overflow-hidden">
-                                                                                <p className="text-[11px] font-bold text-zinc-600 dark:text-zinc-300 uppercase leading-loose tracking-wider relative z-10">
-                                                                                    {order.address || 'Standard Handover Protocol'}
+                                                                            <div className="bg-zinc-50 dark:bg-zinc-900 p-6 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-inner">
+                                                                                <p className="text-[11px] font-bold text-zinc-600 dark:text-zinc-300 uppercase leading-loose tracking-wider">
+                                                                                    {order.address || 'Direct Merchant Handover Protocol'}
                                                                                 </p>
-                                                                                <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 blur-[60px] rounded-full" />
                                                                             </div>
                                                                         </div>
 
-                                                                        <div className="bg-zinc-950 dark:bg-black p-8 rounded-[2.5rem] text-white space-y-6 shadow-2xl relative overflow-hidden border border-white/5">
-                                                                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-500/40 to-emerald-500/0" />
-                                                                            
+                                                                        <div className="bg-zinc-950 dark:bg-black p-8 rounded-[2.5rem] text-white space-y-6 shadow-2xl border border-white/5 relative">
                                                                             <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.3em] opacity-40">
-                                                                                <span>Ledger Summary</span>
+                                                                                <span>Ledger Statement</span>
                                                                                 <ShieldCheck size={14} />
                                                                             </div>
 
                                                                             <div className="space-y-4 pt-4 border-t border-white/5">
                                                                                 <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-60">
-                                                                                    <span>Value Flow</span>
-                                                                                    <span className="text-white">₹{(parseFloat(order.total_price) + (parseFloat(order.discount) || 0)).toFixed(0)}</span>
-                                                                                </div>
-                                                                                {parseFloat(order.discount) > 0 && (
-                                                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-emerald-400">
-                                                                                        <span>Reward Offset</span>
-                                                                                        <span>-₹{parseFloat(order.discount).toFixed(0)}</span>
-                                                                                    </div>
-                                                                                )}
-                                                                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-60">
-                                                                                    <span>Settlement</span>
-                                                                                    <span className="text-white">{(order.payment?.payment_method || 'COD').toUpperCase()}</span>
+                                                                                    <span>Settlement Unit</span>
+                                                                                    <span className="text-white">{(order.payment_method || 'COD').toUpperCase()}</span>
                                                                                 </div>
                                                                             </div>
 
                                                                             <div className="pt-8 mt-4 border-t-4 border-white/10 flex justify-between items-end">
-                                                                                <span className="text-[12px] font-black uppercase tracking-[0.5em] text-emerald-500">Net total</span>
+                                                                                <span className="text-[12px] font-black uppercase tracking-[0.5em] text-emerald-500">Gross total</span>
                                                                                 <div className="flex items-end gap-2">
                                                                                     <span className="text-3xl font-black tracking-tighter leading-none">₹{parseFloat(order.total_price).toFixed(0)}</span>
                                                                                 </div>
@@ -486,25 +349,8 @@ const Orders = () => {
                     </div>
                 </div>
             </div>
-
-            {stripeModal.show && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-                    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
-                    <div className="relative w-full max-w-md bg-white dark:bg-zinc-950 rounded-[2.5rem] shadow-2xl p-8 border border-zinc-200 dark:border-zinc-800">
-                        <StripePayment
-                            clientSecret={clientSecret}
-                            orderId={stripeModal.orderId}
-                            onSucceeded={handlePaymentSuccess}
-                            onCancel={() => {
-                                setStripeModal({ show: false, orderId: null });
-                                setUpdatingId(null);
-                            }}
-                        />
-                    </div>
-                </div>
-            )}
         </Elements>
     );
 };
 
-export default Orders;
+export default Orders; 

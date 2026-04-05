@@ -170,6 +170,7 @@ const MERCHANT_NAV = [
         icon: Activity,
         items: [
             { to: '/merchant-dashboard', label: 'Dashboard', icon: LayoutDashboard },
+            { to: '/merchant-pos', label: 'Active Orders', icon: ShoppingBag, badge: 'Live' },
         ],
     },
     {
