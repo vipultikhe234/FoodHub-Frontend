@@ -296,11 +296,13 @@ const AdminLayout = () => {
 
     return (
         <div className="flex h-screen bg-zinc-50 dark:bg-zinc-950 overflow-hidden font-sans selection:bg-emerald-100 selection:text-emerald-900">
-            {/* Mobile overlay */}
+            {/* Mobile overlay - Only render if sidebar is open AND we are on a mobile/tablet view */}
             <AnimatePresence>
-                {isSidebarOpen && (
+                {isSidebarOpen && window.innerWidth < 1024 && (
                     <motion.div
-                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        exit={{ opacity: 0 }}
                         onClick={() => setIsSidebarOpen(false)}
                         className="fixed inset-0 bg-zinc-950/40 backdrop-blur-sm z-[60] lg:hidden"
                     />
