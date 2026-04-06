@@ -121,8 +121,8 @@ const Orders = () => {
                 {/* Header Section */}
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     <div>
-                        <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Order Record Hub</h1>
-                        <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">Professional archive of all merchant transactions.</p>
+                        <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Order Records</h1>
+                        <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">View and manage all your merchant orders</p>
                     </div>
 
                     <div className="flex items-center gap-4">
@@ -236,7 +236,7 @@ const Orders = () => {
                                                         </div>
                                                     </td>
                                                     <td className="py-6 px-4">
-                                                        <span className="font-black text-zinc-900 dark:text-white tracking-tighter text-[15px]">₹{parseFloat(order.total_price).toFixed(0)}</span>
+                                                        <span className="font-black text-zinc-900 dark:text-white tracking-tighter text-[15px]">₹{parseFloat(order.total_price).toFixed(2)}</span>
                                                     </td>
                                                     <td className="py-6 px-4 text-center">
                                                         <div className="flex flex-col items-center gap-2">
@@ -275,7 +275,7 @@ const Orders = () => {
                                                                     <div className="space-y-6">
                                                                         <div className="flex items-center gap-3 px-2">
                                                                             <Package size={16} className="text-emerald-500" />
-                                                                            <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.3em]">Full Package Manifest</span>
+                                                                            <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.3em]">Order Items</span>
                                                                         </div>
                                                                         <div className="space-y-3">
                                                                             {order.items?.map(item => (
@@ -288,13 +288,16 @@ const Orders = () => {
                                                                                         )}
                                                                                     </div>
                                                                                     <div className="flex-1 min-w-0">
-                                                                                        <p className="font-black text-zinc-900 dark:text-white text-[13px] uppercase tracking-tight truncate">{item.product_name || item.product?.name || 'Deluxe Item'}</p>
+                                                                                        <p className="font-black text-zinc-900 dark:text-white text-[13px] uppercase tracking-tight truncate">
+                                                                                            {item.product_name || item.product?.name || 'Deluxe Item'} 
+                                                                                            {(item.variant_name || item.variant?.quantity || item.variant?.name) && (item.variant_name !== 'Standard' && item.variant?.quantity !== 'Standard') ? ` ${item.variant_name || item.variant?.quantity || item.variant?.name}` : ''}
+                                                                                        </p>
                                                                                         <div className="flex items-center gap-3 mt-1.5">
                                                                                             <span className="px-2 py-0.5 bg-zinc-100 dark:bg-zinc-800 rounded-md text-[9px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">Qty: {item.quantity}</span>
                                                                                         </div>
                                                                                     </div>
                                                                                     <div className="text-right">
-                                                                                        <p className="text-[15px] font-black text-zinc-900 dark:text-white tracking-widest">₹{parseFloat(item.unit_price * item.quantity).toFixed(0)}</p>
+                                                                                        <p className="text-[15px] font-black text-zinc-900 dark:text-white tracking-widest">₹{parseFloat(item.price * item.quantity).toFixed(2)}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             ))}
@@ -305,7 +308,7 @@ const Orders = () => {
                                                                         <div className="space-y-4">
                                                                             <div className="flex items-center gap-3 px-2">
                                                                                 <MapPin size={16} className="text-rose-500" />
-                                                                                <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.3em]">Logistics Terminal</span>
+                                                                                <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.3em]">Delivery Address</span>
                                                                             </div>
                                                                             <div className="bg-zinc-50 dark:bg-zinc-900 p-6 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-inner">
                                                                                 <p className="text-[11px] font-bold text-zinc-600 dark:text-zinc-300 uppercase leading-loose tracking-wider">
@@ -316,21 +319,55 @@ const Orders = () => {
 
                                                                         <div className="bg-zinc-950 dark:bg-black p-8 rounded-[2.5rem] text-white space-y-6 shadow-2xl border border-white/5 relative">
                                                                             <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.3em] opacity-40">
-                                                                                <span>Ledger Statement</span>
+                                                                                <span>Billing Summary</span>
                                                                                 <ShieldCheck size={14} />
                                                                             </div>
 
-                                                                            <div className="space-y-4 pt-4 border-t border-white/5">
+                                                                            <div className="space-y-4 pt-4 border-t border-white/5 pb-4">
                                                                                 <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-60">
-                                                                                    <span>Settlement Unit</span>
+                                                                                    <span>Payment Mode</span>
                                                                                     <span className="text-white">{(order.payment_method || 'COD').toUpperCase()}</span>
                                                                                 </div>
+                                                                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-60">
+                                                                                    <span>Subtotal</span>
+                                                                                    <span className="text-white">₹{parseFloat(order.subtotal || 0).toFixed(2)}</span>
+                                                                                </div>
+                                                                                {(order.packaging_fee > 0 || order.packaging_charge > 0) && (
+                                                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-60">
+                                                                                        <span>Packaging Charge</span>
+                                                                                        <span className="text-white">₹{parseFloat(order.packaging_fee || order.packaging_charge || 0).toFixed(2)}</span>
+                                                                                    </div>
+                                                                                )}
+                                                                                {(order.delivery_fee > 0) && (
+                                                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-60">
+                                                                                        <span>Delivery Charge</span>
+                                                                                        <span className="text-white">₹{parseFloat(order.delivery_fee || 0).toFixed(2)}</span>
+                                                                                    </div>
+                                                                                )}
+                                                                                {(order.platform_fee > 0) && (
+                                                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-60">
+                                                                                        <span>Platform Fee</span>
+                                                                                        <span className="text-white">₹{parseFloat(order.platform_fee || 0).toFixed(2)}</span>
+                                                                                    </div>
+                                                                                )}
+                                                                                {(order.tax_amount > 0) && (
+                                                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest opacity-60">
+                                                                                        <span>Tax Amount</span>
+                                                                                        <span className="text-white">₹{parseFloat(order.tax_amount || 0).toFixed(2)}</span>
+                                                                                    </div>
+                                                                                )}
+                                                                                {(order.coupon_discount > 0) && (
+                                                                                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-emerald-400">
+                                                                                        <span>Discount Applied</span>
+                                                                                        <span className="font-bold">-₹{parseFloat(order.coupon_discount || 0).toFixed(2)}</span>
+                                                                                    </div>
+                                                                                )}
                                                                             </div>
 
                                                                             <div className="pt-8 mt-4 border-t-4 border-white/10 flex justify-between items-end">
-                                                                                <span className="text-[12px] font-black uppercase tracking-[0.5em] text-emerald-500">Gross total</span>
+                                                                                <span className="text-[12px] font-black uppercase tracking-[0.5em] text-emerald-500 underline decoration-double">TOTAL AMOUNT</span>
                                                                                 <div className="flex items-end gap-2">
-                                                                                    <span className="text-3xl font-black tracking-tighter leading-none">₹{parseFloat(order.total_price).toFixed(0)}</span>
+                                                                                    <span className="text-3xl font-black tracking-tighter leading-none">₹{parseFloat(order.total_price).toFixed(2)}</span>
                                                                                 </div>
                                                                             </div>
                                                                         </div>

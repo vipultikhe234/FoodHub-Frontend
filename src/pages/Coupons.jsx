@@ -46,6 +46,7 @@ const Coupons = () => {
         type: 'percentage',
         value: '',
         min_order_amount: 0,
+        max_discount: '',
         expires_at: '',
         is_active: true,
         merchant_id: selectedMerchantId || ''
@@ -214,6 +215,7 @@ const Coupons = () => {
                                                 type: coupon.type,
                                                 value: coupon.value,
                                                 min_order_amount: coupon.min_order_amount,
+                                                max_discount: coupon.max_discount || '',
                                                 expires_at: coupon.expires_at.split('T')[0],
                                                 is_active: coupon.is_active
                                             });
@@ -239,6 +241,7 @@ const Coupons = () => {
                                         <Tag size={10} className="text-emerald-600" />
                                         <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">
                                             {coupon.type === 'percentage' ? `${coupon.value}% OFF` : `₹${coupon.value} FLAT`}
+                                            {coupon.type === 'percentage' && coupon.max_discount > 0 && ` • UP TO ₹${coupon.max_discount}`}
                                         </span>
                                     </div>
                                 </div>
@@ -335,7 +338,7 @@ const Coupons = () => {
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className={`grid gap-4 ${form.type === 'percentage' ? 'grid-cols-2' : 'grid-cols-2'}`}>
                                         <div className="space-y-2">
                                             <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest block">Min Order Threshold</label>
                                             <div className="relative">
@@ -349,6 +352,39 @@ const Coupons = () => {
                                                 <IndianRupee size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
                                             </div>
                                         </div>
+                                        
+                                        {form.type === 'percentage' ? (
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest block">Max Discount Cap</label>
+                                                <div className="relative">
+                                                    <input
+                                                        type="number"
+                                                        placeholder="Optional"
+                                                        className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-sm"
+                                                        value={form.max_discount}
+                                                        onChange={(e) => setForm({ ...form, max_discount: e.target.value })}
+                                                    />
+                                                    <Tag size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest block">Expiry Date</label>
+                                                <div className="relative">
+                                                    <input
+                                                        required
+                                                        type="date"
+                                                        className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase"
+                                                        value={form.expires_at}
+                                                        onChange={(e) => setForm({ ...form, expires_at: e.target.value })}
+                                                    />
+                                                    <Calendar size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {form.type === 'percentage' && (
                                         <div className="space-y-2">
                                             <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest block">Expiry Date</label>
                                             <div className="relative">
@@ -362,7 +398,7 @@ const Coupons = () => {
                                                 <Calendar size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" />
                                             </div>
                                         </div>
-                                    </div>
+                                    )}
 
                                     <button
                                         type="button"

@@ -173,7 +173,10 @@ const MerchantPOS = () => {
                                                                         <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-all text-[8px] font-black ${isPacked ? 'bg-emerald-500 text-white' : 'bg-white/10 text-zinc-500'}`}>
                                                                             {isPacked ? '✓' : i + 1}
                                                                         </div>
-                                                                        <span className={`text-[10px] font-black uppercase italic truncate ${isPacked ? 'text-emerald-500 line-through' : 'text-white'}`}>{item.product?.name}</span>
+                                                                        <span className={`text-[10px] font-black uppercase italic truncate ${isPacked ? 'text-emerald-500 line-through' : 'text-white'}`}>
+                                                                            {item.product_name || item.product?.name}
+                                                                            {(item.variant_name || item.variant?.quantity || item.variant?.name) && (item.variant_name !== 'Standard' && item.variant?.quantity !== 'Standard') ? ` ${item.variant_name || item.variant?.quantity || item.variant?.name}` : ''}
+                                                                        </span>
                                                                     </div>
                                                                     <span className={`px-2 py-0.5 rounded-md text-[9px] font-black italic ${isPacked ? 'bg-emerald-500 text-white' : 'bg-white text-zinc-900'}`}>x{item.quantity}</span>
                                                                 </button>

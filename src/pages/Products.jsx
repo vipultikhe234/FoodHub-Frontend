@@ -322,7 +322,7 @@ const Products = () => {
             setEditingId(null);
             toast.success(editingId ? "Product updated successfully" : "Product added successfully");
         } catch (error) {
-            toast.error("Error saving product. Please ensure all fields are correct.");
+            toast.error(error.response?.data?.message || "Error saving product. Please ensure all fields are correct.");
         }
     };
 
@@ -570,7 +570,17 @@ const Products = () => {
                                                             <div className={`w-2 h-2 rounded-full ${prod.is_veg ? 'bg-emerald-500' : 'bg-rose-500'}`} />
                                                             <p className="font-black text-zinc-900 dark:text-white uppercase tracking-tight text-[13px]">{prod.name}</p>
                                                         </div>
-                                                        <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest truncate max-w-[200px] ">{prod.description || 'No description'}</p>
+                                                        <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest truncate max-w-[200px] mb-1">{prod.description || 'No description'}</p>
+                                                        
+                                                        {prod.has_variants && prod.variants?.length > 0 && (
+                                                            <div className="flex flex-wrap gap-1.5 mt-2">
+                                                                {prod.variants.map((v, i) => (
+                                                                    <span key={i} className="px-2 py-0.5 bg-zinc-50 dark:bg-zinc-800/80 rounded-lg text-[8px] font-black uppercase tracking-wider text-emerald-500 border border-zinc-200 dark:border-zinc-700">
+                                                                        {v.quantity} • ₹{parseFloat(v.price).toFixed(0)}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </td>
