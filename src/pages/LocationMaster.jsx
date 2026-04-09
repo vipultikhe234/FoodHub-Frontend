@@ -124,7 +124,7 @@ const CountriesTab = () => {
         <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{items.length} Countries</p>
-                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20">
+                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] shadow-lg shadow-emerald-500/20">
                     <Plus size={14} strokeWidth={3} /> Add Country
                 </button>
             </div>
@@ -209,7 +209,7 @@ const StatesTab = () => {
                     <option value="">All Countries</option>
                     {countries.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </Select>
-                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20">
+                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] shadow-lg shadow-emerald-500/20">
                     <Plus size={14} strokeWidth={3} /> Add State
                 </button>
             </div>
@@ -332,7 +332,7 @@ const CitiesTab = () => {
                         {(filterCountry ? filteredStates : states).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                     </Select>
                 </div>
-                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20">
+                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] shadow-lg shadow-emerald-500/20">
                     <Plus size={14} strokeWidth={3} /> Add City
                 </button>
             </div>

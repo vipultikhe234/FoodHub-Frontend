@@ -3,15 +3,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const MerchantContext = createContext();
 
 export const MerchantProvider = ({ children }) => {
-    const [selectedMerchantId, setSelectedMerchantId] = useState(() => {
-        return localStorage.getItem('admin_selected_merchant') || '';
-    });
+    const [selectedMerchantId, setSelectedMerchantId] = useState('');
 
     const [merchants, setMerchants] = useState([]);
 
-    useEffect(() => {
-        localStorage.setItem('admin_selected_merchant', selectedMerchantId);
-    }, [selectedMerchantId]);
+
 
     return (
         <MerchantContext.Provider value={{ 

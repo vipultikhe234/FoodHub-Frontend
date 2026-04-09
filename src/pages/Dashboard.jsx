@@ -1,227 +1,191 @@
 import ApnaCartLoader from '../components/ApnaCartLoader';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useDashboardStats } from '../hooks/useDashboardStats';
+import DashboardCard from '../components/DashboardCard';
 import {
-    TrendingUp,
-    Clock,
-    Wallet,
-    Ticket,
-    Package,
-    Users as UsersIcon,
-    ShoppingCart,
     ShoppingBag,
-    Loader2,
-    AlertCircle,
-    Activity,
+    Clock,
     CheckCircle2,
-    ChevronRight,
+    Calendar,
+    Wallet,
+    IndianRupee,
+    Activity,
+    Bike,
+    Users as UsersIcon,
+    UserPlus,
     Store,
-    Bike
+    ShieldCheck,
+    Navigation,
+    Package,
+    AlertTriangle,
+    ChevronRight,
+    SearchX,
+    Tag,
+    LayoutGrid
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-const STATUS_CONFIG = {
-    placed: { text: 'text-zinc-700', bg: 'bg-zinc-100', icon: Package },
-    accepted: { text: 'text-blue-700', bg: 'bg-blue-100', icon: CheckCircle2 },
-    preparing: { text: 'text-amber-700', bg: 'bg-amber-100', icon: Activity },
-    ready: { text: 'text-emerald-700', bg: 'bg-emerald-100', icon: ShoppingBag },
-    out_for_delivery: { text: 'text-violet-700', bg: 'bg-violet-100', icon: Bike },
-    delivered: { text: 'text-emerald-700', bg: 'bg-emerald-100', icon: CheckCircle2 },
-    picked_up: { text: 'text-teal-700', bg: 'bg-teal-100', icon: Store },
-    cancelled: { text: 'text-red-700', bg: 'bg-red-100', icon: AlertCircle },
-};
-
 import { useMerchant } from '../contexts/MerchantContext';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
     const { selectedMerchantId } = useMerchant();
     const { orders, stats, loading, error } = useDashboardStats(selectedMerchantId);
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.1 }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: { y: 0, opacity: 1 }
-    };
-
-    // Removed top-level loading check to keep header visible
-    // if (loading) return <ApnaCartLoader />;
-
     if (error) return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-12 bg-white dark:bg-zinc-900 rounded-2xl border border-red-100 dark:border-red-900/20 max-w-xl mx-auto shadow-sm">
-            <div className="w-16 h-16 bg-red-50 dark:bg-red-900/10 rounded-2xl flex items-center justify-center mb-6 text-red-500">
-                <AlertCircle size={32} />
-            </div>
             <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Sync Interrupted</h2>
             <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-8">{error}</p>
-            <button
-                onClick={() => window.location.reload()}
-                className="bg-zinc-900 dark:bg-emerald-500 text-white px-8 py-3 rounded-xl font-semibold shadow-sm hover:opacity-90 transition-all text-sm"
-            >
-                Retry Connection
-            </button>
+            <button onClick={() => window.location.reload()} className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-semibold shadow-sm hover:opacity-90 transition-all text-sm">Retry Connection</button>
         </div>
     );
 
-    const totalOrders = stats?.total_orders ?? orders.length;
-    const totalRevenue = stats?.total_revenue ?? 0;
-    const totalUsers = stats?.total_users ?? 0;
-    const totalProducts = stats?.total_products ?? 0;
-    const totalMerchants = stats?.total_Merchants ?? 0;
-    const recentCount = stats?.recent_orders_count ?? 0;
+    if (loading) return <ApnaCartLoader />;
 
-    const statusBreakdown = ['placed', 'accepted', 'preparing', 'ready', 'out_for_delivery', 'delivered', 'picked_up', 'cancelled'].map(s => ({
-        status: s,
-        count: orders.filter(o => o.status === s).length,
-    }));
-
-    const statsConfig = [
-        { label: 'Revenue Flow', val: `₹${Number(totalRevenue).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, icon: Wallet, color: 'emerald', sub: '+12.5% Velocity', show: true },
-        { label: 'Rewards Burn', val: `₹${Number(stats?.total_discounts || 0).toLocaleString('en-IN', { maximumFractionDigits: 0 })}`, icon: Ticket, color: 'amber', sub: 'Coupon utility', show: stats?.total_discounts !== undefined },
-        { label: 'Order Volume', val: totalOrders, icon: ShoppingBag, color: 'blue', sub: `${recentCount} recent`, show: true },
-        { label: 'Network Users', val: totalUsers, icon: UsersIcon, color: 'purple', sub: 'Total accounts', show: stats?.total_users !== undefined },
-        { label: 'Partner Outlets', val: totalMerchants, icon: Store, color: 'violet', sub: 'Active nodes', show: stats?.total_Merchants !== undefined },
-        { label: 'Inventory Assets', val: totalProducts, icon: Package, color: 'orange', sub: 'Active menu', show: true }
-    ].filter(s => s.show);
+    const trend = stats?.sales_trend?.map(d => d.total) || [10, 25, 15, 30, 45, 35, 55];
 
     return (
-        <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-8 pb-10"
-        >
-            {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-12 pb-20">
+            {/* Header */}
+            <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">Dashboard Overview</h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm">Welcome back, here's what's happening in your node today.</p>
+                    <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight uppercase flex items-center gap-3">
+                        <span className="w-1.5 h-8 bg-zinc-900 dark:bg-emerald-500 rounded-full" />
+                        Platform Control Center
+                    </h1>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-black uppercase tracking-[0.3em] mt-1 italic ml-4">
+                        Master Intelligence & Real-time Node Monitoring
+                    </p>
                 </div>
-                <div className="flex items-center gap-3">
-                    <Link
-                        to="/orders"
-                        className="bg-zinc-900 dark:bg-emerald-500 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 font-bold transition-all shadow-lg shadow-zinc-900/10 dark:shadow-emerald-500/20 text-[10px] uppercase tracking-[0.2em]"
-                    >
-                        <ShoppingCart className="w-4 h-4" />
-                        Marketplace Intel
+                <div className="flex bg-white dark:bg-zinc-900 rounded-2xl p-1.5 shadow-sm border border-zinc-100 dark:border-zinc-800">
+                    <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl">
+                        <Activity className="text-emerald-500 animate-pulse" size={14} />
+                        <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-[9px]">System Online</span>
+                    </div>
+                </div>
+            </header>
+
+            {/* 1. Orders Ecosystem */}
+            <section>
+                <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                    <span className="w-8 h-px bg-zinc-200 dark:bg-zinc-800"></span>
+                    Orders Ecosystem
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <DashboardCard label="Total Orders" value={stats?.total_orders || 0} icon={ShoppingBag} color="zinc" subLabel="Network Wide" trendData={trend} />
+                    <DashboardCard label="Today Orders" value={stats?.today_orders || 0} icon={Calendar} color="blue" subLabel="Daily Volume" />
+                    <DashboardCard label="Pending Orders" value={stats?.pending_orders || 0} icon={Clock} color="amber" subLabel="Awaiting Action" />
+                    <DashboardCard label="Completed Orders" value={stats?.completed_orders || 0} icon={CheckCircle2} color="emerald" subLabel="Direct Fulfilled" />
+                </div>
+            </section>
+
+            {/* 2. Revenue & Fintech */}
+            <section>
+                <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                    <span className="w-8 h-px bg-zinc-200 dark:bg-zinc-800"></span>
+                    Revenue & Liquidity
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <DashboardCard label="Total Revenue" value={stats?.total_revenue || 0} icon={Wallet} color="emerald" subLabel="Net Volume" isCurrency={true} trendData={trend} />
+                    <DashboardCard label="Today Revenue" value={stats?.today_revenue || 0} icon={IndianRupee} color="cyan" subLabel="Daily Income" isCurrency={true} />
+                    <DashboardCard label="Active Orders" value={stats?.active_orders || 0} icon={Activity} color="amber" subLabel="Live Sessions" />
+                    <DashboardCard label="Failed / Cancelled" value={stats?.failed_orders || 0} icon={AlertTriangle} color="rose" subLabel="Risk Analysis" />
+                </div>
+            </section>
+
+            {/* 3. Logistics & Infrastructure */}
+            <section>
+                <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                    <span className="w-8 h-px bg-zinc-200 dark:bg-zinc-800"></span>
+                    Platform Infrastructure
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <DashboardCard label="In Transit" value={stats?.out_for_delivery || 0} icon={Bike} color="violet" subLabel="Riders En route" />
+                    <DashboardCard label="Active Riders" value={stats?.active_riders || 0} icon={Navigation} color="emerald" subLabel="Fleet Capacity" />
+                    <DashboardCard label="Total Merchants" value={stats?.total_merchants || 0} icon={Store} color="blue" subLabel="Vendor Nodes" />
+                    <DashboardCard label="Active Merchants" value={stats?.active_merchants || 0} icon={ShieldCheck} color="cyan" subLabel="Verification Live" />
+                </div>
+            </section>
+
+            {/* 4. Users & Inventory */}
+            <section>
+                <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                    <span className="w-8 h-px bg-zinc-200 dark:bg-zinc-800"></span>
+                    Growth & Inventory
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <DashboardCard label="Total Users" value={stats?.total_users || 0} icon={UsersIcon} color="purple" subLabel="Identity Base" />
+                    <DashboardCard label="New Today" value={stats?.today_new_users || 0} icon={UserPlus} color="emerald" subLabel="Adoption Rate" />
+                    <DashboardCard label="Stock Alerts" value={stats?.low_stock_products || 0} icon={Package} color="rose" subLabel="Restock Needed" />
+                    <DashboardCard label="Identity Flow" value="Live" icon={Activity} color="zinc" subLabel="System Secure" />
+                </div>
+            </section>
+
+            {/* Recent Orders Table (Minimal) */}
+            <section className="pt-4">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] flex items-center gap-3">
+                        <span className="w-8 h-px bg-zinc-200 dark:bg-zinc-800"></span>
+                        Recent Transaction Stream
+                    </h3>
+                    <Link to="/orders" className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest hover:underline flex items-center gap-1">
+                        View Journal <ChevronRight size={12} />
                     </Link>
                 </div>
-            </div>
-
-            {loading ? (
-                <div className="py-20">
-                    <ApnaCartLoader centered={true} size={80} />
+                
+                <div className="bg-white dark:bg-zinc-900 rounded-[32px] border border-zinc-100 dark:border-zinc-800 overflow-hidden shadow-sm">
+                    {orders.length === 0 ? (
+                        <div className="py-20 text-center opacity-30">
+                            <SearchX size={48} className="mx-auto text-zinc-400 mb-4" />
+                            <p className="text-xs font-bold uppercase tracking-widest text-zinc-500">No active sessions found</p>
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead className="bg-zinc-50/50 dark:bg-zinc-800/50 border-b border-zinc-100 dark:border-zinc-800">
+                                    <tr>
+                                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Identity</th>
+                                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Flow State</th>
+                                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest">Merchant</th>
+                                        <th className="px-8 py-4 text-[9px] font-black text-zinc-400 uppercase tracking-widest text-right">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                                    {orders.slice(0, 8).map(order => (
+                                        <tr key={order.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors group">
+                                            <td className="px-8 py-5">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center font-black text-zinc-400 text-xs">#{String(order.id).slice(-3)}</div>
+                                                    <div>
+                                                        <p className="text-xs font-bold text-zinc-900 dark:text-white uppercase">{order.user?.name || 'Customer'}</p>
+                                                        <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter mt-0.5">{new Date(order.created_at).toLocaleTimeString()}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-8 py-5">
+                                                <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
+                                                    order.status === 'delivered' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 
+                                                    order.status === 'cancelled' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
+                                                    'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                                                }`}>
+                                                    {order.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-8 py-5">
+                                                <p className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase">{order.merchant?.name || 'Partner'}</p>
+                                            </td>
+                                            <td className="px-8 py-5 text-right">
+                                                <p className="text-xs font-black text-zinc-900 dark:text-white">₹{order.total_price}</p>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
                 </div>
-            ) : (
-                <>
-                    {/* Stat Cards Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xxl:grid-cols-6 gap-6">
-                        {statsConfig.map((stat, i) => (
-                            <motion.div
-                                key={i}
-                                variants={itemVariants}
-                                className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow group"
-                            >
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className={`p-3 rounded-xl bg-zinc-50 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 group-hover:scale-110 transition-transform`}>
-                                        <stat.icon className="w-5 h-5" />
-                                    </div>
-                                    <div className={`flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-2.5 py-1 rounded-full uppercase tracking-wider`}>
-                                        <TrendingUp className="w-3 h-3" />
-                                        12%
-                                    </div>
-                                </div>
-                                <p className="text-zinc-500 dark:text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-1">{stat.label}</p>
-                                <h3 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">{stat.val}</h3>
-                                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-2 font-medium">{stat.sub}</p>
-                            </motion.div>
-                        ))}
-                    </div>
-
-                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                        {/* Orders Overview */}
-                        <motion.div variants={itemVariants} className="xl:col-span-2 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
-                            <div className="px-8 py-6 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
-                                <div>
-                                    <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Recent Orders</h3>
-                                    <p className="text-xs text-zinc-500 font-medium">Tracking live node activity</p>
-                                </div>
-                                <Link to="/orders" className="text-xs font-bold text-emerald-600 hover:text-emerald-700 transition-colors uppercase tracking-widest flex items-center gap-1">
-                                    View All <ChevronRight className="w-3 h-3" />
-                                </Link>
-                            </div>
-
-                            <div className="p-6">
-                                {orders.length === 0 ? (
-                                    <div className="py-20 text-center">
-                                        <ShoppingCart size={48} className="text-zinc-100 mx-auto mb-4" />
-                                        <p className="text-sm font-medium text-zinc-400 uppercase tracking-widest">No recent traffic</p>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-3">
-                                        {orders.slice(0, 5).map((order) => {
-                                            const cfg = STATUS_CONFIG[order.status] || STATUS_CONFIG.pending;
-                                            return (
-                                                <div key={order.id} className="flex items-center justify-between p-4 bg-zinc-50/50 dark:bg-zinc-800/30 rounded-xl border border-zinc-100 dark:border-zinc-800 hover:border-emerald-200 dark:hover:border-emerald-900/50 transition-all group">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="w-10 h-10 rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center font-bold text-zinc-400 text-xs">
-                                                            #{order.id.toString().slice(-3)}
-                                                        </div>
-                                                        <div>
-                                                            <p className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-tight">{order.user?.name || 'Guest User'}</p>
-                                                            <p className="text-[10px] text-zinc-400 font-medium uppercase tracking-widest">{new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • ₹{order.total_price}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${cfg.bg} ${cfg.text}`}>
-                                                        {order.status}
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-                        </motion.div>
-
-                        {/* Status Breakdown */}
-                        <motion.div variants={itemVariants} className="space-y-6">
-                            <div className="bg-white dark:bg-zinc-900 p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-                                <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-6">Distribution</h3>
-                                <div className="space-y-6">
-                                    {statusBreakdown.map((s) => {
-                                        const cfg = STATUS_CONFIG[s.status];
-                                        return (
-                                            <div key={s.status} className="space-y-2.5">
-                                                <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.1em]">
-                                                    <span className="text-zinc-500">{s.status}</span>
-                                                    <span className="text-zinc-900 dark:text-white">{s.count}</span>
-                                                </div>
-                                                <div className="h-2 w-full bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
-                                                    <motion.div
-                                                        initial={{ width: 0 }}
-                                                        animate={{ width: `${Math.min((s.count / (orders.length || 1)) * 100, 100)}%` }}
-                                                        className={`h-full ${cfg.bg.replace('100', '500')}`}
-                                                    />
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-                </>
-            )}
-        </motion.div>
+            </section>
+        </div>
     );
 };
 
 export default Dashboard;
-

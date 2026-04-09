@@ -1,6 +1,6 @@
 import ApnaCartLoader from '../components/ApnaCartLoader';
 import React, { useState, useEffect } from 'react';
-import api, { merchantCategoryService } from '../services/api';
+import api from '../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import {
@@ -36,8 +36,7 @@ const Coupons = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [merchantCategories, setMerchantCategories] = useState([]);
-    const [selectedMerchantCategoryId, setSelectedMerchantCategoryId] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all'); // all, active, inactive
     const [user] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
     const isMerchant = user.role === 'merchant' || user.role === 'Merchant';
 
@@ -49,23 +48,24 @@ const Coupons = () => {
         max_discount: '',
         expires_at: '',
         is_active: true,
-        merchant_id: selectedMerchantId || ''
+        merchant_id: selectedMerchantId || '',
+        show_on_landing: false
     };
 
     const [form, setForm] = useState(initialFormState);
 
     useEffect(() => {
         fetchCoupons();
-        if (!isMerchant) {
-            merchantCategoryService.adminGetAll().then(res => setMerchantCategories(res.data.data || []));
-        }
-    }, [selectedMerchantId]);
+    }, [selectedMerchantId, statusFilter]);
 
     const fetchCoupons = async () => {
         try {
             setLoading(true);
-            const query = selectedMerchantId ? `?merchant_id=${selectedMerchantId}` : '';
-            const res = await api.get(`/coupons${query}`);
+            let url = `/coupons?status=${statusFilter}`;
+            if (selectedMerchantId) {
+                url += `&merchant_id=${selectedMerchantId}`;
+            }
+            const res = await api.get(url);
             setCoupons(res.data.data || []);
         } catch (error) {
             console.error("Error fetching coupons:", error);
@@ -140,28 +140,34 @@ const Coupons = () => {
                         />
                     </div>
 
-                    {!isMerchant && (
-                        <div className="relative group hidden md:block">
-                            <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
-                            <select
-                                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
-                                value={selectedMerchantCategoryId}
-                                onChange={(e) => setSelectedMerchantCategoryId(e.target.value)}
-                            >
-                                <option value="">ALL SEGMENTS</option>
-                                {merchantCategories.map(cat => (
-                                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                                ))}
-                            </select>
-                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={14} />
-                        </div>
-                    )}
+                    <div className="flex bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-1 rounded-2xl">
+                        <button 
+                            onClick={() => setStatusFilter('active')}
+                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${statusFilter === 'active' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                        >
+                            Live
+                        </button>
+                        <button 
+                            onClick={() => setStatusFilter('inactive')}
+                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${statusFilter === 'inactive' ? 'bg-zinc-900 dark:bg-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                        >
+                            Deactivated
+                        </button>
+                        <button 
+                            onClick={() => setStatusFilter('all')}
+                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${statusFilter === 'all' ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                        >
+                            All
+                        </button>
+                    </div>
+
+
                     
                     <button 
                         onClick={() => { setEditingId(null); setForm(initialFormState); setShowModal(true); }}
-                        className="bg-emerald-500 text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
-                        <Plus size={18} strokeWidth={3} />
+                        <Plus size={16} strokeWidth={3} />
                         Add Coupon
                     </button>
                 </div>
@@ -181,9 +187,10 @@ const Coupons = () => {
                 ) : coupons.filter(coupon => {
                     const matchesSearch = 
                         (coupon.code || '').toLowerCase().includes(searchTerm.toLowerCase());
-                    const matchesMerchantCategory = !selectedMerchantCategoryId || 
-                        coupon.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
-                    return matchesSearch && matchesMerchantCategory;
+                    const isDateValid = !coupon.expires_at || new Date(coupon.expires_at).setHours(23,59,59,999) >= new Date().getTime();
+                    const isActive = (coupon.is_active == 1 || coupon.is_active == true) && isDateValid;
+                    const matchesStatus = statusFilter === 'all' || (statusFilter === 'active' ? isActive : !isActive);
+                    return matchesSearch && matchesStatus;
                 }).length === 0 ? (
                     <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
                         <SearchX size={48} className="text-zinc-400" />
@@ -192,10 +199,14 @@ const Coupons = () => {
                 ) : coupons.filter(coupon => {
                     const matchesSearch = 
                         (coupon.code || '').toLowerCase().includes(searchTerm.toLowerCase());
-                    const matchesMerchantCategory = !selectedMerchantCategoryId || 
-                        coupon.merchant?.merchant_category_id?.toString() === selectedMerchantCategoryId.toString();
-                    return matchesSearch && matchesMerchantCategory;
-                }).map((coupon) => (
+                    const isDateValid = !coupon.expires_at || new Date(coupon.expires_at).setHours(23,59,59,999) >= new Date().getTime();
+                    const isActive = (coupon.is_active == 1 || coupon.is_active == true) && isDateValid;
+                    const matchesStatus = statusFilter === 'all' || (statusFilter === 'active' ? isActive : !isActive);
+                    return matchesSearch && matchesStatus;
+                }).map((coupon) => {
+                    const isDateValid = !coupon.expires_at || new Date(coupon.expires_at).setHours(23,59,59,999) >= new Date().getTime();
+                    const isActuallyLive = (coupon.is_active == 1 || coupon.is_active == true) && isDateValid;
+                    return (
                     <motion.div
                         key={coupon.id}
                         whileHover={{ y: -4 }}
@@ -217,7 +228,8 @@ const Coupons = () => {
                                                 min_order_amount: coupon.min_order_amount,
                                                 max_discount: coupon.max_discount || '',
                                                 expires_at: coupon.expires_at.split('T')[0],
-                                                is_active: coupon.is_active
+                                                is_active: coupon.is_active,
+                                                show_on_landing: !!coupon.show_on_landing
                                             });
                                             setShowModal(true);
                                         }}
@@ -261,9 +273,9 @@ const Coupons = () => {
 
                                 <div className="pt-4 mt-2 flex items-center justify-between border-t border-zinc-100 dark:border-zinc-800">
                                     <div className="flex items-center gap-2">
-                                        <div className={`w-2 h-2 rounded-full ${coupon.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-300'}`}></div>
-                                        <span className={`text-[10px] font-bold uppercase tracking-wider ${coupon.is_active ? 'text-emerald-600' : 'text-zinc-400'}`}>
-                                            {coupon.is_active ? 'Active' : 'Paused'}
+                                        <div className={`w-2 h-2 rounded-full ${isActuallyLive ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></div>
+                                        <span className={`text-[10px] font-bold uppercase tracking-wider ${isActuallyLive ? 'text-emerald-600' : 'text-red-500'}`}>
+                                            {isActuallyLive ? 'Active' : (!isDateValid ? 'Expired' : 'Paused')}
                                         </span>
                                     </div>
                                     <p className="text-[9px] font-bold text-zinc-300 uppercase tracking-widest group-hover:text-emerald-500 transition-colors">
@@ -273,7 +285,7 @@ const Coupons = () => {
                             </div>
                         </div>
                     </motion.div>
-                ))}
+                ); })}
             </div>
 
             {/* Modal */}
@@ -399,23 +411,41 @@ const Coupons = () => {
                                             </div>
                                         </div>
                                     )}
-
                                     <button
                                         type="button"
                                         onClick={() => setForm({ ...form, is_active: !form.is_active })}
-                                        className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${form.is_active ? 'bg-emerald-50 border-emerald-100' : 'bg-zinc-50 border-zinc-200'}`}
+                                        className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${form.is_active ? 'bg-emerald-50 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-900/20' : 'bg-zinc-50 border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800'}`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <div className={`p-2 rounded-lg ${form.is_active ? 'bg-emerald-500 text-white' : 'bg-zinc-200 text-zinc-400'}`}>
+                                            <div className={`p-2 rounded-lg ${form.is_active ? 'bg-emerald-500 text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400'}`}>
                                                 <Activity size={16} />
                                             </div>
                                             <div className="text-left">
-                                                <p className="text-xs font-bold text-zinc-900 uppercase">Live Reward</p>
+                                                <p className="text-xs font-bold text-zinc-900 dark:text-white uppercase">Live Reward</p>
                                                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">Visibility in checkout node</p>
                                             </div>
                                         </div>
                                         <div className={`w-10 h-6 rounded-full relative ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300'} transition-colors`}>
                                             <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${form.is_active ? 'translate-x-5' : 'translate-x-1'}`} />
+                                        </div>
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        onClick={() => setForm({ ...form, show_on_landing: !form.show_on_landing })}
+                                        className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${form.show_on_landing ? 'bg-blue-50 border-blue-100 dark:bg-blue-900/10 dark:border-blue-900/20' : 'bg-zinc-50 border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800'}`}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className={`p-2 rounded-lg ${form.show_on_landing ? 'bg-blue-500 text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400'}`}>
+                                                <Smartphone size={16} />
+                                            </div>
+                                            <div className="text-left">
+                                                <p className={`text-xs font-bold uppercase ${form.show_on_landing ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-900 dark:text-white'}`}>Show on Landing</p>
+                                                <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest leading-tight mt-0.5">Promote on mobile home screen</p>
+                                            </div>
+                                        </div>
+                                        <div className={`w-10 h-6 rounded-full relative ${form.show_on_landing ? 'bg-blue-500' : 'bg-zinc-300 dark:bg-zinc-800'} transition-colors`}>
+                                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${form.show_on_landing ? 'translate-x-5' : 'translate-x-1'}`} />
                                         </div>
                                     </button>
                                 </div>

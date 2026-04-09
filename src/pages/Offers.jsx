@@ -46,6 +46,7 @@ const Offers = () => {
     const [merchants, setMerchants] = useState([]);
     const [generating, setGenerating] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [filterStatus, setFilterStatus] = useState('all'); // all, active, inactive
 
     const initialFormState = {
         title: '',
@@ -59,7 +60,8 @@ const Offers = () => {
         is_active: true,
         merchant_id: selectedMerchantId || '',
         category_id: '',
-        product_id: ''
+        product_id: '',
+        show_on_landing: false
     };
 
     const [form, setForm] = useState(initialFormState);
@@ -82,7 +84,7 @@ const Offers = () => {
         fetchOffers();
         fetchMeta();
         if (!selectedMerchantId) fetchMerchants(); 
-    }, [selectedMerchantId]);
+    }, [selectedMerchantId, filterStatus]);
 
     const fetchMerchants = async () => {
         try {
@@ -96,8 +98,11 @@ const Offers = () => {
     const fetchOffers = async () => {
         try {
             setLoading(true);
-            const query = selectedMerchantId ? `?merchant_id=${selectedMerchantId}` : '';
-            const res = await api.get(`/offers${query}`);
+            let url = `/offers?status=${filterStatus}`;
+            if (selectedMerchantId) {
+                url += `&merchant_id=${selectedMerchantId}`;
+            }
+            const res = await api.get(url);
             setOffers(res.data.data || []);
         } catch (error) {
             console.error("Error fetching offers:", error);
@@ -198,12 +203,33 @@ const Offers = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
+
+                    <div className="flex bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-1 rounded-2xl">
+                        <button 
+                            onClick={() => setFilterStatus('active')}
+                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === 'active' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                        >
+                            Live
+                        </button>
+                        <button 
+                            onClick={() => setFilterStatus('inactive')}
+                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === 'inactive' ? 'bg-zinc-900 dark:bg-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                        >
+                            Deactivated
+                        </button>
+                        <button 
+                            onClick={() => setFilterStatus('all')}
+                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === 'all' ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                        >
+                            All
+                        </button>
+                    </div>
                     
                     <button 
                         onClick={() => { setEditingId(null); setForm(initialFormState); setShowModal(true); }}
-                        className="bg-emerald-500 text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
-                        <Plus size={18} strokeWidth={3} />
+                        <Plus size={16} strokeWidth={3} />
                         New Offer
                     </button>
                 </div>
@@ -220,10 +246,31 @@ const Offers = () => {
                         <Zap size={48} className="text-zinc-400" />
                         <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No active promotions</p>
                     </div>
-                ) : offers.filter(offer => 
-                    offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    (offer.merchant?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
-                ).map((offer) => (
+                ) : offers.filter(offer => {
+                    const matchesSearch = 
+                        offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (offer.merchant?.name || '').toLowerCase().includes(searchTerm.toLowerCase());
+                    const isDateValid = !offer.end_date || new Date(offer.end_date).setHours(23,59,59,999) >= new Date().getTime();
+                    const isActive = (offer.is_active == 1 || offer.is_active == true) && isDateValid;
+                    const matchesStatus = filterStatus === 'all' || (filterStatus === 'active' ? isActive : !isActive);
+                    return matchesSearch && matchesStatus;
+                }).length === 0 ? (
+                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
+                        <SearchX size={48} className="text-zinc-400" />
+                        <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No promotions match your filter</p>
+                    </div>
+                ) : offers.filter(offer => {
+                    const matchesSearch = 
+                        offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (offer.merchant?.name || '').toLowerCase().includes(searchTerm.toLowerCase());
+                    const isDateValid = !offer.end_date || new Date(offer.end_date).setHours(23,59,59,999) >= new Date().getTime();
+                    const isActive = (offer.is_active == 1 || offer.is_active == true) && isDateValid;
+                    const matchesStatus = filterStatus === 'all' || (filterStatus === 'active' ? isActive : !isActive);
+                    return matchesSearch && matchesStatus;
+                }).map((offer) => {
+                    const isDateValid = !offer.end_date || new Date(offer.end_date).setHours(23,59,59,999) >= new Date().getTime();
+                    const isActuallyLive = (offer.is_active == 1 || offer.is_active == true) && isDateValid;
+                    return (
                     <motion.div
                         key={offer.id}
                         whileHover={{ y: -4 }}
@@ -246,6 +293,7 @@ const Offers = () => {
                                             end_date: offer.end_date ? offer.end_date.split('T')[0] : '',
                                             category_id: offer.category_id || '',
                                             product_id: offer.product_id || '',
+                                            show_on_landing: !!offer.show_on_landing
                                         });
                                         setShowModal(true);
                                     }}
@@ -261,8 +309,8 @@ const Offers = () => {
                                 </button>
                             </div>
                             <div className="absolute bottom-4 left-4">
-                                <span className={`px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border ${offer.is_active ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-zinc-500/10 border-zinc-500/20 text-zinc-500'}`}>
-                                    {offer.is_active ? 'Live Now' : 'Draft'}
+                                <span className={`px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border ${isActuallyLive ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-rose-500/10 border-rose-500/20 text-rose-500'}`}>
+                                    {isActuallyLive ? 'Live Now' : (!isDateValid ? 'Expired' : 'Draft')}
                                 </span>
                             </div>
                         </div>
@@ -309,7 +357,7 @@ const Offers = () => {
                             </div>
                         </div>
                     </motion.div>
-                ))}
+                ); })}
             </div>
 
             {/* Modal */}
@@ -440,6 +488,21 @@ const Offers = () => {
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Marketplace Priority (0-100)</label>
                                                 <input type="number" className="w-full px-5 py-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-xs shadow-sm" value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} />
+                                            </div>
+
+                                            <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                                                <label className="flex items-center justify-between cursor-pointer group">
+                                                    <div>
+                                                        <span className="text-[10px] font-black text-zinc-900 dark:text-white uppercase tracking-widest block">Show on Landing Screen</span>
+                                                        <span className="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">Promote this deal on mobile home screen</span>
+                                                    </div>
+                                                    <div className="relative">
+                                                        <input type="checkbox" className="sr-only p-2" checked={form.show_on_landing} onChange={(e) => setForm({ ...form, show_on_landing: e.target.checked })} />
+                                                        <div className={`w-12 h-6 rounded-full transition-all duration-300 ${form.show_on_landing ? 'bg-emerald-500' : 'bg-zinc-200 dark:bg-zinc-800'}`}>
+                                                            <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 ${form.show_on_landing ? 'translate-x-6' : ''}`} />
+                                                        </div>
+                                                    </div>
+                                                </label>
                                             </div>
                                         </div>
                                     </div>

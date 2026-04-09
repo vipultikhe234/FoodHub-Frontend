@@ -50,7 +50,7 @@ const ApnaCartLoader = ({ size = 64, className = "", centered = true }) => {
   // For major page loaders, give it center wrapper.
   if (centered && !isSmall) {
     return (
-      <div className="flex items-center justify-center p-8 w-full h-full min-h-[200px] bg-transparent">
+      <div className="flex items-center justify-center p-8 w-full min-h-[70vh] bg-transparent flex-1">
         {content}
       </div>
     );

@@ -35,6 +35,7 @@ import {
     MessageSquare,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import MerchantDropdown from '../components/MerchantDropdown';
 
 // ─── Nav Group Component ──────────────────────────────────────────────────────
 const NavGroup = ({ group, location, defaultOpen = false }) => {
@@ -395,19 +396,11 @@ const AdminLayout = () => {
 
                         {/* Admin Merchant Selector */}
                         {user?.role === 'admin' && (
-                            <div className="flex items-center gap-3 bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 py-1.5 pl-3.5 pr-2 rounded-2xl ml-2">
-                                <Store size={13} className="text-zinc-400 shrink-0" />
-                                <select
-                                    value={selectedMerchantId}
-                                    onChange={(e) => setSelectedMerchantId(e.target.value)}
-                                    className="bg-transparent border-none text-[11px] font-bold text-zinc-600 dark:text-zinc-300 focus:ring-0 cursor-pointer outline-none min-w-[140px] max-w-[180px]"
-                                >
-                                    <option value="">Global Overview</option>
-                                    {merchants.map(m => (
-                                        <option key={m.id} value={m.id}>{m.name}</option>
-                                    ))}
-                                </select>
-                            </div>
+                            <MerchantDropdown 
+                                merchants={merchants} 
+                                selectedMerchantId={selectedMerchantId} 
+                                setSelectedMerchantId={setSelectedMerchantId} 
+                            />
                         )}
                     </div>
 

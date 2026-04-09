@@ -478,9 +478,9 @@ const Products = () => {
 
                     <button
                         onClick={() => { setScannedBarcode(''); setShowScanner(true); }}
-                        className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl transition-all active:scale-95"
+                        className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl transition-all active:scale-95"
                     >
-                        <ScanBarcode size={18} strokeWidth={3} />
+                        <ScanBarcode size={16} strokeWidth={3} />
                         Scan
                     </button>
 
@@ -490,9 +490,9 @@ const Products = () => {
                             setNewProduct({ ...initialProductState, merchant_id: selectedMerchantId || '' });
                             setShowModal(true);
                         }}
-                        className="bg-emerald-500 text-white px-6 py-4 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
-                        <Plus size={18} strokeWidth={3} />
+                        <Plus size={16} strokeWidth={3} />
                         Add Item
                     </button>
                 </div>
