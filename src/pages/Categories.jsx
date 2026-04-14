@@ -90,8 +90,8 @@ const Categories = () => {
         setImgLoaded(false);
         setImgLoading(true);
         debounceRef.current = setTimeout(async () => {
-            const url = await fetchRealFoodImage(name, false, '', 'category');
-            setNewCategory(prev => ({ ...prev, image: url, image_url: url }));
+            const data = await fetchRealFoodImage(name, false, '', 'category');
+            setNewCategory(prev => ({ ...prev, image: data.url, image_url: data.url, fallback_url: data.fallback }));
             setImgLoading(false);
         }, 1500);
     };
@@ -100,8 +100,8 @@ const Categories = () => {
         if (!newCategory.name.trim()) return;
         setImgLoaded(false);
         setImgLoading(true);
-        const url = await fetchRealFoodImage(newCategory.name, true, '', 'category');
-        setNewCategory(prev => ({ ...prev, image: url, image_url: url }));
+        const data = await fetchRealFoodImage(newCategory.name, true, '', 'category');
+        setNewCategory(prev => ({ ...prev, image: data.url, image_url: data.url, fallback_url: data.fallback }));
         setImgLoading(false);
     };
 
@@ -389,10 +389,18 @@ const Categories = () => {
                                             <div className="w-full h-full relative">
                                                 <img
                                                     src={newCategory.image_url}
-                                                    className={`w-full h-full object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                                                     alt="preview"
+                                                    className="w-full h-full object-cover"
                                                     onLoad={() => setImgLoaded(true)}
-                                                    onError={() => { setImgLoaded(true); toast.error('Image generation delay... please wait.'); }}
+                                                    onError={(e) => {
+                                                        if (newCategory.fallback_url && e.target.src !== newCategory.fallback_url) {
+                                                            e.target.src = newCategory.fallback_url;
+                                                            toast.info('Adjusting visual style...');
+                                                        } else {
+                                                            setImgLoaded(true);
+                                                            toast.error('Image source unavailable.');
+                                                        }
+                                                    }}
                                                 />
                                                 <div className="absolute inset-0 bg-zinc-950/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all backdrop-blur-[2px]">
                                                     <p className="text-[9px] font-black text-white uppercase tracking-widest">Change</p>
