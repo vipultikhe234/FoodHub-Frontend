@@ -180,6 +180,7 @@ const Merchants = () => {
 
     const handleSaveMerchant = async (e) => {
         e.preventDefault();
+        if (formLoading) return;
         setFormLoading(true);
         try {
             if (editingId) {

@@ -100,7 +100,9 @@ const CountriesTab = () => {
     const openEdit = (item) => { setEditing(item); setForm({ name: item.name, code: item.code || '', is_active: item.is_active }); setModal(true); };
 
     const handleSave = async (e) => {
-        e.preventDefault(); setSaving(true);
+        e.preventDefault();
+        if (saving) return;
+        setSaving(true);
         try {
             if (editing) await locationService.adminUpdateCountry(editing.id, form);
             else await locationService.adminCreateCountry(form);
@@ -144,8 +146,9 @@ const CountriesTab = () => {
                                 </div>
                                 <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Active</span>
                             </label>
-                            <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 disabled:opacity-50">
-                                {saving ? <ApnaCartLoader centered={false} size={16} /> : <Check size={16} />} {editing ? 'Update' : 'Create'}
+                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 transition-all active:scale-95 shadow-xl">
+                                {saving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />} 
+                                {editing ? 'Update Registry' : 'Confirm Addition'}
                             </button>
                         </form>
                     </Modal>
@@ -180,7 +183,9 @@ const StatesTab = () => {
     const openEdit = (item) => { setEditing(item); setForm({ country_id: item.country_id, name: item.name, is_active: item.is_active }); setModal(true); };
 
     const handleSave = async (e) => {
-        e.preventDefault(); setSaving(true);
+        e.preventDefault();
+        if (saving) return;
+        setSaving(true);
         try {
             if (editing) await locationService.adminUpdateState(editing.id, form);
             else await locationService.adminCreateState(form);
@@ -234,8 +239,9 @@ const StatesTab = () => {
                                 </div>
                                 <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Active</span>
                             </label>
-                            <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 disabled:opacity-50">
-                                {saving ? <ApnaCartLoader centered={false} size={16} /> : <Check size={16} />} {editing ? 'Update' : 'Create'}
+                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 transition-all active:scale-95 shadow-xl">
+                                {saving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />} 
+                                {editing ? 'Update Registry' : 'Confirm Addition'}
                             </button>
                         </form>
                     </Modal>
@@ -293,7 +299,9 @@ const CitiesTab = () => {
     };
 
     const handleSave = async (e) => {
-        e.preventDefault(); setSaving(true);
+        e.preventDefault();
+        if (saving) return;
+        setSaving(true);
         try {
             if (editing) await locationService.adminUpdateCity(editing.id, form);
             else await locationService.adminCreateCity(form);
@@ -363,8 +371,9 @@ const CitiesTab = () => {
                                 </div>
                                 <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Active</span>
                             </label>
-                            <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 disabled:opacity-50">
-                                {saving ? <ApnaCartLoader centered={false} size={16} /> : <Check size={16} />} {editing ? 'Update' : 'Create'}
+                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 transition-all active:scale-95 shadow-xl">
+                                {saving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />} 
+                                {editing ? 'Update Registry' : 'Confirm Addition'}
                             </button>
                         </form>
                     </Modal>

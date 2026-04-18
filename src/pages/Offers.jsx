@@ -46,7 +46,8 @@ const Offers = () => {
     const [merchants, setMerchants] = useState([]);
     const [generating, setGenerating] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterStatus, setFilterStatus] = useState('all'); // all, active, inactive
+    const [filterStatus, setFilterStatus] = useState('active'); // all, active, inactive
+    const [submitting, setSubmitting] = useState(false);
 
     const initialFormState = {
         title: '',
@@ -138,7 +139,9 @@ const Offers = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (submitting) return;
         try {
+            setSubmitting(true);
             const payload = { ...form };
             if (selectedMerchantId && !payload.merchant_id) {
                 payload.merchant_id = selectedMerchantId;
@@ -156,6 +159,8 @@ const Offers = () => {
             toast.success(editingId ? "Offer updated successfully" : "Offer deployed successfully");
         } catch (error) {
             toast.error("Operation failed");
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -510,8 +515,8 @@ const Offers = () => {
 
                                 <div className="flex gap-4 pt-4">
                                     <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-600 transition-colors">Abort Mission</button>
-                                    <button type="submit" className="flex-[3] py-4 bg-zinc-900 dark:bg-emerald-500 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-zinc-900/20 hover:opacity-90 transition-all flex items-center justify-center gap-3">
-                                        <CheckCircle2 size={18} /> {editingId ? 'Update Promotion' : 'Deploy Live Offer'}
+                                    <button type="submit" disabled={submitting} className="flex-[3] py-4 bg-zinc-900 dark:bg-emerald-500 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-zinc-900/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-3">
+                                        {submitting ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle2 size={18} />} {editingId ? 'Update Promotion' : 'Deploy Live Offer'}
                                     </button>
                                 </div>
                             </form>

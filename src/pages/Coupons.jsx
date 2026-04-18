@@ -21,9 +21,11 @@ import {
     Edit2,
     Loader2,
     Smartphone,
+    Store,
     Search,
     Archive,
     ChevronDown,
+    Globe2,
     RefreshCw
 } from 'lucide-react';
 
@@ -36,8 +38,10 @@ const Coupons = () => {
     const [showModal, setShowModal] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('all'); // all, active, inactive
+    const [statusFilter, setStatusFilter] = useState('active'); // all, active, inactive
     const [user] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
+    const [submitting, setSubmitting] = useState(false);
+    const [merchants, setMerchants] = useState([]);
     const isMerchant = user.role === 'merchant' || user.role === 'Merchant';
 
     const initialFormState = {
@@ -49,14 +53,25 @@ const Coupons = () => {
         expires_at: '',
         is_active: true,
         merchant_id: selectedMerchantId || '',
-        show_on_landing: false
+        show_on_landing: false,
+        is_admin_coupon: !isMerchant
     };
 
     const [form, setForm] = useState(initialFormState);
 
     useEffect(() => {
         fetchCoupons();
+        if (!isMerchant) fetchMerchants();
     }, [selectedMerchantId, statusFilter]);
+
+    const fetchMerchants = async () => {
+        try {
+            const res = await api.get('/admin/merchants');
+            setMerchants(res.data.data || []);
+        } catch (error) {
+            console.error("Error fetching merchants:", error);
+        }
+    };
 
     const fetchCoupons = async () => {
         try {
@@ -76,7 +91,15 @@ const Coupons = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Validation for Admin: Must select merchant OR mark as platform-wide
+        if (!isMerchant && !form.merchant_id && !form.is_admin_coupon) {
+            return toast.error("Deployment Error: You must either select a Target Merchant OR mark this as a Platform Wide (Admin) coupon.");
+        }
+
+        if (submitting) return;
         try {
+            setSubmitting(true);
             const payload = { ...form };
             if (selectedMerchantId && !payload.merchant_id) {
                 payload.merchant_id = selectedMerchantId;
@@ -94,6 +117,8 @@ const Coupons = () => {
             toast.success(editingId ? "Coupon updated successfully" : "Coupon created successfully");
         } catch (error) {
             toast.error("Operation failed");
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -229,7 +254,8 @@ const Coupons = () => {
                                                 max_discount: coupon.max_discount || '',
                                                 expires_at: coupon.expires_at.split('T')[0],
                                                 is_active: coupon.is_active,
-                                                show_on_landing: !!coupon.show_on_landing
+                                                show_on_landing: !!coupon.show_on_landing,
+                                                is_admin_coupon: !!coupon.is_admin_coupon
                                             });
                                             setShowModal(true);
                                         }}
@@ -249,6 +275,9 @@ const Coupons = () => {
                             <div className="space-y-4">
                                 <div>
                                     <h3 className="text-2xl font-bold text-zinc-900 dark:text-white tracking-widest uppercase mb-1">{coupon.code}</h3>
+                                    <p className="text-[10px] font-bold text-zinc-400 flex items-center gap-1.5 uppercase tracking-[0.1em] mb-3">
+                                        <Store size={10} /> {coupon.merchant?.name || 'Global / Platform'}
+                                    </p>
                                     <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
                                         <Tag size={10} className="text-emerald-600" />
                                         <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">
@@ -299,11 +328,11 @@ const Coupons = () => {
                             onClick={() => setShowModal(false)}
                             className="absolute inset-0 bg-zinc-950/60 backdrop-blur-sm"
                         />
-                        <motion.div
+                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="relative w-full max-w-lg bg-white dark:bg-zinc-950 rounded-3xl shadow-2xl overflow-hidden"
+                            className="relative w-full max-w-lg bg-white dark:bg-zinc-950 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
                         >
                             <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
                                 <h2 className="text-xl font-bold text-zinc-900 dark:text-white uppercase tracking-tight">{editingId ? 'Edit Manifest' : 'Initialize Reward'}</h2>
@@ -312,8 +341,65 @@ const Coupons = () => {
                                 </button>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="p-6 space-y-6">
-                                <div className="space-y-4">
+                             <div className="flex-1 overflow-y-auto custom-scrollbar">
+                                <form id="couponForm" onSubmit={handleSubmit} className="p-6 space-y-6">
+                                    <div className="space-y-4">
+                                        {/* Admin Scope Selection: Platform Wide vs specific Merchant */}
+                                        {!isMerchant && (
+                                            <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500 bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setForm({ 
+                                                        ...form, 
+                                                        is_admin_coupon: !form.is_admin_coupon,
+                                                        merchant_id: !form.is_admin_coupon ? '' : form.merchant_id 
+                                                    })}
+                                                    className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${form.is_admin_coupon ? 'bg-rose-50 border-rose-100 dark:bg-rose-900/10 dark:border-rose-900/20 shadow-inner' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'}`}
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`p-2 rounded-lg ${form.is_admin_coupon ? 'bg-rose-500 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400'}`}>
+                                                            <Globe2 size={16} />
+                                                        </div>
+                                                        <div className="text-left">
+                                                            <p className={`text-xs font-bold uppercase ${form.is_admin_coupon ? 'text-rose-600 dark:text-rose-400' : 'text-zinc-900 dark:text-white'}`}>Platform Wide (Admin)</p>
+                                                            <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest leading-tight mt-0.5">Visible to all users vs specific merchant</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className={`w-10 h-6 rounded-full relative ${form.is_admin_coupon ? 'bg-rose-500' : 'bg-zinc-300 dark:bg-zinc-800'} transition-colors`}>
+                                                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${form.is_admin_coupon ? 'translate-x-5' : 'translate-x-1'}`} />
+                                                    </div>
+                                                </button>
+
+                                                <AnimatePresence mode="wait">
+                                                    {!form.is_admin_coupon && (
+                                                        <motion.div 
+                                                            initial={{ opacity: 0, height: 0 }}
+                                                            animate={{ opacity: 1, height: 'auto' }}
+                                                            exit={{ opacity: 0, height: 0 }}
+                                                            className="space-y-2 overflow-hidden"
+                                                        >
+                                                            <label className="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em] block pt-2">Assign to Specific Merchant</label>
+                                                            <div className="relative">
+                                                                <select 
+                                                                    className="w-full pl-12 pr-5 py-3.5 bg-white dark:bg-zinc-900 border-2 border-rose-500/10 rounded-2xl outline-none focus:border-rose-500 transition-colors dark:text-white font-bold text-[10px] uppercase appearance-none shadow-sm" 
+                                                                    value={form.merchant_id} 
+                                                                    onChange={(e) => setForm({ 
+                                                                        ...form, 
+                                                                        merchant_id: e.target.value,
+                                                                        is_admin_coupon: e.target.value ? false : form.is_admin_coupon 
+                                                                    })}
+                                                                >
+                                                                    <option value="">Select Target Merchant</option>
+                                                                    {merchants.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
+                                                                </select>
+                                                                <Store size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-rose-500" />
+                                                                <ChevronDown size={14} className="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
+                                                            </div>
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
+                                        )}
                                     <div className="space-y-2">
                                         <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest block">Promo Code</label>
                                         <input
@@ -448,15 +534,17 @@ const Coupons = () => {
                                             <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${form.show_on_landing ? 'translate-x-5' : 'translate-x-1'}`} />
                                         </div>
                                     </button>
-                                </div>
 
-                                <div className="flex gap-3 pt-2">
-                                    <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-3 text-xs font-bold text-zinc-400 uppercase tracking-widest hover:text-zinc-600 transition-colors">Abort</button>
-                                    <button type="submit" className="flex-[2] py-3 bg-zinc-900 dark:bg-emerald-500 text-white rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-zinc-900/10 hover:opacity-90 transition-all flex items-center justify-center gap-2">
-                                        <CheckCircle2 size={16} /> {editingId ? 'Save' : 'Deploy'}
-                                    </button>
                                 </div>
                             </form>
+                        </div>
+
+                            <div className="p-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 flex gap-3">
+                                <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-3 text-xs font-bold text-zinc-400 uppercase tracking-widest hover:text-zinc-600 transition-colors">Abort</button>
+                                <button form="couponForm" type="submit" disabled={submitting} className="flex-[2] py-3 bg-zinc-900 dark:bg-emerald-500 text-white rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-zinc-900/10 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2">
+                                    {submitting ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />} {editingId ? 'Save Changes' : 'Deploy Reward'}
+                                </button>
+                            </div>
                         </motion.div>
                     </div>
                 )}

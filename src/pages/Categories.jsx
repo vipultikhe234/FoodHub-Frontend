@@ -35,6 +35,7 @@ const Categories = () => {
     const [uploading, setUploading] = useState(false);
     const [imgLoading, setImgLoading] = useState(false);
     const [imgLoaded, setImgLoaded] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [merchantCategories, setMerchantCategories] = useState([]);
@@ -144,8 +145,10 @@ const Categories = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (submitting) return;
         if (!newCategory.name.trim()) return toast.error('Category name required');
         try {
+            setSubmitting(true);
             const payload = {
                 name: newCategory.name,
                 image: newCategory.image,
@@ -167,6 +170,8 @@ const Categories = () => {
             toast.success(editingId ? "Category updated successfully" : "Category created successfully");
         } catch (err) {
             toast.error(`Error saving category.`);
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -456,8 +461,16 @@ const Categories = () => {
 
                                 <div className="flex gap-3 pt-2">
                                     <button onClick={resetModal} type="button" className="flex-1 h-12 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-black text-[9px] uppercase tracking-[0.2em] rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">Cancel</button>
-                                    <button type="submit" className="flex-1 h-12 bg-emerald-500 text-white rounded-xl font-black text-[9px] uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 transition-all">
-                                        {editingId ? 'Update' : 'Confirm'}
+                                    <button
+                                        type="submit"
+                                        disabled={submitting}
+                                        className="flex-1 h-12 bg-emerald-500 text-white rounded-xl font-black text-[9px] uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                    >
+                                        {submitting ? (
+                                            <Loader2 size={16} className="animate-spin" />
+                                        ) : (
+                                            editingId ? 'Update' : 'Confirm'
+                                        )}
                                     </button>
                                 </div>
                             </form>

@@ -22,6 +22,7 @@ const MerchantCategories = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
@@ -51,22 +52,25 @@ const MerchantCategories = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (submitting) return;
         if (!form.name.trim()) return toast.error('Category name is required');
-
         try {
+            setSubmitting(true);
             if (editingId) {
                 await merchantCategoryService.adminUpdate(editingId, form);
                 toast.success('Category updated successfully');
             } else {
                 await merchantCategoryService.adminCreate(form);
-                toast.success('Category created successfully');
             }
             setShowModal(false);
             setEditingId(null);
             setForm({ name: '', description: '', is_active: true });
             fetchCategories();
+            toast.success(editingId ? "Category updated successfully" : "Category created successfully");
         } catch (error) {
             toast.error(error.response?.data?.message || 'Error saving category');
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -325,9 +329,14 @@ const MerchantCategories = () => {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-2 px-12 bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95"
+                                        disabled={submitting}
+                                        className="flex-2 px-12 bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95 flex items-center justify-center gap-2"
                                     >
-                                        {editingId ? 'Update Registry' : 'Save Classification'}
+                                        {submitting ? (
+                                            <Loader2 size={16} className="animate-spin" />
+                                        ) : (
+                                            editingId ? 'Update Registry' : 'Save Classification'
+                                        )}
                                     </button>
                                 </div>
                             </form>

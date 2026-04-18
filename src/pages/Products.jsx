@@ -38,6 +38,7 @@ const Products = () => {
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
     const [editingId, setEditingId] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -301,7 +302,10 @@ const Products = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (submitting) return;
+
         try {
+            setSubmitting(true);
             const payload = { ...newProduct };
             if (selectedMerchantId && !payload.merchant_id) {
                 payload.merchant_id = selectedMerchantId;
@@ -323,6 +327,8 @@ const Products = () => {
             toast.success(editingId ? "Product updated successfully" : "Product added successfully");
         } catch (error) {
             toast.error(error.response?.data?.message || "Error saving product. Please ensure all fields are correct.");
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -1112,9 +1118,14 @@ const Products = () => {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-[2] h-12 bg-emerald-500 text-white font-black rounded-xl shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 transition-all text-[9px] uppercase tracking-widest"
+                                        disabled={submitting}
+                                        className="flex-[2] h-12 bg-emerald-500 text-white font-black rounded-xl shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 transition-all text-[9px] uppercase tracking-widest flex items-center justify-center gap-2"
                                     >
-                                        {editingId ? 'Push Update' : 'Finalize Addition'}
+                                        {submitting ? (
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                        ) : (
+                                            editingId ? 'Push Update' : 'Finalize Addition'
+                                        )}
                                     </button>
                                 </div>
                             </form>
