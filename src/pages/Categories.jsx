@@ -180,8 +180,8 @@ const Categories = () => {
             (t) => (
                 <span style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     Delete this category?
-                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/categories/${id}`); setCategories(prev => prev.filter(c => c.id !== id)); toast.success('Category deleted'); } catch { toast.error('Error deleting category'); } }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}>YES</button>
-                    <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}>NO</button>
+                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/categories/${id}`); setCategories(prev => prev.filter(c => c.id !== id)); toast.success('Category deleted'); } catch { toast.error('Error deleting category'); } }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: '0px', padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}>YES</button>
+                    <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: '0px', padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: '10px', letterSpacing: '0.1em' }}>NO</button>
                 </span>
             ),
             { duration: 6000 }
@@ -225,7 +225,7 @@ const Categories = () => {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={fetchData}
-                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
                     </button>
@@ -235,7 +235,7 @@ const Categories = () => {
                         <input
                             type="text"
                             placeholder="SEARCH CATEGORIES..."
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-none text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -245,7 +245,7 @@ const Categories = () => {
                         <div className="relative group hidden md:block">
                             <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
                             <select
-                                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
+                                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-none text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
                                 value={selectedMerchantCategoryId}
                                 onChange={(e) => setSelectedMerchantCategoryId(e.target.value)}
                             >
@@ -264,7 +264,7 @@ const Categories = () => {
                             setNewCategory({ name: '', image: '', image_url: '', status: true, merchant_id: selectedMerchantId || '' });
                             setShowModal(true);
                         }}
-                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-none font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
                         <Plus size={16} strokeWidth={3} />
                         Add Category
@@ -280,7 +280,7 @@ const Categories = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
                     {filtered.length === 0 ? (
-                        <div className="col-span-full py-32 bg-zinc-50 dark:bg-zinc-900/40 rounded-[4rem] border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-40">
+                        <div className="col-span-full py-32 bg-zinc-50 dark:bg-zinc-900/40 rounded-none border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-40">
                             <LayoutGrid size={48} className="text-zinc-300" />
                             <p className="text-[10px] font-black uppercase tracking-[0.3em] mt-6 text-zinc-500">No Groups Found</p>
                         </div>
@@ -289,7 +289,7 @@ const Categories = () => {
                             <motion.div
                                 key={cat.id}
                                 whileHover={{ y: -8 }}
-                                className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden group hover:shadow-2xl transition-all duration-500"
+                                className="bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden group hover:shadow-2xl transition-all duration-500"
                             >
                                 <div className="relative h-44 overflow-hidden bg-zinc-100 dark:bg-zinc-800">
                                     {cat.image_url ? (
@@ -300,12 +300,12 @@ const Categories = () => {
                                         </div>
                                     )}
                                     <div className="absolute top-6 left-6">
-                                        <span className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-wider backdrop-blur-xl border ${cat.status ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20 shadow-lg shadow-emerald-500/10' : 'bg-rose-500/20 text-rose-400 border-rose-500/20'}`}>
+                                        <span className={`px-4 py-2 rounded-none text-[10px] font-black uppercase tracking-wider backdrop-blur-xl border ${cat.status ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20 shadow-lg shadow-emerald-500/10' : 'bg-rose-500/20 text-rose-400 border-rose-500/20'}`}>
                                             {cat.status ? 'Live' : 'Hidden'}
                                         </span>
                                     </div>
                                     <div className="absolute top-6 right-6 flex items-center gap-2">
-                                        <div className="h-10 px-3 bg-white/20 backdrop-blur-xl rounded-xl flex items-center gap-2 border border-white/10 text-white shadow-xl">
+                                        <div className="h-10 px-3 bg-white/20 backdrop-blur-xl rounded-none flex items-center gap-2 border border-white/10 text-white shadow-xl">
                                             <Store size={14} className="text-emerald-400" />
                                             <span className="text-[10px] font-black uppercase tracking-tight">{cat.merchant?.name || 'Global'}</span>
                                         </div>
@@ -319,13 +319,13 @@ const Categories = () => {
                                     <div className="flex gap-3 shrink-0">
                                         <button
                                             onClick={() => handleEdit(cat)}
-                                            className="w-10 h-10 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
+                                            className="w-10 h-10 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-none transition-all"
                                         >
                                             <Edit2 size={16} />
                                         </button>
                                         <button
                                             onClick={() => handleDelete(cat.id)}
-                                            className="w-10 h-10 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                            className="w-10 h-10 flex items-center justify-center bg-zinc-100 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-none transition-all"
                                         >
                                             <Trash2 size={16} />
                                         </button>
@@ -352,14 +352,14 @@ const Categories = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                            className="relative w-full max-w-md bg-white dark:bg-zinc-950 rounded-[2.5rem] shadow-2xl overflow-hidden my-auto border border-zinc-200 dark:border-zinc-800"
+                            className="relative w-full max-w-md bg-white dark:bg-zinc-950 rounded-none shadow-2xl overflow-hidden my-auto border border-zinc-200 dark:border-zinc-800"
                         >
                             <div className="p-6 lg:p-8 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-900/50">
                                 <div>
                                     <h2 className="text-xl font-black text-zinc-900 dark:text-white uppercase tracking-tight leading-none">{editingId ? 'Edit Group' : 'New Group'}</h2>
                                     <p className="text-[9px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mt-1.5">Define your grouping.</p>
                                 </div>
-                                <button onClick={resetModal} className="p-3 bg-white dark:bg-zinc-800 rounded-xl text-zinc-500 hover:text-rose-500 transition-colors border border-zinc-100 dark:border-zinc-700 shadow-sm">
+                                <button onClick={resetModal} className="p-3 bg-white dark:bg-zinc-800 rounded-none text-zinc-500 hover:text-rose-500 transition-colors border border-zinc-100 dark:border-zinc-700 shadow-sm">
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
@@ -371,7 +371,7 @@ const Categories = () => {
                                         <select
                                             required
                                             disabled={isMerchant}
-                                            className={`w-full h-12 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-800 rounded-xl px-5 text-[10px] font-black uppercase text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none ${isMerchant ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'}`}
+                                            className={`w-full h-12 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-800 rounded-none px-5 text-[10px] font-black uppercase text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none ${isMerchant ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'}`}
                                             value={newCategory.merchant_id}
                                             onChange={(e) => setNewCategory({ ...newCategory, merchant_id: e.target.value })}
                                         >
@@ -384,7 +384,7 @@ const Categories = () => {
 
                                 <div className="space-y-3">
                                     <label className="text-[9px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.2em]">Visual Identification</label>
-                                    <div className="relative h-32 bg-zinc-50 dark:bg-zinc-900 rounded-[1.5rem] border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center overflow-hidden transition-all hover:border-emerald-500/50 shadow-inner group">
+                                    <div className="relative h-32 bg-zinc-50 dark:bg-zinc-900 rounded-none border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center overflow-hidden transition-all hover:border-emerald-500/50 shadow-inner group">
                                         {(imgLoading || (newCategory.image_url && !imgLoaded)) && (
                                             <div className="absolute inset-0 z-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-900">
                                                 <ApnaCartLoader centered={false} size={24} />
@@ -421,13 +421,12 @@ const Categories = () => {
                                     </div>
                                     <div className="flex justify-end mt-2">
                                         {newCategory.name.length > 2 && (
-                                            <button type="button" onClick={handleRetryImage} className="text-[10px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-xl hover:bg-emerald-100 transition-all border-2 border-emerald-500/10">
+                                            <button type="button" onClick={handleRetryImage} className="text-[10px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-500/10 rounded-none hover:bg-emerald-100 transition-all border-2 border-emerald-500/10">
                                                 <Sparkles size={12} strokeWidth={3} /> AI Generate
                                             </button>
                                         )}
                                     </div>
                                 </div>
-
                                 <div className="grid grid-cols-1 gap-6">
                                     <div className="space-y-3">
                                         <label className="text-[9px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-[0.2em]">Group Label</label>
@@ -435,14 +434,14 @@ const Categories = () => {
                                             type="text"
                                             required
                                             placeholder="Label Name"
-                                            className="w-full h-12 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-800 rounded-xl px-5 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-inner"
+                                            className="w-full h-12 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-200 dark:border-zinc-800 rounded-none px-5 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-inner"
                                             value={newCategory.name}
                                             onChange={handleNameChange}
                                         />
                                     </div>
                                 </div>
 
-                                <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                                <div className="flex items-center justify-between p-4 bg-zinc-50 dark:bg-zinc-900 rounded-none border border-zinc-100 dark:border-zinc-800">
                                     <div className="flex items-center gap-3">
                                         <div className={`w-2 h-2 rounded-full ${newCategory.status ? 'bg-emerald-500 animate-pulse' : 'bg-zinc-400'}`} />
                                         <p className="text-[9px] font-black uppercase text-zinc-900 dark:text-white tracking-widest">Public Visibility</p>
@@ -450,21 +449,21 @@ const Categories = () => {
                                     <button
                                         type="button"
                                         onClick={() => setNewCategory(prev => ({ ...prev, status: !prev.status }))}
-                                        className={`w-10 h-5 rounded-full relative transition-all ${newCategory.status ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'}`}
+                                        className={`w-10 h-5 rounded-none relative transition-all ${newCategory.status ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'}`}
                                     >
                                         <motion.div
-                                            animate={{ x: newCategory.status ? 20 : 4 }}
-                                            className="absolute top-1 w-3 h-3 bg-white rounded-full shadow-sm"
+                                            animate={{ x: newCategory.status ? 26 : 4 }}
+                                            className="absolute top-1 w-3 h-3 bg-white rounded-none shadow-sm"
                                         />
                                     </button>
                                 </div>
 
                                 <div className="flex gap-3 pt-2">
-                                    <button onClick={resetModal} type="button" className="flex-1 h-12 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-black text-[9px] uppercase tracking-[0.2em] rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">Cancel</button>
+                                    <button onClick={resetModal} type="button" className="flex-1 h-12 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-black text-[9px] uppercase tracking-[0.2em] rounded-none hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">Cancel</button>
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="flex-1 h-12 bg-emerald-500 text-white rounded-xl font-black text-[9px] uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                        className="flex-1 h-12 bg-emerald-500 text-white rounded-none font-black text-[9px] uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 transition-all flex items-center justify-center gap-2"
                                     >
                                         {submitting ? (
                                             <Loader2 size={16} className="animate-spin" />

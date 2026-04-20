@@ -18,14 +18,14 @@ const Field = ({ label, children }) => (
 const Input = (props) => (
     <input
         {...props}
-        className="w-full h-12 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-2xl px-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-400"
+        className="w-full h-12 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none px-4 text-[13px] font-bold text-zinc-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-500/20 transition-all placeholder:text-zinc-400"
     />
 );
 
 const Select = ({ children, ...props }) => (
     <select
         {...props}
-        className="w-full h-12 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-2xl px-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all"
+        className="w-full h-12 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none px-4 text-[13px] font-bold text-zinc-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-500/20 transition-all appearance-none cursor-pointer"
     >
         {children}
     </select>
@@ -38,16 +38,16 @@ const Row = ({ item, subLabel, onEdit, onDelete }) => (
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
-        className="flex items-center justify-between px-5 py-4 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl group hover:border-emerald-500/30 transition-all"
+        className="flex items-center justify-between px-5 py-4 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-none group hover:border-emerald-500/30 transition-all"
     >
         <div className="flex items-center gap-4">
-            <div className={`w-2 h-2 rounded-full ${item.is_active ? 'bg-emerald-500' : 'bg-zinc-400'}`} />
+            <div className={`w-2 h-2 rounded-none ${item.is_active ? 'bg-emerald-500' : 'bg-zinc-400'}`} />
             <div>
                 <p className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-tight">{item.name}</p>
                 {subLabel && <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-0.5">{subLabel}</p>}
             </div>
             {item.code && (
-                <span className="text-[10px] font-black text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-lg tracking-wider">{item.code}</span>
+                <span className="text-[10px] font-black text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-none tracking-wider">{item.code}</span>
             )}
         </div>
         <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -68,7 +68,7 @@ const Modal = ({ title, onClose, children }) => (
             className="absolute inset-0 bg-zinc-950/60 backdrop-blur-md" onClick={onClose} />
         <motion.div initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl p-8 space-y-6">
+            className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-2xl p-8 space-y-6">
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-black text-zinc-900 dark:text-white uppercase tracking-tight">{title}</h3>
                 <button onClick={onClose} className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white">
@@ -116,8 +116,8 @@ const CountriesTab = () => {
         toast((t) => (
             <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 Delete this country? (cascades states & cities)
-                <button onClick={async () => { toast.dismiss(t.id); await locationService.adminDeleteCountry(id); toast.success('Deleted'); fetch(); }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: 8, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>YES</button>
-                <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: 8, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>NO</button>
+                <button onClick={async () => { toast.dismiss(t.id); await locationService.adminDeleteCountry(id); toast.success('Deleted'); fetch(); }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: 0, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>YES</button>
+                <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: 0, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>NO</button>
             </span>
         ), { duration: 6000 });
     };
@@ -126,7 +126,7 @@ const CountriesTab = () => {
         <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{items.length} Countries</p>
-                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] shadow-lg shadow-emerald-500/20">
+                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-4 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.15em] shadow-lg shadow-emerald-500/20">
                     <Plus size={14} strokeWidth={3} /> Add Country
                 </button>
             </div>
@@ -141,12 +141,12 @@ const CountriesTab = () => {
                             <Field label="Country Name"><Input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. India" /></Field>
                             <Field label="Country Code (ISO)"><Input value={form.code} onChange={e => setForm({ ...form, code: e.target.value })} placeholder="e.g. IN" /></Field>
                             <label className="flex items-center gap-3 cursor-pointer">
-                                <div onClick={() => setForm({ ...form, is_active: !form.is_active })} className={`w-10 h-6 rounded-full transition-colors ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'} flex items-center px-1`}>
-                                    <div className={`w-4 h-4 bg-white rounded-full shadow transition-transform ${form.is_active ? 'translate-x-4' : 'translate-x-0'}`} />
+                                <div onClick={() => setForm({ ...form, is_active: !form.is_active })} className={`w-10 h-6 rounded-none transition-colors ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'} flex items-center px-1`}>
+                                    <div className={`w-4 h-4 bg-white rounded-none shadow transition-transform ${form.is_active ? 'translate-x-4' : 'translate-x-0'}`} />
                                 </div>
                                 <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Active</span>
                             </label>
-                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 transition-all active:scale-95 shadow-xl">
+                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-none font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 transition-all active:scale-95 shadow-xl">
                                 {saving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />} 
                                 {editing ? 'Update Registry' : 'Confirm Addition'}
                             </button>
@@ -199,8 +199,8 @@ const StatesTab = () => {
         toast((t) => (
             <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 Delete this state? (cascades cities)
-                <button onClick={async () => { toast.dismiss(t.id); await locationService.adminDeleteState(id); toast.success('Deleted'); init(); }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: 8, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>YES</button>
-                <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: 8, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>NO</button>
+                <button onClick={async () => { toast.dismiss(t.id); await locationService.adminDeleteState(id); toast.success('Deleted'); init(); }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: 0, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>YES</button>
+                <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: 0, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>NO</button>
             </span>
         ), { duration: 6000 });
     };
@@ -214,7 +214,7 @@ const StatesTab = () => {
                     <option value="">All Countries</option>
                     {countries.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </Select>
-                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] shadow-lg shadow-emerald-500/20">
+                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-4 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.15em] shadow-lg shadow-emerald-500/20">
                     <Plus size={14} strokeWidth={3} /> Add State
                 </button>
             </div>
@@ -234,12 +234,12 @@ const StatesTab = () => {
                             </Field>
                             <Field label="State / Province Name"><Input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. Maharashtra" /></Field>
                             <label className="flex items-center gap-3 cursor-pointer">
-                                <div onClick={() => setForm({ ...form, is_active: !form.is_active })} className={`w-10 h-6 rounded-full transition-colors ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'} flex items-center px-1`}>
-                                    <div className={`w-4 h-4 bg-white rounded-full shadow transition-transform ${form.is_active ? 'translate-x-4' : 'translate-x-0'}`} />
+                                <div onClick={() => setForm({ ...form, is_active: !form.is_active })} className={`w-10 h-6 rounded-none transition-colors ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'} flex items-center px-1`}>
+                                    <div className={`w-4 h-4 bg-white rounded-none shadow transition-transform ${form.is_active ? 'translate-x-4' : 'translate-x-0'}`} />
                                 </div>
                                 <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Active</span>
                             </label>
-                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 transition-all active:scale-95 shadow-xl">
+                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-none font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 transition-all active:scale-95 shadow-xl">
                                 {saving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />} 
                                 {editing ? 'Update Registry' : 'Confirm Addition'}
                             </button>
@@ -315,8 +315,8 @@ const CitiesTab = () => {
         toast((t) => (
             <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 Delete this city?
-                <button onClick={async () => { toast.dismiss(t.id); await locationService.adminDeleteCity(id); toast.success('Deleted'); init(); }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: 8, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>YES</button>
-                <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: 8, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>NO</button>
+                <button onClick={async () => { toast.dismiss(t.id); await locationService.adminDeleteCity(id); toast.success('Deleted'); init(); }} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: 0, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>YES</button>
+                <button onClick={() => toast.dismiss(t.id)} style={{ background: '#27272a', color: '#fff', border: 'none', borderRadius: 0, padding: '6px 14px', fontWeight: 900, cursor: 'pointer', fontSize: 10 }}>NO</button>
             </span>
         ), { duration: 6000 });
     };
@@ -340,7 +340,7 @@ const CitiesTab = () => {
                         {(filterCountry ? filteredStates : states).map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                     </Select>
                 </div>
-                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] shadow-lg shadow-emerald-500/20">
+                <button onClick={openAdd} className="flex items-center gap-2 bg-emerald-500 text-white px-4 py-2.5 rounded-none text-[10px] font-black uppercase tracking-[0.15em] shadow-lg shadow-emerald-500/20">
                     <Plus size={14} strokeWidth={3} /> Add City
                 </button>
             </div>
@@ -366,12 +366,12 @@ const CitiesTab = () => {
                             </Field>
                             <Field label="City Name"><Input required value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. Pune" /></Field>
                             <label className="flex items-center gap-3 cursor-pointer">
-                                <div onClick={() => setForm({ ...form, is_active: !form.is_active })} className={`w-10 h-6 rounded-full transition-colors ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'} flex items-center px-1`}>
-                                    <div className={`w-4 h-4 bg-white rounded-full shadow transition-transform ${form.is_active ? 'translate-x-4' : 'translate-x-0'}`} />
+                                <div onClick={() => setForm({ ...form, is_active: !form.is_active })} className={`w-10 h-6 rounded-none transition-colors ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-700'} flex items-center px-1`}>
+                                    <div className={`w-4 h-4 bg-white rounded-none shadow transition-transform ${form.is_active ? 'translate-x-4' : 'translate-x-0'}`} />
                                 </div>
                                 <span className="text-xs font-black text-zinc-500 uppercase tracking-widest">Active</span>
                             </label>
-                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 transition-all active:scale-95 shadow-xl">
+                             <button type="submit" disabled={saving} className="w-full h-12 bg-zinc-900 dark:bg-emerald-500 text-white rounded-none font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 disabled:opacity-50 transition-all active:scale-95 shadow-xl">
                                 {saving ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />} 
                                 {editing ? 'Update Registry' : 'Confirm Addition'}
                             </button>
@@ -405,26 +405,26 @@ const LocationMaster = () => {
                 <div className="flex items-center gap-4">
                     <button 
                         onClick={() => window.location.reload()}
-                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} />
                     </button>
                     
-                    <div className="h-12 w-12 bg-emerald-500/10 text-emerald-500 rounded-2xl flex items-center justify-center border border-emerald-500/20 shadow-lg shadow-emerald-500/5">
+                    <div className="h-12 w-12 bg-emerald-500/10 text-emerald-500 rounded-none flex items-center justify-center border border-emerald-500/20 shadow-lg shadow-emerald-500/5">
                         <Globe2 size={20} strokeWidth={3} />
                     </div>
                 </div>
             </div>
 
             {/* Tabs */}
-            <div className="flex items-center gap-2 bg-zinc-100 dark:bg-zinc-900 p-1.5 rounded-2xl w-fit border border-zinc-200 dark:border-zinc-800">
+            <div className="flex items-center gap-2 bg-zinc-100 dark:bg-zinc-900 p-1.5 rounded-none w-fit border border-zinc-200 dark:border-zinc-800">
                 {TABS.map(tab => {
                     const Icon = tab.icon;
                     return (
                         <button
                             key={tab.key}
                             onClick={() => setActiveTab(tab.key)}
-                            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+                            className={`flex items-center gap-2 px-5 py-2.5 rounded-none text-[10px] font-black uppercase tracking-widest transition-all ${
                                 activeTab === tab.key
                                     ? 'bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-sm'
                                     : 'text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300'
@@ -438,7 +438,7 @@ const LocationMaster = () => {
             </div>
 
             {/* Tab Content */}
-            <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 rounded-none p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={activeTab}

@@ -100,11 +100,11 @@ const MerchantCategories = () => {
                                 toast.error(err.response?.data?.message || 'Delete failed');
                             }
                         }}
-                        className="bg-rose-500 text-white px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest"
+                        className="bg-rose-500 text-white px-3 py-1.5 rounded-none text-[9px] font-black uppercase tracking-widest"
                     >
                         Delete
                     </button>
-                    <button onClick={() => toast.dismiss(t.id)} className="bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest">
+                    <button onClick={() => toast.dismiss(t.id)} className="bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-3 py-1.5 rounded-none text-[9px] font-black uppercase tracking-widest">
                         Cancel
                     </button>
                 </div>
@@ -142,7 +142,7 @@ const MerchantCategories = () => {
                 <div className="flex items-center gap-4">
                     <button 
                         onClick={fetchCategories}
-                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
                     </button>
@@ -152,7 +152,7 @@ const MerchantCategories = () => {
                         <input 
                             type="text"
                             placeholder="SEARCH CATEGORIES..."
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-none text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -161,7 +161,7 @@ const MerchantCategories = () => {
                     <div className="relative group hidden md:block">
                         <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
                         <select
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-none text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
                             value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
                         >
@@ -178,7 +178,7 @@ const MerchantCategories = () => {
                             setForm({ name: '', description: '', is_active: true });
                             setShowModal(true);
                         }}
-                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-none font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
                         <Plus size={16} strokeWidth={3} />
                         Add Category
@@ -194,7 +194,7 @@ const MerchantCategories = () => {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filtered.length === 0 ? (
-                        <div className="col-span-full py-32 bg-zinc-50 dark:bg-zinc-900/40 rounded-[3rem] border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-40">
+                        <div className="col-span-full py-32 bg-zinc-50 dark:bg-zinc-900/40 rounded-none border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-40">
                             <LayoutGrid size={48} className="text-zinc-300" />
                             <p className="text-[10px] font-black uppercase tracking-[0.3em] mt-6 text-zinc-500">No Categories Defined</p>
                         </div>
@@ -202,12 +202,12 @@ const MerchantCategories = () => {
                         filtered.map((cat) => (
                             <motion.div
                                 key={cat.id}
-                                className="bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all group relative overflow-hidden"
+                                className="bg-white dark:bg-zinc-900 rounded-none p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-xl transition-all group relative overflow-hidden"
                             >
                                 <div className="absolute top-0 right-0 p-4">
                                     <button
                                         onClick={() => toggleStatus(cat.id)}
-                                        className={`px-3 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${
+                                        className={`px-3 py-1.5 rounded-none text-[8px] font-black uppercase tracking-widest transition-all ${
                                             cat.is_active 
                                             ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 shadow-lg shadow-emerald-500/5' 
                                             : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 border border-zinc-200 dark:border-zinc-700'
@@ -218,7 +218,7 @@ const MerchantCategories = () => {
                                 </div>
 
                                 <div className="space-y-4">
-                                    <div className="w-12 h-12 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl flex items-center justify-center text-emerald-500 shadow-inner group-hover:scale-110 transition-transform">
+                                    <div className="w-12 h-12 bg-zinc-50 dark:bg-zinc-800/50 rounded-none flex items-center justify-center text-emerald-500 shadow-inner group-hover:scale-110 transition-transform">
                                         <Activity size={20} />
                                     </div>
                                     <div>
@@ -231,13 +231,13 @@ const MerchantCategories = () => {
                                     <div className="pt-4 border-t border-zinc-50 dark:border-zinc-800 flex items-center justify-between gap-4">
                                         <button
                                             onClick={() => handleEdit(cat)}
-                                            className="flex-1 py-3 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 rounded-xl transition-all flex items-center justify-center gap-2 text-[9px] font-extrabold uppercase tracking-widest"
+                                            className="flex-1 py-3 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 rounded-none transition-all flex items-center justify-center gap-2 text-[9px] font-extrabold uppercase tracking-widest"
                                         >
                                             <Edit2 size={12} /> Edit
                                         </button>
                                         <button
                                             onClick={() => handleDelete(cat.id)}
-                                            className="flex-1 py-3 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 rounded-xl transition-all flex items-center justify-center gap-2 text-[9px] font-extrabold uppercase tracking-widest"
+                                            className="flex-1 py-3 bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 rounded-none transition-all flex items-center justify-center gap-2 text-[9px] font-extrabold uppercase tracking-widest"
                                         >
                                             <Trash2 size={12} /> Delete
                                         </button>
@@ -264,14 +264,14 @@ const MerchantCategories = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 30 }}
-                            className="relative w-full max-w-lg bg-white dark:bg-zinc-950 rounded-[2.5rem] shadow-2xl overflow-hidden my-auto border border-zinc-200 dark:border-zinc-800"
+                            className="relative w-full max-w-lg bg-white dark:bg-zinc-950 rounded-none shadow-2xl overflow-hidden my-auto border border-zinc-200 dark:border-zinc-800"
                         >
                             <div className="p-8 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
                                 <div>
                                     <h2 className="text-xl font-black text-zinc-900 dark:text-white uppercase tracking-tight">{editingId ? 'Edit Identity' : 'New Classification'}</h2>
                                     <p className="text-[9px] font-black text-zinc-500 uppercase tracking-widest mt-1">Define Business Model Segment</p>
                                 </div>
-                                <button onClick={() => setShowModal(false)} className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-xl text-zinc-500 hover:text-rose-500 transition-colors">
+                                <button onClick={() => setShowModal(false)} className="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-none text-zinc-500 hover:text-rose-500 transition-colors">
                                     <X size={20} />
                                 </button>
                             </div>
@@ -285,7 +285,7 @@ const MerchantCategories = () => {
                                             required
                                             value={form.name}
                                             onChange={(e) => setForm({ ...form, name: e.target.value })}
-                                            className="w-full bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-widest"
+                                            className="w-full bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none p-4 text-xs font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-widest"
                                             placeholder="e.g. FINE DINING, CLOUD KITCHEN"
                                         />
                                     </div>
@@ -296,12 +296,12 @@ const MerchantCategories = () => {
                                             rows="4"
                                             value={form.description}
                                             onChange={(e) => setForm({ ...form, description: e.target.value })}
-                                            className="w-full bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-widest leading-relaxed"
+                                            className="w-full bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none p-4 text-xs font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-widest leading-relaxed"
                                             placeholder="Specify the operational scope of this category..."
                                         />
                                     </div>
 
-                                    <div className="flex items-center justify-between p-5 bg-zinc-50 dark:bg-zinc-900 rounded-3xl border border-zinc-100 dark:border-zinc-800">
+                                    <div className="flex items-center justify-between p-5 bg-zinc-50 dark:bg-zinc-900 rounded-none border border-zinc-100 dark:border-zinc-800">
                                         <div className="flex items-center gap-4">
                                             <div className={`w-3 h-3 rounded-full ${form.is_active ? 'bg-emerald-500 shadow-lg shadow-emerald-500/20' : 'bg-zinc-300'}`} />
                                             <span className="text-[10px] font-black text-zinc-900 dark:text-white uppercase tracking-widest text-zinc-500">Enable Identity</span>
@@ -309,11 +309,11 @@ const MerchantCategories = () => {
                                         <button
                                             type="button"
                                             onClick={() => setForm(f => ({ ...f, is_active: !f.is_active }))}
-                                            className={`w-12 h-6 rounded-full relative transition-all ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-800'}`}
+                                            className={`w-12 h-6 rounded-none relative transition-all ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300 dark:bg-zinc-800'}`}
                                         >
                                             <motion.div
                                                 animate={{ x: form.is_active ? 26 : 4 }}
-                                                className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-md"
+                                                className="absolute top-1 w-4 h-4 bg-white rounded-none shadow-md"
                                             />
                                         </button>
                                     </div>
@@ -323,14 +323,14 @@ const MerchantCategories = () => {
                                     <button
                                         type="button"
                                         onClick={() => setShowModal(false)}
-                                        className="flex-1 py-4 border-2 border-zinc-100 dark:border-zinc-800 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 rounded-2xl font-black text-[10px] uppercase tracking-widest"
+                                        className="flex-1 py-4 border-2 border-zinc-100 dark:border-zinc-800 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 rounded-none font-black text-[10px] uppercase tracking-widest"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="flex-2 px-12 bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95 flex items-center justify-center gap-2"
+                                        className="flex-2 px-12 bg-emerald-500 text-white rounded-none font-black text-[10px] uppercase tracking-widest shadow-xl shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95 flex items-center justify-center gap-2"
                                     >
                                         {submitting ? (
                                             <Loader2 size={16} className="animate-spin" />

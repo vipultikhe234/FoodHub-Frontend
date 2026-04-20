@@ -127,8 +127,8 @@ const Coupons = () => {
             (t) => (
                 <span style={{display:'flex',alignItems:'center',gap:'12px'}}>
                     Delete this coupon?
-                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/coupons/${id}`); fetchCoupons(); toast.success("Coupon deleted"); } catch { toast.error("Deletion failed"); }}} style={{background:'#ef4444',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>YES</button>
-                    <button onClick={() => toast.dismiss(t.id)} style={{background:'#27272a',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>NO</button>
+                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/coupons/${id}`); fetchCoupons(); toast.success("Coupon deleted"); } catch { toast.error("Deletion failed"); }}} style={{background:'#ef4444',color:'#fff',border:'none',borderRadius:'0px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>YES</button>
+                    <button onClick={() => toast.dismiss(t.id)} style={{background:'#27272a',color:'#fff',border:'none',borderRadius:'0px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>NO</button>
                 </span>
             ),
             { duration: 6000 }
@@ -149,7 +149,7 @@ const Coupons = () => {
                 <div className="flex items-center gap-4">
                     <button 
                         onClick={fetchCoupons}
-                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
                     </button>
@@ -159,28 +159,28 @@ const Coupons = () => {
                         <input 
                             type="text"
                             placeholder="SEARCH PROMO CODES..."
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-none text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
 
-                    <div className="flex bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-1 rounded-2xl">
+                    <div className="flex bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-1 rounded-none">
                         <button 
                             onClick={() => setStatusFilter('active')}
-                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${statusFilter === 'active' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                            className={`px-4 py-2.5 rounded-none text-[9px] font-black uppercase tracking-widest transition-all ${statusFilter === 'active' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
                         >
                             Live
                         </button>
                         <button 
                             onClick={() => setStatusFilter('inactive')}
-                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${statusFilter === 'inactive' ? 'bg-zinc-900 dark:bg-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                            className={`px-4 py-2.5 rounded-none text-[9px] font-black uppercase tracking-widest transition-all ${statusFilter === 'inactive' ? 'bg-zinc-900 dark:bg-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
                         >
                             Deactivated
                         </button>
                         <button 
                             onClick={() => setStatusFilter('all')}
-                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${statusFilter === 'all' ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                            className={`px-4 py-2.5 rounded-none text-[9px] font-black uppercase tracking-widest transition-all ${statusFilter === 'all' ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
                         >
                             All
                         </button>
@@ -190,7 +190,7 @@ const Coupons = () => {
                     
                     <button 
                         onClick={() => { setEditingId(null); setForm(initialFormState); setShowModal(true); }}
-                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-none font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
                         <Plus size={16} strokeWidth={3} />
                         Add Coupon
@@ -205,7 +205,7 @@ const Coupons = () => {
                         <ApnaCartLoader centered={true} size={80} />
                     </div>
                 ) : coupons.length === 0 ? (
-                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
+                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
                         <Ticket size={48} className="text-zinc-400" />
                         <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No rewards configured</p>
                     </div>
@@ -217,7 +217,7 @@ const Coupons = () => {
                     const matchesStatus = statusFilter === 'all' || (statusFilter === 'active' ? isActive : !isActive);
                     return matchesSearch && matchesStatus;
                 }).length === 0 ? (
-                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
+                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
                         <SearchX size={48} className="text-zinc-400" />
                         <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No coupons match your filter</p>
                     </div>
@@ -235,11 +235,11 @@ const Coupons = () => {
                     <motion.div
                         key={coupon.id}
                         whileHover={{ y: -4 }}
-                        className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden group"
+                        className="bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden group"
                     >
                         <div className="p-6">
                             <div className="flex justify-between items-start mb-6">
-                                <div className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-xl text-emerald-600 dark:text-emerald-400 border border-zinc-100 dark:border-zinc-700">
+                                <div className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-none text-emerald-600 dark:text-emerald-400 border border-zinc-100 dark:border-zinc-700">
                                     <Ticket size={24} />
                                 </div>
                                 <div className="flex gap-1.5">
@@ -259,13 +259,13 @@ const Coupons = () => {
                                             });
                                             setShowModal(true);
                                         }}
-                                        className="p-2 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-zinc-400 hover:text-emerald-600 rounded-lg transition-colors"
+                                        className="p-2 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-zinc-400 hover:text-emerald-600 rounded-none transition-colors"
                                     >
                                         <Edit2 size={16} />
                                     </button>
                                     <button
                                         onClick={() => handleDelete(coupon.id)}
-                                        className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 text-zinc-400 hover:text-red-500 rounded-lg transition-colors"
+                                        className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 text-zinc-400 hover:text-red-500 rounded-none transition-colors"
                                     >
                                         <Trash2 size={16} />
                                     </button>
@@ -278,7 +278,7 @@ const Coupons = () => {
                                     <p className="text-[10px] font-bold text-zinc-400 flex items-center gap-1.5 uppercase tracking-[0.1em] mb-3">
                                         <Store size={10} /> {coupon.merchant?.name || 'Global / Platform'}
                                     </p>
-                                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+                                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-900/20 rounded-none">
                                         <Tag size={10} className="text-emerald-600" />
                                         <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-widest">
                                             {coupon.type === 'percentage' ? `${coupon.value}% OFF` : `₹${coupon.value} FLAT`}
@@ -286,13 +286,13 @@ const Coupons = () => {
                                         </span>
                                     </div>
                                 </div>
-
+ 
                                 <div className="grid grid-cols-2 gap-3 pt-2">
-                                    <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                                    <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-none border border-zinc-100 dark:border-zinc-800">
                                         <p className="text-[9px] font-bold text-zinc-400 uppercase mb-1">Min Order</p>
                                         <p className="text-sm font-bold text-zinc-900 dark:text-white">₹{coupon.min_order_amount}</p>
                                     </div>
-                                    <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-100 dark:border-zinc-800">
+                                    <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-none border border-zinc-100 dark:border-zinc-800">
                                         <p className="text-[9px] font-bold text-zinc-400 uppercase mb-1">Expiry</p>
                                         <p className={`text-sm font-bold ${new Date(coupon.expires_at) < new Date() ? 'text-red-500' : 'text-zinc-900 dark:text-white'}`}>
                                             {new Date(coupon.expires_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
@@ -332,11 +332,11 @@ const Coupons = () => {
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="relative w-full max-w-lg bg-white dark:bg-zinc-950 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+                            className="relative w-full max-w-lg bg-white dark:bg-zinc-950 rounded-none shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
                         >
                             <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
                                 <h2 className="text-xl font-bold text-zinc-900 dark:text-white uppercase tracking-tight">{editingId ? 'Edit Manifest' : 'Initialize Reward'}</h2>
-                                <button onClick={() => setShowModal(false)} className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full text-zinc-400">
+                                <button onClick={() => setShowModal(false)} className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-none text-zinc-400">
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
@@ -346,7 +346,7 @@ const Coupons = () => {
                                     <div className="space-y-4">
                                         {/* Admin Scope Selection: Platform Wide vs specific Merchant */}
                                         {!isMerchant && (
-                                            <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500 bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+                                            <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500 bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-none border border-zinc-100 dark:border-zinc-800">
                                                 <button
                                                     type="button"
                                                     onClick={() => setForm({ 
@@ -354,10 +354,10 @@ const Coupons = () => {
                                                         is_admin_coupon: !form.is_admin_coupon,
                                                         merchant_id: !form.is_admin_coupon ? '' : form.merchant_id 
                                                     })}
-                                                    className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${form.is_admin_coupon ? 'bg-rose-50 border-rose-100 dark:bg-rose-900/10 dark:border-rose-900/20 shadow-inner' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'}`}
+                                                    className={`w-full p-4 rounded-none border-2 transition-all flex items-center justify-between ${form.is_admin_coupon ? 'bg-rose-50 border-rose-100 dark:bg-rose-900/10 dark:border-rose-900/20 shadow-inner' : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800'}`}
                                                 >
                                                     <div className="flex items-center gap-3">
-                                                        <div className={`p-2 rounded-lg ${form.is_admin_coupon ? 'bg-rose-500 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400'}`}>
+                                                        <div className={`p-2 rounded-none ${form.is_admin_coupon ? 'bg-rose-500 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400'}`}>
                                                             <Globe2 size={16} />
                                                         </div>
                                                         <div className="text-left">
@@ -365,8 +365,8 @@ const Coupons = () => {
                                                             <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest leading-tight mt-0.5">Visible to all users vs specific merchant</p>
                                                         </div>
                                                     </div>
-                                                    <div className={`w-10 h-6 rounded-full relative ${form.is_admin_coupon ? 'bg-rose-500' : 'bg-zinc-300 dark:bg-zinc-800'} transition-colors`}>
-                                                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${form.is_admin_coupon ? 'translate-x-5' : 'translate-x-1'}`} />
+                                                    <div className={`w-10 h-6 rounded-none relative ${form.is_admin_coupon ? 'bg-rose-500' : 'bg-zinc-300 dark:bg-zinc-800'} transition-colors`}>
+                                                        <div className={`absolute top-1 w-4 h-4 bg-white rounded-none transition-all ${form.is_admin_coupon ? 'translate-x-5' : 'translate-x-1'}`} />
                                                     </div>
                                                 </button>
 
@@ -381,7 +381,7 @@ const Coupons = () => {
                                                             <label className="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em] block pt-2">Assign to Specific Merchant</label>
                                                             <div className="relative">
                                                                 <select 
-                                                                    className="w-full pl-12 pr-5 py-3.5 bg-white dark:bg-zinc-900 border-2 border-rose-500/10 rounded-2xl outline-none focus:border-rose-500 transition-colors dark:text-white font-bold text-[10px] uppercase appearance-none shadow-sm" 
+                                                                    className="w-full pl-12 pr-5 py-3.5 bg-white dark:bg-zinc-900 border-2 border-rose-500/10 rounded-none outline-none focus:border-rose-500 transition-colors dark:text-white font-bold text-[10px] uppercase appearance-none shadow-sm" 
                                                                     value={form.merchant_id} 
                                                                     onChange={(e) => setForm({ 
                                                                         ...form, 
@@ -406,17 +406,17 @@ const Coupons = () => {
                                             required
                                             type="text"
                                             placeholder="E.G. FESTIVE2024"
-                                            className="w-full px-5 py-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-lg tracking-widest uppercase"
+                                            className="w-full px-5 py-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-lg tracking-widest uppercase"
                                             value={form.code}
                                             onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })}
                                         />
                                     </div>
-
+ 
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
                                             <label className="text-xs font-bold text-zinc-400 uppercase tracking-widest block">Structure</label>
                                             <select
-                                                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase"
+                                                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase"
                                                 value={form.type}
                                                 onChange={(e) => setForm({ ...form, type: e.target.value })}
                                             >
@@ -429,7 +429,7 @@ const Coupons = () => {
                                             <input
                                                 required
                                                 type="number"
-                                                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-sm"
+                                                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-sm"
                                                 value={form.value}
                                                 onChange={(e) => setForm({ ...form, value: e.target.value })}
                                             />
@@ -443,7 +443,7 @@ const Coupons = () => {
                                                 <input
                                                     required
                                                     type="number"
-                                                    className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-sm"
+                                                    className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-sm"
                                                     value={form.min_order_amount}
                                                     onChange={(e) => setForm({ ...form, min_order_amount: e.target.value })}
                                                 />
@@ -458,7 +458,7 @@ const Coupons = () => {
                                                     <input
                                                         type="number"
                                                         placeholder="Optional"
-                                                        className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-sm"
+                                                        className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-sm"
                                                         value={form.max_discount}
                                                         onChange={(e) => setForm({ ...form, max_discount: e.target.value })}
                                                     />
@@ -472,7 +472,7 @@ const Coupons = () => {
                                                     <input
                                                         required
                                                         type="date"
-                                                        className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase"
+                                                        className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase"
                                                         value={form.expires_at}
                                                         onChange={(e) => setForm({ ...form, expires_at: e.target.value })}
                                                     />
@@ -489,7 +489,7 @@ const Coupons = () => {
                                                 <input
                                                     required
                                                     type="date"
-                                                    className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase"
+                                                    className="w-full pl-10 pr-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase"
                                                     value={form.expires_at}
                                                     onChange={(e) => setForm({ ...form, expires_at: e.target.value })}
                                                 />
@@ -500,10 +500,10 @@ const Coupons = () => {
                                     <button
                                         type="button"
                                         onClick={() => setForm({ ...form, is_active: !form.is_active })}
-                                        className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${form.is_active ? 'bg-emerald-50 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-900/20' : 'bg-zinc-50 border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800'}`}
+                                        className={`w-full p-4 rounded-none border-2 transition-all flex items-center justify-between ${form.is_active ? 'bg-emerald-50 border-emerald-100 dark:bg-emerald-900/10 dark:border-emerald-900/20' : 'bg-zinc-50 border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800'}`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <div className={`p-2 rounded-lg ${form.is_active ? 'bg-emerald-500 text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400'}`}>
+                                            <div className={`p-2 rounded-none ${form.is_active ? 'bg-emerald-500 text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400'}`}>
                                                 <Activity size={16} />
                                             </div>
                                             <div className="text-left">
@@ -511,18 +511,18 @@ const Coupons = () => {
                                                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">Visibility in checkout node</p>
                                             </div>
                                         </div>
-                                        <div className={`w-10 h-6 rounded-full relative ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300'} transition-colors`}>
-                                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${form.is_active ? 'translate-x-5' : 'translate-x-1'}`} />
+                                        <div className={`w-10 h-6 rounded-none relative ${form.is_active ? 'bg-emerald-500' : 'bg-zinc-300'} transition-colors`}>
+                                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-none transition-all ${form.is_active ? 'translate-x-5' : 'translate-x-1'}`} />
                                         </div>
                                     </button>
-
+ 
                                     <button
                                         type="button"
                                         onClick={() => setForm({ ...form, show_on_landing: !form.show_on_landing })}
-                                        className={`w-full p-4 rounded-xl border-2 transition-all flex items-center justify-between ${form.show_on_landing ? 'bg-blue-50 border-blue-100 dark:bg-blue-900/10 dark:border-blue-900/20' : 'bg-zinc-50 border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800'}`}
+                                        className={`w-full p-4 rounded-none border-2 transition-all flex items-center justify-between ${form.show_on_landing ? 'bg-blue-50 border-blue-100 dark:bg-blue-900/10 dark:border-blue-900/20' : 'bg-zinc-50 border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800'}`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <div className={`p-2 rounded-lg ${form.show_on_landing ? 'bg-blue-500 text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400'}`}>
+                                            <div className={`p-2 rounded-none ${form.show_on_landing ? 'bg-blue-500 text-white' : 'bg-zinc-200 dark:bg-zinc-800 text-zinc-400'}`}>
                                                 <Smartphone size={16} />
                                             </div>
                                             <div className="text-left">
@@ -530,8 +530,8 @@ const Coupons = () => {
                                                 <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest leading-tight mt-0.5">Promote on mobile home screen</p>
                                             </div>
                                         </div>
-                                        <div className={`w-10 h-6 rounded-full relative ${form.show_on_landing ? 'bg-blue-500' : 'bg-zinc-300 dark:bg-zinc-800'} transition-colors`}>
-                                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${form.show_on_landing ? 'translate-x-5' : 'translate-x-1'}`} />
+                                        <div className={`w-10 h-6 rounded-none relative ${form.show_on_landing ? 'bg-blue-500' : 'bg-zinc-300 dark:bg-zinc-800'} transition-colors`}>
+                                            <div className={`absolute top-1 w-4 h-4 bg-white rounded-none transition-all ${form.show_on_landing ? 'translate-x-5' : 'translate-x-1'}`} />
                                         </div>
                                     </button>
 
@@ -541,7 +541,7 @@ const Coupons = () => {
 
                             <div className="p-6 border-t border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 flex gap-3">
                                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-3 text-xs font-bold text-zinc-400 uppercase tracking-widest hover:text-zinc-600 transition-colors">Abort</button>
-                                <button form="couponForm" type="submit" disabled={submitting} className="flex-[2] py-3 bg-zinc-900 dark:bg-emerald-500 text-white rounded-xl font-bold text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-zinc-900/10 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2">
+                                <button form="couponForm" type="submit" disabled={submitting} className="flex-[2] py-3 bg-zinc-900 dark:bg-emerald-500 text-white rounded-none font-bold text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-zinc-900/10 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2">
                                     {submitting ? <Loader2 size={16} className="animate-spin" /> : <CheckCircle2 size={16} />} {editingId ? 'Save Changes' : 'Deploy Reward'}
                                 </button>
                             </div>

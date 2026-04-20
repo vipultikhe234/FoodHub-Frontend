@@ -82,13 +82,13 @@ const UserProfile = () => {
                     <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight">Access Identity</h1>
                     <p className="text-zinc-500 dark:text-zinc-400 font-bold mt-1 uppercase tracking-widest text-[10px]">Manage your personal credentials</p>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-xl border border-emerald-100 dark:border-emerald-900/50">
+                <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 rounded-none border border-emerald-100 dark:border-emerald-900/50">
                     <ShieldCheck size={16} />
                     <span className="text-[10px] font-black uppercase tracking-widest">{userRole} Identity</span>
                 </div>
             </div>
 
-            <form onSubmit={handleSave} className="bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 md:p-10 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-8">
+            <form onSubmit={handleSave} className="bg-white dark:bg-zinc-900 rounded-none p-8 md:p-10 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-8">
                 {loading ? (
                     <div className="py-24 text-center">
                         <ApnaCartLoader centered={true} size={80} />
@@ -96,7 +96,7 @@ const UserProfile = () => {
                 ) : (
                     <>
                         <div className="flex items-center gap-6 pb-8 border-b border-zinc-100 dark:border-zinc-800">
-                            <div className="w-20 h-20 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center text-zinc-400 shadow-inner">
+                            <div className="w-20 h-20 bg-zinc-100 dark:bg-zinc-800 rounded-none flex items-center justify-center text-zinc-400 shadow-inner">
                                 <UserCircle size={40} />
                             </div>
                             <div>
@@ -113,7 +113,7 @@ const UserProfile = () => {
                                     type="text"
                                     value={formData.name}
                                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-wide"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-none p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-wide"
                                     placeholder="Enter your name"
                                 />
                             </div>
@@ -124,7 +124,7 @@ const UserProfile = () => {
                                     type="email"
                                     disabled
                                     value={formData.email}
-                                    className="w-full bg-zinc-100 dark:bg-zinc-900/50 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-500 outline-none cursor-not-allowed uppercase tracking-wide"
+                                    className="w-full bg-zinc-100 dark:bg-zinc-900/50 border-2 border-zinc-100 dark:border-zinc-800 rounded-none p-4 text-xs font-bold text-zinc-500 outline-none cursor-not-allowed uppercase tracking-wide"
                                 />
                             </div>
 
@@ -134,7 +134,7 @@ const UserProfile = () => {
                                     type="text"
                                     value={formData.phone}
                                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all font-mono"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-none p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all font-mono"
                                     placeholder="e.g. +91 98765 43210"
                                 />
                             </div>
@@ -145,7 +145,7 @@ const UserProfile = () => {
                                     value={formData.address}
                                     onChange={(e) => setFormData({...formData, address: e.target.value})}
                                     rows="3"
-                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-wide leading-relaxed"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-zinc-100 dark:border-zinc-800 rounded-none p-4 text-xs font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all uppercase tracking-wide leading-relaxed"
                                     placeholder="Enter physical address details"
                                 />
                             </div>
@@ -155,7 +155,7 @@ const UserProfile = () => {
                             <button
                                 type="submit"
                                 disabled={saving}
-                                className="w-full md:w-auto px-8 bg-zinc-900 dark:bg-emerald-500 text-white dark:text-zinc-900 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-zinc-900/10 dark:shadow-emerald-500/20 flex items-center justify-center gap-3 active:scale-[0.98] transition-all disabled:opacity-50"
+                                className="w-full md:w-auto px-8 bg-zinc-900 dark:bg-emerald-500 text-white dark:text-zinc-900 py-4 rounded-none font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-zinc-900/10 dark:shadow-emerald-500/20 flex items-center justify-center gap-3 active:scale-[0.98] transition-all disabled:opacity-50"
                             >
                                 {saving ? <ApnaCartLoader centered={false} size={16} /> : <Save size={16} />}
                                 {saving ? 'Transmitting...' : 'Update Context'}

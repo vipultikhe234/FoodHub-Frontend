@@ -29,9 +29,9 @@ const MerchantDropdown = ({ merchants, selectedMerchantId, setSelectedMerchantId
             {/* Trigger Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 py-2 pl-4 pr-3 rounded-2xl ml-2 hover:border-emerald-500/50 transition-all group"
+                className="flex items-center gap-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 py-2 pl-4 pr-3 rounded-none ml-2 hover:border-emerald-500/50 transition-all group"
             >
-                <div className="p-1.5 bg-emerald-500/10 rounded-lg text-emerald-500 group-hover:scale-110 transition-transform">
+                <div className="p-1.5 bg-emerald-500/10 rounded-none text-emerald-500 group-hover:scale-110 transition-transform">
                     {selectedMerchantId ? <Store size={14} /> : <Globe size={14} />}
                 </div>
                 <div className="flex flex-col items-start min-w-[120px] max-w-[200px]">
@@ -53,7 +53,7 @@ const MerchantDropdown = ({ merchants, selectedMerchantId, setSelectedMerchantId
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute top-full left-2 mt-2 w-72 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-3xl shadow-2xl z-[100] overflow-hidden backdrop-blur-xl"
+                        className="absolute top-full left-2 mt-2 w-72 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-none shadow-2xl z-[100] overflow-hidden backdrop-blur-xl"
                     >
                         {/* Search Header */}
                         <div className="p-4 border-b border-zinc-100 dark:border-zinc-800">
@@ -62,7 +62,7 @@ const MerchantDropdown = ({ merchants, selectedMerchantId, setSelectedMerchantId
                                 <input
                                     type="text"
                                     placeholder="SEARCH MERCHANTS..."
-                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-2.5 pl-10 pr-4 text-[10px] font-bold text-zinc-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all uppercase tracking-wider"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none py-2.5 pl-10 pr-4 text-[10px] font-bold text-zinc-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all uppercase tracking-wider"
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     autoFocus
@@ -81,7 +81,7 @@ const MerchantDropdown = ({ merchants, selectedMerchantId, setSelectedMerchantId
                                 className={`w-full flex items-center justify-between px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all ${!selectedMerchantId ? 'bg-emerald-500/5' : ''}`}
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className={`p-2 rounded-xl ${!selectedMerchantId ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400'}`}>
+                                    <div className={`p-2 rounded-none ${!selectedMerchantId ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400'}`}>
                                         <Globe size={16} />
                                     </div>
                                     <div className="flex flex-col items-start">
@@ -112,7 +112,7 @@ const MerchantDropdown = ({ merchants, selectedMerchantId, setSelectedMerchantId
                                         className={`w-full flex items-center justify-between px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-all group ${selectedMerchantId?.toString() === m.id.toString() ? 'bg-emerald-500/5' : ''}`}
                                     >
                                         <div className="flex items-center gap-3">
-                                            <div className={`p-2 rounded-xl transition-all ${selectedMerchantId?.toString() === m.id.toString() 
+                                            <div className={`p-2 rounded-none transition-all ${selectedMerchantId?.toString() === m.id.toString() 
                                                 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' 
                                                 : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 group-hover:text-emerald-500 group-hover:bg-emerald-500/10'}`}>
                                                 <Store size={16} />

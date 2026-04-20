@@ -42,7 +42,7 @@ const rolePill = (role) => {
     );
     const Icon = r.icon;
     return (
-        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${r.pill}`}>
+        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-none text-[9px] font-black uppercase tracking-widest ${r.pill}`}>
             <Icon size={9} strokeWidth={3} /> {r.label.replace(/s$/, '')}
         </span>
     );
@@ -103,7 +103,7 @@ const Users = () => {
                 <div className="flex items-center gap-4">
                     <button 
                         onClick={fetchUsers}
-                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
                     </button>
@@ -113,14 +113,14 @@ const Users = () => {
                         <input 
                             type="text"
                             placeholder="SEARCH USERS..."
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-none text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                     
-                    <div className="flex items-center gap-2 px-6 py-4 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-2xl border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-sm">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <div className="flex items-center gap-2 px-6 py-4 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-none border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-sm">
+                        <div className="w-1.5 h-1.5 rounded-none bg-emerald-500 animate-pulse" />
                         <p className="text-[10px] font-black uppercase tracking-widest leading-none">
                             {users.length} Records
                         </p>
@@ -129,7 +129,7 @@ const Users = () => {
             </div>
 
             {/* ── Role Filter Tabs ── */}
-            <div className="bg-white dark:bg-zinc-900 p-5 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm">
+            <div className="bg-white dark:bg-zinc-900 p-5 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-sm">
                 <div className="flex flex-wrap gap-2.5">
                     {ROLES.map(({ value, label, icon: Icon }) => {
                         const active = roleFilter === value;
@@ -137,7 +137,7 @@ const Users = () => {
                             <button
                                 key={value}
                                 onClick={() => setRoleFilter(value)}
-                                className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border-2 ${
+                                className={`flex items-center gap-2.5 px-6 py-3 rounded-none text-[10px] font-black uppercase tracking-widest transition-all border-2 ${
                                     active
                                         ? 'bg-zinc-900 dark:bg-emerald-500 text-white border-transparent shadow-xl shadow-zinc-900/10 dark:shadow-emerald-500/20'
                                         : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border-zinc-100 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-500'
@@ -145,7 +145,7 @@ const Users = () => {
                             >
                                 <Icon size={12} strokeWidth={active ? 3 : 2.5} />
                                 {label}
-                                <span className={`px-2 py-0.5 rounded-lg text-[9px] font-black ${active ? 'bg-white/20 text-white' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'}`}>
+                                <span className={`px-2 py-0.5 rounded-none text-[9px] font-black ${active ? 'bg-white/20 text-white' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500'}`}>
                                     {counts[value]}
                                 </span>
                             </button>
@@ -163,7 +163,7 @@ const Users = () => {
             </div>
 
             {/* ── Table ── */}
-            <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     {loading ? (
                         <div className="py-24 text-center">
@@ -201,13 +201,13 @@ const Users = () => {
                                             {/* Name + Avatar */}
                                             <td className="px-8 py-5">
                                                 <div className="flex items-center gap-4">
-                                                    <div className="w-11 h-11 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 group-hover:bg-zinc-900 dark:group-hover:bg-emerald-500 group-hover:text-white transition-all uppercase font-black text-sm shadow-sm">
+                                                    <div className="w-11 h-11 bg-zinc-100 dark:bg-zinc-800 rounded-none flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 group-hover:bg-zinc-900 dark:group-hover:bg-emerald-500 group-hover:text-white transition-all uppercase font-black text-sm shadow-sm">
                                                         {user.name?.[0] || <UserCircle size={22} />}
                                                     </div>
                                                     <div className="min-w-0">
                                                         <p className="font-black text-zinc-900 dark:text-white tracking-tight text-[14px] mb-0.5 group-hover:text-emerald-500 transition-colors">{user.name || 'Anonymous'}</p>
                                                         <div className="flex items-center gap-2">
-                                                            <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-md">ID-{String(user.id).padStart(4, '0')}</span>
+                                                            <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded-none">ID-{String(user.id).padStart(4, '0')}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -249,7 +249,7 @@ const Users = () => {
                                                         <Calendar size={12} className="text-zinc-400" />
                                                         {new Date(user.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
                                                     </div>
-                                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.2em] bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md">Verified</span>
+                                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.2em] bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-none">Verified</span>
                                                 </div>
                                             </td>
                                         </motion.tr>
@@ -273,9 +273,9 @@ const Users = () => {
                     <motion.div
                         key={i}
                         whileHover={{ y: -4, scale: 1.02 }}
-                        className="bg-white dark:bg-zinc-900 p-6 rounded-[1.75rem] border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col gap-4 group transition-all"
+                        className="bg-white dark:bg-zinc-900 p-6 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col gap-4 group transition-all"
                     >
-                        <div className={`w-12 h-12 rounded-2xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center ${stat.color} group-hover:bg-zinc-900 dark:group-hover:bg-white transition-colors`}>
+                        <div className={`w-12 h-12 rounded-none bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center ${stat.color} group-hover:bg-zinc-900 dark:group-hover:bg-white transition-colors`}>
                             <stat.icon size={22} strokeWidth={2.5} />
                         </div>
                         <div>

@@ -93,7 +93,7 @@ const Reviews = () => {
                     <button 
                         onClick={fetchReviews}
                         disabled={loading}
-                        className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all flex items-center gap-2"
+                        className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white px-5 py-2.5 rounded-none text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all flex items-center gap-2"
                     >
                         <Activity size={14} className={loading ? 'animate-pulse' : ''} />
                         Sync Data
@@ -103,8 +103,8 @@ const Reviews = () => {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="md:col-span-1 bg-white dark:bg-zinc-900 p-6 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center">
-                    <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 mb-4">
+                <div className="md:col-span-1 bg-white dark:bg-zinc-900 p-6 rounded-none border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col items-center justify-center text-center">
+                    <div className="w-12 h-12 bg-amber-500/10 rounded-none flex items-center justify-center text-amber-500 mb-4">
                         <TrendingUp size={24} />
                     </div>
                     <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-1">Average Rating</p>
@@ -121,7 +121,7 @@ const Reviews = () => {
                     <p className="text-[9px] font-bold text-zinc-400 mt-4 uppercase">Based on {stats?.total_reviews || 0} reviews</p>
                 </div>
 
-                <div className="md:col-span-3 bg-white dark:bg-zinc-900 p-8 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm">
+                <div className="md:col-span-3 bg-white dark:bg-zinc-900 p-8 rounded-none border border-zinc-100 dark:border-zinc-800 shadow-sm">
                     <h3 className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-tight mb-6">Rating Distribution</h3>
                     <div className="space-y-4">
                         {[5, 4, 3, 2, 1].map(rating => {
@@ -133,7 +133,7 @@ const Reviews = () => {
                                         <span className="text-xs font-black text-zinc-600 dark:text-zinc-400">{rating}</span>
                                         <Star size={10} className="text-amber-500 fill-amber-500" />
                                     </div>
-                                    <div className="flex-1 h-2 bg-zinc-50 dark:bg-zinc-800 rounded-full overflow-hidden">
+                                    <div className="flex-1 h-2 bg-zinc-50 dark:bg-zinc-800 rounded-none overflow-hidden">
                                         <motion.div 
                                             initial={{ width: 0 }}
                                             animate={{ width: `${percentage}%` }}
@@ -149,8 +149,8 @@ const Reviews = () => {
             </div>
 
             {/* Filters */}
-            <div className="bg-white dark:bg-zinc-900 p-4 rounded-3xl border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2 bg-zinc-50 dark:bg-zinc-950 px-4 py-2 rounded-2xl border border-zinc-100 dark:border-zinc-800">
+            <div className="bg-white dark:bg-zinc-900 p-4 rounded-none border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2 bg-zinc-50 dark:bg-zinc-950 px-4 py-2 rounded-none border border-zinc-100 dark:border-zinc-800">
                     <Filter size={14} className="text-zinc-400" />
                     <select 
                         value={filterRating} 
@@ -175,7 +175,7 @@ const Reviews = () => {
                         <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Syncing Feedbacks...</p>
                     </div>
                 ) : reviews.length === 0 ? (
-                    <div className="py-20 flex flex-col items-center justify-center bg-white dark:bg-zinc-900 rounded-[40px] border border-zinc-100 dark:border-zinc-800 border-dashed">
+                    <div className="py-20 flex flex-col items-center justify-center bg-white dark:bg-zinc-900 rounded-none border border-zinc-100 dark:border-zinc-800 border-dashed">
                         <MessageSquare size={48} className="text-zinc-200 mb-4" />
                         <p className="text-[11px] font-black uppercase tracking-widest text-zinc-400">Silence is the only sound here</p>
                     </div>
@@ -186,13 +186,13 @@ const Reviews = () => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: idx * 0.05 }}
-                            className="group bg-white dark:bg-zinc-900 p-8 rounded-[32px] border border-zinc-100 dark:border-zinc-800 shadow-sm transition-all hover:shadow-xl hover:shadow-zinc-200/20 dark:hover:shadow-none relative"
+                            className="group bg-white dark:bg-zinc-900 p-8 rounded-none border border-zinc-100 dark:border-zinc-800 shadow-sm transition-all hover:shadow-xl hover:shadow-zinc-200/20 dark:hover:shadow-none relative"
                         >
                             <div className="flex flex-col lg:flex-row gap-6">
                                 {/* Left Side: User & Meta */}
                                 <div className="lg:w-64 space-y-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 text-xs font-black italic">
+                                        <div className="w-10 h-10 bg-emerald-500/10 rounded-none flex items-center justify-center text-emerald-500 text-xs font-black italic">
                                             {row.user?.name?.[0]?.toUpperCase() || 'U'}
                                         </div>
                                         <div>
@@ -240,7 +240,7 @@ const Reviews = () => {
                                         {isAdmin && (
                                             <button 
                                                 onClick={() => handleDelete(row.id)}
-                                                className="w-9 h-9 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-xl flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white"
+                                                className="w-9 h-9 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-none flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white"
                                             >
                                                 <Trash2 size={16} />
                                             </button>
@@ -255,8 +255,8 @@ const Reviews = () => {
                                     </div>
 
                                     {row.product && (
-                                        <div className="inline-flex items-center gap-2 bg-zinc-50 dark:bg-zinc-800 p-2 pr-4 rounded-2xl border border-zinc-100 dark:border-zinc-700/60 mt-4">
-                                            <img src={row.product.image_url} className="w-8 h-8 rounded-xl object-cover" />
+                                        <div className="inline-flex items-center gap-2 bg-zinc-50 dark:bg-zinc-800 p-2 pr-4 rounded-none border border-zinc-100 dark:border-zinc-700/60 mt-4">
+                                            <img src={row.product.image_url} className="w-8 h-8 rounded-none object-cover" />
                                             <span className="text-[10px] font-bold text-zinc-400 uppercase italic">On: {row.product.name}</span>
                                         </div>
                                     )}
@@ -273,7 +273,7 @@ const Reviews = () => {
                     <button 
                         disabled={page === 1}
                         onClick={() => setPage(p => p - 1)}
-                        className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-zinc-200 dark:border-zinc-800 transition-all ${page === 1 ? 'opacity-30' : 'hover:bg-zinc-900 hover:text-white active:scale-90'}`}
+                        className={`w-10 h-10 rounded-none flex items-center justify-center border border-zinc-200 dark:border-zinc-800 transition-all ${page === 1 ? 'opacity-30' : 'hover:bg-zinc-900 hover:text-white active:scale-90'}`}
                     >
                         <ChevronLeft size={18} />
                     </button>
@@ -281,7 +281,7 @@ const Reviews = () => {
                     <button 
                         disabled={page === meta.last_page}
                         onClick={() => setPage(p => p + 1)}
-                        className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-zinc-200 dark:border-zinc-800 transition-all ${page === meta.last_page ? 'opacity-30' : 'hover:bg-zinc-900 hover:text-white active:scale-90'}`}
+                        className={`w-10 h-10 rounded-none flex items-center justify-center border border-zinc-200 dark:border-zinc-800 transition-all ${page === meta.last_page ? 'opacity-30' : 'hover:bg-zinc-900 hover:text-white active:scale-90'}`}
                     >
                         <ChevronRight size={18} />
                     </button>

@@ -51,7 +51,7 @@ const NavGroup = ({ group, location, defaultOpen = false }) => {
             {/* Group Header */}
             <button
                 onClick={() => setOpen(o => !o)}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-xl group transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                className="w-full flex items-center justify-between px-3 py-2 rounded-none group transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
             >
                 <div className="flex items-center gap-2.5">
                     <div className={`w-5 h-5 flex items-center justify-center ${hasActive ? 'text-emerald-500' : 'text-zinc-400'}`}>
@@ -84,7 +84,7 @@ const NavGroup = ({ group, location, defaultOpen = false }) => {
                                     <Link
                                         key={to}
                                         to={to}
-                                        className={`flex items-center justify-between gap-3 py-2 px-3 rounded-xl transition-all duration-150 group ${
+                                        className={`flex items-center justify-between gap-3 py-2 px-3 rounded-none transition-all duration-150 group ${
                                             isActive
                                                 ? 'bg-zinc-900 dark:bg-emerald-500 text-white shadow-md shadow-zinc-900/10 dark:shadow-emerald-500/20'
                                                 : 'text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white'
@@ -99,7 +99,7 @@ const NavGroup = ({ group, location, defaultOpen = false }) => {
                                             <span className="text-[11px] font-bold tracking-tight">{label}</span>
                                         </div>
                                         {badge && (
-                                            <span className="text-[8px] font-black uppercase tracking-widest bg-emerald-500/15 text-emerald-500 px-1.5 py-0.5 rounded-full">
+                                            <span className="text-[8px] font-black uppercase tracking-widest bg-emerald-500/15 text-emerald-500 px-1.5 py-0.5 rounded-none">
                                                 {badge}
                                             </span>
                                         )}
@@ -324,7 +324,7 @@ const AdminLayout = () => {
                 {/* Logo */}
                 <div className="px-5 py-5 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800">
                     <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                        <div className="w-9 h-9 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-none flex items-center justify-center shadow-lg shadow-emerald-500/30">
                             <Command className="text-white" size={18} strokeWidth={2.5} />
                         </div>
                         <div>
@@ -344,8 +344,8 @@ const AdminLayout = () => {
 
                 {/* User chip */}
                 {user && (
-                    <div className="mx-4 mt-4 flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-800 rounded-2xl border border-zinc-100 dark:border-zinc-700/60">
-                        <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-xl flex items-center justify-center shrink-0 relative">
+                    <div className="mx-4 mt-4 flex items-center gap-3 p-3 bg-zinc-50 dark:bg-zinc-800 rounded-none border border-zinc-100 dark:border-zinc-700/60">
+                        <div className="w-8 h-8 bg-zinc-900 dark:bg-white rounded-none flex items-center justify-center shrink-0 relative">
                             <span className="font-black text-white dark:text-zinc-900 text-xs">{user.name?.[0]?.toUpperCase()}</span>
                             <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white dark:border-zinc-800 rounded-full" />
                         </div>
@@ -372,7 +372,7 @@ const AdminLayout = () => {
                 <div className="p-4 border-t border-zinc-100 dark:border-zinc-800">
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center justify-center gap-2 h-11 rounded-2xl text-zinc-500 dark:text-zinc-400 hover:text-white hover:bg-zinc-900 dark:hover:bg-zinc-700 transition-all font-black text-[10px] tracking-[0.2em] uppercase border border-zinc-200 dark:border-zinc-700"
+                        className="w-full flex items-center justify-center gap-2 h-11 rounded-none text-zinc-500 dark:text-zinc-400 hover:text-white hover:bg-zinc-900 dark:hover:bg-zinc-700 transition-all font-black text-[10px] tracking-[0.2em] uppercase border border-zinc-200 dark:border-zinc-700"
                     >
                         <LogOut size={14} className="rotate-180" /> End Session
                     </button>
@@ -387,7 +387,7 @@ const AdminLayout = () => {
                         {/* Mobile hamburger */}
                         <button
                             onClick={() => setIsSidebarOpen(true)}
-                            className="p-2 bg-zinc-50 dark:bg-zinc-900 rounded-xl text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-all border border-zinc-200 dark:border-zinc-800 lg:hidden"
+                            className="p-2 bg-zinc-50 dark:bg-zinc-900 rounded-none text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-all border border-zinc-200 dark:border-zinc-800 lg:hidden"
                         >
                             <Menu size={18} />
                         </button>
@@ -411,20 +411,20 @@ const AdminLayout = () => {
 
                     {/* Right controls */}
                     <div className="flex items-center gap-2 lg:gap-3">
-                        <button onClick={toggleDarkMode} className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-xl transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800">
+                        <button onClick={toggleDarkMode} className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-none transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800">
                             {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
                         </button>
-                        <button className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-xl transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800 relative">
+                        <button className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-none transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800 relative">
                             <Bell size={18} />
                             <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-red-500 rounded-full" />
                         </button>
-                        <Link to="/my-profile" className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-xl transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800">
+                        <Link to="/my-profile" className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-none transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800">
                             <UserCircle size={18} />
                         </Link>
 
                         <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800 mx-1" />
 
-                        <div className="flex bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 rounded-xl items-center gap-1.5 border border-emerald-100 dark:border-emerald-900/40">
+                        <div className="flex bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 rounded-none items-center gap-1.5 border border-emerald-100 dark:border-emerald-900/40">
                             <ShieldCheck size={13} strokeWidth={2.5} />
                             <span className="text-[9px] font-black uppercase tracking-widest hidden sm:block">{user?.role}</span>
                         </div>

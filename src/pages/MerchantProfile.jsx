@@ -134,7 +134,7 @@ const MerchantProfile = () => {
         }
     };
 
-    const sel = "w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all";
+    const sel = "w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-none p-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all";
 
     // if (loading) return <ApnaCartLoader />;
 
@@ -145,7 +145,7 @@ const MerchantProfile = () => {
                     <h1 className="text-3xl font-extrabold text-zinc-900 dark:text-white tracking-tight">Merchant Profile</h1>
                     <p className="text-zinc-500 dark:text-zinc-400 font-medium mt-1 uppercase tracking-widest text-[10px]">Manage your merchant outlet identity</p>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 rounded-xl border border-emerald-100 dark:border-emerald-900/50">
+                <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 rounded-none border border-emerald-100 dark:border-emerald-900/50">
                     <CheckCircle size={16} />
                     <span className="text-[10px] font-bold uppercase tracking-widest">Active Merchant</span>
                 </div>
@@ -161,9 +161,9 @@ const MerchantProfile = () => {
                         {/* Left Column */}
                         <div className="lg:col-span-2 space-y-6">
                             {/* Store Details */}
-                            <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
+                            <div className="bg-white dark:bg-zinc-900 rounded-none p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
                                 <div className="flex items-center gap-3 mb-2">
-                                     <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg"><Store size={18} className="text-zinc-500" /></div>
+                                     <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-none"><Store size={18} className="text-zinc-500" /></div>
                                      <h2 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider">Merchant Details</h2>
                                 </div>
                                 <div className="space-y-4">
@@ -181,9 +181,9 @@ const MerchantProfile = () => {
                             </div>
 
                             {/* Location */}
-                            <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
+                            <div className="bg-white dark:bg-zinc-900 rounded-none p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
                                 <div className="flex items-center gap-3 mb-2">
-                                     <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg"><Globe2 size={18} className="text-zinc-500" /></div>
+                                     <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-none"><Globe2 size={18} className="text-zinc-500" /></div>
                                      <div>
                                          <h2 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider">Service Location <span className="text-red-500">*</span></h2>
                                          <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mt-0.5">Required — customers discover your outlet by city</p>
@@ -254,9 +254,9 @@ const MerchantProfile = () => {
                             </div>
 
                             {/* Fees & Charges */}
-                            <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
+                            <div className="bg-white dark:bg-zinc-900 rounded-none p-8 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
                                 <div className="flex items-center gap-3 mb-2">
-                                     <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg"><Tag size={18} className="text-zinc-500" /></div>
+                                     <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-none"><Tag size={18} className="text-zinc-500" /></div>
                                      <h2 className="text-sm font-bold text-zinc-900 dark:text-white uppercase tracking-wider">Fees & Performance Config</h2>
                                 </div>
 
@@ -329,9 +329,9 @@ const MerchantProfile = () => {
 
                         {/* Right Column */}
                         <div className="space-y-6">
-                            <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
+                            <div className="bg-white dark:bg-zinc-900 rounded-none p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-6">
                                 <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Cover Image</label>
-                                <div className="aspect-video bg-zinc-100 dark:bg-zinc-950 rounded-2xl overflow-hidden border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center">
+                                <div className="aspect-video bg-zinc-100 dark:bg-zinc-950 rounded-none overflow-hidden border-2 border-dashed border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center">
                                     {Merchant.image ? (
                                         <img src={Merchant.image} className="w-full h-full object-cover" alt="Banner" />
                                     ) : (
@@ -342,18 +342,18 @@ const MerchantProfile = () => {
                                     )}
                                 </div>
                                 <input type="text" value={Merchant.image} onChange={(e) => setMerchant({...Merchant, image: e.target.value})}
-                                    placeholder="Image URL" className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-3 text-[10px] font-medium outline-none" />
+                                    placeholder="Image URL" className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-none p-3 text-[10px] font-medium outline-none" />
                             </div>
 
-                            <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm">
+                            <div className="bg-white dark:bg-zinc-900 rounded-none p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm">
                                 <div className="flex items-center justify-between mb-6">
                                     <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest px-1">Merchant Status</span>
-                                    <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${Merchant.is_open ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
+                                    <div className={`px-3 py-1 rounded-none text-[9px] font-black uppercase tracking-widest ${Merchant.is_open ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
                                         {Merchant.is_open ? 'Open' : 'Closed'}
                                     </div>
                                 </div>
                                 <button type="button" onClick={() => setMerchant({...Merchant, is_open: !Merchant.is_open})}
-                                    className={`w-full p-4 rounded-2xl border-2 transition-all font-bold text-xs uppercase tracking-widest ${
+                                    className={`w-full p-4 rounded-none border-2 transition-all font-bold text-xs uppercase tracking-widest ${
                                         Merchant.is_open
                                         ? 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/20'
                                         : 'bg-zinc-100 dark:bg-zinc-800 border-transparent text-zinc-500'
@@ -364,7 +364,7 @@ const MerchantProfile = () => {
                             </div>
 
                             <button type="submit" disabled={saving}
-                                className="w-full bg-zinc-900 dark:bg-white text-white dark:text-black py-5 rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all disabled:opacity-50">
+                                className="w-full bg-zinc-900 dark:bg-white text-white dark:text-black py-5 rounded-none font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all disabled:opacity-50">
                                 {saving ? <ApnaCartLoader centered={false} size={18} /> : <Save size={18} />}
                                 {saving ? 'Synchronizing...' : 'Save Merchant Profile'}
                             </button>

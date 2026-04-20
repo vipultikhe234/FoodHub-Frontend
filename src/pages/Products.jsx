@@ -443,17 +443,17 @@ const Products = () => {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={fetchData}
-                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                        className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
-                        <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+                        <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
                     </button>
 
                     <div className="relative group hidden sm:block">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={14} />
                         <input
                             type="text"
                             placeholder="SEARCH CATALOGUE..."
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-2.5 rounded-none text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -461,9 +461,9 @@ const Products = () => {
 
                     {!isMerchant && (
                         <div className="relative group hidden md:block">
-                            <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                            <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={14} />
                             <select
-                                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
+                                className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-11 pr-10 py-2.5 rounded-none text-[10px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
                                 value={selectedMerchantCategoryId}
                                 onChange={(e) => setSelectedMerchantCategoryId(e.target.value)}
                             >
@@ -472,19 +472,19 @@ const Products = () => {
                                     <option key={cat.id} value={cat.id}>{cat.name}</option>
                                 ))}
                             </select>
-                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={14} />
+                            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={12} />
                         </div>
                     )}
 
-                    <label className="flex items-center gap-3 px-6 py-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-black text-[10px] uppercase tracking-[0.2em] transition-all hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer border border-zinc-200 dark:border-zinc-700 active:scale-95 hidden xl:flex">
-                        <Archive size={16} />
+                    <label className="flex items-center gap-3 px-5 py-3 rounded-none bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 font-black text-[9px] uppercase tracking-[0.2em] transition-all hover:bg-zinc-200 dark:hover:bg-zinc-700 cursor-pointer border border-zinc-200 dark:border-zinc-700 active:scale-95 hidden xl:flex">
+                        <Archive size={14} />
                         Bulk Upload
                         <input type="file" className="hidden" accept=".xlsx,.xls,.csv" onChange={handleBulkUpload} />
                     </label>
 
                     <button
                         onClick={() => { setScannedBarcode(''); setShowScanner(true); }}
-                        className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl transition-all active:scale-95"
+                        className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 px-4 py-2.5 rounded-none font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl transition-all active:scale-95"
                     >
                         <ScanBarcode size={16} strokeWidth={3} />
                         Scan
@@ -496,7 +496,7 @@ const Products = () => {
                             setNewProduct({ ...initialProductState, merchant_id: selectedMerchantId || '' });
                             setShowModal(true);
                         }}
-                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-none font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
                         <Plus size={16} strokeWidth={3} />
                         Add Item
@@ -508,7 +508,7 @@ const Products = () => {
             <div className="flex items-center gap-3 overflow-x-auto w-full pb-2 no-scrollbar">
                 <button
                     onClick={() => setSelectedCategory('all')}
-                    className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${selectedCategory === 'all'
+                    className={`px-6 py-2.5 rounded-none text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${selectedCategory === 'all'
                         ? 'bg-zinc-900 dark:bg-emerald-500 text-white border-zinc-900 dark:border-emerald-500'
                         : 'bg-transparent text-zinc-500 border-zinc-100 dark:border-zinc-800 hover:border-emerald-500/30 hover:text-emerald-500'
                         }`}
@@ -519,7 +519,7 @@ const Products = () => {
                     <button
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
-                        className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${selectedCategory === cat.id
+                        className={`px-6 py-2.5 rounded-none text-[9px] font-black uppercase tracking-widest whitespace-nowrap transition-all border-2 ${selectedCategory === cat.id
                             ? 'bg-zinc-900 dark:bg-emerald-500 text-white border-zinc-900 dark:border-emerald-500'
                             : 'bg-transparent text-zinc-500 border-zinc-100 dark:border-zinc-800 hover:border-emerald-500/30 hover:text-emerald-500'
                             }`}
@@ -530,7 +530,7 @@ const Products = () => {
             </div>
 
             {/* Product Table Card */}
-            <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     {loading ? (
                         <div className="py-32">
@@ -564,7 +564,7 @@ const Products = () => {
                                         <tr key={prod.id} className="group hover:bg-zinc-50/50 dark:hover:bg-zinc-800/50 transition-colors">
                                             <td className="px-8 py-5">
                                                 <div className="flex items-center gap-6">
-                                                    <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-[1.25rem] overflow-hidden shrink-0 border border-zinc-200 dark:border-zinc-700 shadow-sm relative group-hover:scale-105 transition-all duration-500">
+                                                    <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-none overflow-hidden shrink-0 border border-zinc-200 dark:border-zinc-700 shadow-sm relative group-hover:scale-105 transition-all duration-500">
                                                         {prod.image_url ? (
                                                             <img src={prod.image_url} alt={prod.name} className="w-full h-full object-cover" />
                                                         ) : (
@@ -573,7 +573,7 @@ const Products = () => {
                                                     </div>
                                                     <div className="min-w-0 pr-4">
                                                         <div className="flex items-center gap-2 mb-1">
-                                                            <div className={`w-2 h-2 rounded-full ${prod.is_veg ? 'bg-emerald-500' : 'bg-rose-500'}`} />
+                                                            <div className={`w-2 h-2 rounded-none ${prod.is_veg ? 'bg-emerald-500' : 'bg-rose-500'}`} />
                                                             <p className="font-black text-zinc-900 dark:text-white uppercase tracking-tight text-[13px]">{prod.name}</p>
                                                         </div>
                                                         <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest truncate max-w-[200px] mb-1">{prod.description || 'No description'}</p>
@@ -581,7 +581,7 @@ const Products = () => {
                                                         {prod.has_variants && prod.variants?.length > 0 && (
                                                             <div className="flex flex-wrap gap-1.5 mt-2">
                                                                 {prod.variants.map((v, i) => (
-                                                                    <span key={i} className="px-2 py-0.5 bg-zinc-50 dark:bg-zinc-800/80 rounded-lg text-[8px] font-black uppercase tracking-wider text-emerald-500 border border-zinc-200 dark:border-zinc-700">
+                                                                    <span key={i} className="px-2 py-0.5 bg-zinc-50 dark:bg-zinc-800/80 rounded-none text-[8px] font-black uppercase tracking-wider text-emerald-500 border border-zinc-200 dark:border-zinc-700">
                                                                         {v.quantity} • ₹{parseFloat(v.price).toFixed(0)}
                                                                     </span>
                                                                 ))}
@@ -599,7 +599,7 @@ const Products = () => {
                                                 </div>
                                             </td>
                                             <td className="py-5 px-4">
-                                                <span className="px-3 py-1.5 bg-zinc-100 dark:bg-zinc-800/80 rounded-xl text-[9px] font-black uppercase text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700">
+                                                <span className="px-3 py-1 bg-zinc-100 dark:bg-zinc-800/80 rounded-none text-[9px] font-black uppercase text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700">
                                                     {prod.category?.name || 'Uncategorized'}
                                                 </span>
                                             </td>
@@ -615,18 +615,18 @@ const Products = () => {
                                                         } Units
                                                     </span>
                                                     {prod.has_variants && (
-                                                        <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.1em] mt-1 bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                                                        <span className="text-[8px] font-black text-emerald-500 uppercase tracking-[0.1em] mt-1 bg-emerald-500/10 px-2 py-0.5 rounded-none">
                                                             {prod.variants?.length || 0} Variants
                                                         </span>
                                                     )}
                                                 </div>
                                             </td>
                                             <td className="py-5 px-4">
-                                                <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.1em] border-2 ${prod.is_available
+                                                <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-none text-[8px] font-black uppercase tracking-[0.1em] border-2 ${prod.is_available
                                                         ? 'bg-emerald-50/50 text-emerald-600 border-emerald-500/10'
                                                         : 'bg-rose-50/50 text-rose-600 border-rose-500/10'
                                                     }`}>
-                                                    <span className={`w-1.5 h-1.5 rounded-full ${prod.is_available ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
+                                                    <span className={`w-1.5 h-1.5 rounded-none ${prod.is_available ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></span>
                                                     {prod.is_available ? 'Live' : 'Hidden'}
                                                 </span>
                                             </td>
@@ -634,13 +634,13 @@ const Products = () => {
                                                 <div className="flex justify-end gap-3">
                                                     <button
                                                         onClick={() => handleEdit(prod)}
-                                                        className="w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-xl transition-all"
+                                                        className="w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-emerald-500 hover:bg-emerald-50 rounded-none transition-all"
                                                     >
                                                         <Edit2 size={16} />
                                                     </button>
                                                     <button
                                                         onClick={() => handleDelete(prod.id)}
-                                                        className="w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-xl transition-all"
+                                                        className="w-10 h-10 flex items-center justify-center bg-zinc-50 dark:bg-zinc-800/80 text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-none transition-all"
                                                     >
                                                         <Trash2 size={16} />
                                                     </button>
@@ -670,7 +670,7 @@ const Products = () => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.9 }}
-                            className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden shadow-2xl border border-zinc-200 dark:border-zinc-800"
+                            className="relative w-full max-w-lg bg-white dark:bg-zinc-900 rounded-none overflow-hidden shadow-2xl border border-zinc-200 dark:border-zinc-800"
                         >
                             <div className="p-8 border-b border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
                                 <div>
@@ -688,14 +688,14 @@ const Products = () => {
                                         <input 
                                             type="text"
                                             placeholder="ENTER CODE..."
-                                            className="flex-1 h-12 bg-zinc-100 dark:bg-zinc-800 border-2 border-transparent focus:border-emerald-500 rounded-2xl px-6 text-sm font-black tracking-widest outline-none transition-all dark:text-white"
+                                            className="flex-1 h-12 bg-zinc-100 dark:bg-zinc-800 border-2 border-transparent focus:border-emerald-500 rounded-none px-6 text-sm font-black tracking-widest outline-none transition-all dark:text-white"
                                             value={scannedBarcode}
                                             onChange={(e) => setScannedBarcode(e.target.value)}
                                             onKeyDown={(e) => e.key === 'Enter' && handleBarcodeLookup(scannedBarcode)}
                                         />
                                         <button 
                                             onClick={() => handleBarcodeLookup(scannedBarcode)}
-                                            className="px-6 bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
+                                            className="px-6 bg-emerald-500 text-white rounded-none font-black text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 active:scale-95 transition-all"
                                         >
                                             FETCH
                                         </button>
@@ -708,7 +708,7 @@ const Products = () => {
                                 </div>
 
                                 {/* Camera Viewfinder */}
-                                <div className="relative aspect-square max-w-[300px] mx-auto bg-zinc-100 dark:bg-zinc-800 rounded-[2rem] overflow-hidden border-2 border-zinc-200 dark:border-zinc-800">
+                                <div className="relative aspect-square max-w-[300px] mx-auto bg-zinc-100 dark:bg-zinc-800 rounded-none overflow-hidden border-2 border-zinc-200 dark:border-zinc-800">
                                     <div id="reader" className="w-full h-full"></div>
                                     <div className="absolute inset-0 border-[30px] border-black/20 pointer-events-none"></div>
                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-0.5 bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)] animate-bounce" />
@@ -753,7 +753,7 @@ const Products = () => {
                                             // Handle error
                                         });
                                     }}
-                                    className="w-full py-4 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all border border-zinc-200 dark:border-zinc-700"
+                                    className="w-full py-4 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded-none font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-all border border-zinc-200 dark:border-zinc-700"
                                 >
                                     <Camera size={18} />
                                     Launch Scanner
@@ -786,7 +786,7 @@ const Products = () => {
                                 </div>
                                 <button
                                     onClick={() => setShowModal(false)}
-                                    className="p-3 bg-white dark:bg-zinc-800 rounded-xl text-zinc-500 hover:text-rose-500 transition-colors border border-zinc-100 dark:border-zinc-700 shadow-sm"
+                                    className="p-3 bg-white dark:bg-zinc-800 rounded-none text-zinc-500 hover:text-rose-500 transition-colors border border-zinc-100 dark:border-zinc-700 shadow-sm"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
@@ -829,7 +829,7 @@ const Products = () => {
                                                 <select
                                                     required
                                                     disabled={isMerchant}
-                                                    className={`w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[10px] font-black uppercase text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none ${isMerchant ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'}`}
+                                                    className={`w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[10px] font-black uppercase text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none ${isMerchant ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'}`}
                                                     value={newProduct.merchant_id}
                                                     onChange={(e) => setNewProduct({ ...newProduct, merchant_id: e.target.value })}
                                                 >
@@ -858,7 +858,7 @@ const Products = () => {
                                                     required
                                                     type="text"
                                                     placeholder="e.g. Signature Pizza"
-                                                    className="w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-400 shadow-inner"
+                                                    className="w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-400 shadow-inner"
                                                     value={newProduct.name}
                                                     onChange={(e) => {
                                                         setNewProduct({ ...newProduct, name: e.target.value });
@@ -866,13 +866,13 @@ const Products = () => {
                                                     }}
                                                 />
                                                 {nameSuggestions.length > 0 && (
-                                                    <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-2xl z-50 overflow-hidden p-1">
+                                                    <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none shadow-2xl z-50 overflow-hidden p-1">
                                                         {nameSuggestions.map((s, i) => (
                                                             <button
                                                                 key={i}
                                                                 type="button"
                                                                 onClick={() => { setNewProduct(prev => ({ ...prev, name: s })); setNameSuggestions([]); }}
-                                                                className="w-full p-2.5 text-left text-[9px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white rounded-lg text-zinc-900 dark:text-zinc-100 transition-all"
+                                                                className="w-full p-2.5 text-left text-[9px] font-black uppercase tracking-widest hover:bg-emerald-500 hover:text-white rounded-none text-zinc-900 dark:text-zinc-100 transition-all"
                                                             >
                                                                 {s}
                                                             </button>
@@ -887,7 +887,7 @@ const Products = () => {
                                             <div className="relative">
                                                 <select
                                                     required
-                                                    className="w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[10px] font-black uppercase text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none cursor-pointer"
+                                                    className="w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[10px] font-black uppercase text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none cursor-pointer"
                                                     value={newProduct.category_id}
                                                     onChange={(e) => setNewProduct({ ...newProduct, category_id: e.target.value })}
                                                 >
@@ -906,7 +906,7 @@ const Products = () => {
                                         <button
                                             type="button"
                                             onClick={() => setNewProduct({ ...newProduct, is_veg: !newProduct.is_veg })}
-                                            className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest border-2 transition-all ${newProduct.is_veg ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500' : 'bg-rose-500/10 text-rose-500 border-rose-500'}`}
+                                            className={`px-4 py-2 rounded-none text-[9px] font-black uppercase tracking-widest border-2 transition-all ${newProduct.is_veg ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500' : 'bg-rose-500/10 text-rose-500 border-rose-500'}`}
                                         >
                                             {newProduct.is_veg ? 'VEG' : 'NON-VEG'}
                                         </button>
@@ -916,7 +916,7 @@ const Products = () => {
                                         <input
                                             type="number"
                                             min="0" max="3"
-                                            className="h-10 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black"
+                                            className="h-10 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-black"
                                             value={newProduct.spicy_level}
                                             onChange={(e) => setNewProduct({ ...newProduct, spicy_level: parseInt(e.target.value) || 0 })}
                                         />
@@ -925,7 +925,7 @@ const Products = () => {
                                         <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Prep Time (Min)</label>
                                         <input
                                             type="number"
-                                            className="h-10 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black"
+                                            className="h-10 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-black"
                                             value={newProduct.preparation_time}
                                             onChange={(e) => setNewProduct({ ...newProduct, preparation_time: e.target.value })}
                                         />
@@ -934,7 +934,7 @@ const Products = () => {
                                         <label className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Calories</label>
                                         <input
                                             type="number"
-                                            className="h-10 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black"
+                                            className="h-10 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-black"
                                             value={newProduct.calories}
                                             onChange={(e) => setNewProduct({ ...newProduct, calories: e.target.value })}
                                         />
@@ -945,21 +945,21 @@ const Products = () => {
                                     <button
                                         type="button"
                                         onClick={() => setNewProduct({ ...newProduct, is_popular: !newProduct.is_popular })}
-                                        className={`px-3 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest border-2 transition-all ${newProduct.is_popular ? 'bg-amber-500/10 text-amber-500 border-amber-500' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-400 border-zinc-100 dark:border-zinc-800'}`}
+                                        className={`px-3 py-2 rounded-none text-[8px] font-black uppercase tracking-widest border-2 transition-all ${newProduct.is_popular ? 'bg-amber-500/10 text-amber-500 border-amber-500' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-400 border-zinc-100 dark:border-zinc-800'}`}
                                     >
                                         POPULAR
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => setNewProduct({ ...newProduct, is_recommended: !newProduct.is_recommended })}
-                                        className={`px-3 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest border-2 transition-all ${newProduct.is_recommended ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-400 border-zinc-100 dark:border-zinc-800'}`}
+                                        className={`px-3 py-2 rounded-none text-[8px] font-black uppercase tracking-widest border-2 transition-all ${newProduct.is_recommended ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-400 border-zinc-100 dark:border-zinc-800'}`}
                                     >
                                         RECOMMENDED
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => setNewProduct({ ...newProduct, is_new: !newProduct.is_new })}
-                                        className={`px-3 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest border-2 transition-all ${newProduct.is_new ? 'bg-blue-500/10 text-blue-500 border-blue-500' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-400 border-zinc-100 dark:border-zinc-800'}`}
+                                        className={`px-3 py-2 rounded-none text-[8px] font-black uppercase tracking-widest border-2 transition-all ${newProduct.is_new ? 'bg-blue-500/10 text-blue-500 border-blue-500' : 'bg-zinc-50 dark:bg-zinc-900 text-zinc-400 border-zinc-100 dark:border-zinc-800'}`}
                                     >
                                         NEW ARRIVAL
                                     </button>
@@ -990,7 +990,7 @@ const Products = () => {
                                                 <input
                                                     required={!newProduct.has_variants}
                                                     type="number"
-                                                    className="w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all"
+                                                    className="w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all"
                                                     value={newProduct.price}
                                                     onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
                                                 />
@@ -1000,7 +1000,7 @@ const Products = () => {
                                                 <input
                                                     required={!newProduct.has_variants}
                                                     type="number"
-                                                    className="w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all"
+                                                    className="w-full h-11 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all"
                                                     value={newProduct.stock}
                                                     onChange={(e) => setNewProduct({ ...newProduct, stock: parseInt(e.target.value) || 0 })}
                                                 />
@@ -1020,7 +1020,7 @@ const Products = () => {
                                             </div>
 
                                             {newProduct.variants.length === 0 ? (
-                                                <div className="py-8 border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-[2rem] flex flex-col items-center justify-center opacity-40">
+                                                <div className="py-8 border-2 border-dashed border-zinc-100 dark:border-zinc-800 rounded-none flex flex-col items-center justify-center opacity-40">
                                                     <Layers size={24} className="text-zinc-300" />
                                                     <p className="text-[8px] font-black uppercase tracking-[0.2em] mt-3">No Variants Defined</p>
                                                 </div>
@@ -1032,7 +1032,7 @@ const Products = () => {
                                                             initial={{ opacity: 0, x: -10 }}
                                                             animate={{ opacity: 1, x: 0 }}
                                                             key={idx}
-                                                            className="p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-100 dark:border-zinc-800 relative group/v"
+                                                            className="p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-none border border-zinc-100 dark:border-zinc-800 relative group/v"
                                                         >
                                                             <div className="grid grid-cols-[1fr_100px_80px] gap-3">
                                                                 <div className="space-y-1.5">
@@ -1043,7 +1043,7 @@ const Products = () => {
                                                                     <input
                                                                         type="text"
                                                                         placeholder="e.g. 500g"
-                                                                        className="w-full h-9 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 text-[10px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500"
+                                                                        className="w-full h-9 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none px-3 text-[10px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500"
                                                                         value={v.quantity}
                                                                         onChange={(e) => handleUpdateVariant(idx, 'quantity', e.target.value)}
                                                                     />
@@ -1056,7 +1056,7 @@ const Products = () => {
                                                                     <input
                                                                         type="number"
                                                                         placeholder="₹"
-                                                                        className="w-full h-9 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 text-[10px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500"
+                                                                        className="w-full h-9 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none px-3 text-[10px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500"
                                                                         value={v.price}
                                                                         onChange={(e) => handleUpdateVariant(idx, 'price', e.target.value)}
                                                                     />
@@ -1068,7 +1068,7 @@ const Products = () => {
                                                                     </div>
                                                                     <input
                                                                         type="number"
-                                                                        className="w-full h-9 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg px-3 text-[10px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500"
+                                                                        className="w-full h-9 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none px-3 text-[10px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500"
                                                                         value={v.stock}
                                                                         onChange={(e) => handleUpdateVariant(idx, 'stock', parseInt(e.target.value) || 0)}
                                                                     />
@@ -1077,7 +1077,7 @@ const Products = () => {
                                                             <button
                                                                 type="button"
                                                                 onClick={() => handleRemoveVariant(idx)}
-                                                                className="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover/v:opacity-100 transition-all shadow-lg hover:bg-rose-600 scale-90 group-hover/v:scale-100"
+                                                                className="absolute -top-2 -right-2 w-6 h-6 bg-rose-500 text-white rounded-none flex items-center justify-center opacity-0 group-hover/v:opacity-100 transition-all shadow-lg hover:bg-rose-600 scale-90 group-hover/v:scale-100"
                                                             >
                                                                 <X size={12} strokeWidth={3} />
                                                             </button>
@@ -1102,7 +1102,7 @@ const Products = () => {
                                     </div>
                                     <textarea
                                         rows={2}
-                                        className="w-full p-4 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-all dark:text-white text-[11px] font-bold placeholder:text-zinc-500 resize-none shadow-inner"
+                                        className="w-full p-4 bg-zinc-50 dark:bg-zinc-900 border-2 border-zinc-100 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-all dark:text-white text-[11px] font-bold placeholder:text-zinc-500 resize-none shadow-inner"
                                         value={newProduct.description}
                                         onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
                                     />
@@ -1112,14 +1112,14 @@ const Products = () => {
                                     <button
                                         type="button"
                                         onClick={() => setShowModal(false)}
-                                        className="flex-1 h-12 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-black text-[9px] uppercase tracking-widest rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                                        className="flex-1 h-12 border border-zinc-200 dark:border-zinc-800 text-zinc-500 dark:text-zinc-400 font-black text-[9px] uppercase tracking-widest rounded-none hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="flex-[2] h-12 bg-emerald-500 text-white font-black rounded-xl shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 transition-all text-[9px] uppercase tracking-widest flex items-center justify-center gap-2"
+                                        className="flex-[2] h-12 bg-emerald-500 text-white font-black rounded-none shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 active:scale-95 transition-all text-[9px] uppercase tracking-widest flex items-center justify-center gap-2"
                                     >
                                         {submitting ? (
                                             <Loader2 className="w-4 h-4 animate-spin" />

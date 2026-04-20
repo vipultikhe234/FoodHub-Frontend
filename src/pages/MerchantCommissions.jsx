@@ -11,7 +11,8 @@ import {
     CheckCircle2,
     Clock,
     Filter,
-    Wallet
+    Wallet,
+    Activity
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MerchantService } from '../services/api';
@@ -125,15 +126,26 @@ const MerchantCommissions = () => {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8 pb-10">
+            {/* Header */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div>
+                    <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight leading-none uppercase">Partner Commissions</h1>
+                    <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-bold uppercase tracking-[0.2em] mt-3 flex items-center gap-2">
+                        <Activity size={12} className="text-emerald-500" />
+                        Monetization & Partner Payout Policies
+                    </p>
+                </div>
+            </div>
+
             {/* Filter Bar */}
-            <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white dark:bg-zinc-900 p-4 rounded-3xl border border-zinc-100 dark:border-zinc-800 shadow-sm">
-                <div className="relative w-full md:w-96">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
+            <div className="flex flex-col md:flex-row gap-3 justify-between items-center bg-white dark:bg-zinc-900 p-2 shadow-sm border border-zinc-100 dark:border-zinc-800 rounded-none">
+                <div className="relative w-full md:w-80">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={14} />
                     <input 
                         type="text" 
-                        placeholder="Search merchant name or email..." 
-                        className="w-full h-12 bg-zinc-50 dark:bg-zinc-950 border-none rounded-2xl pl-11 pr-4 text-xs font-bold text-zinc-900 dark:text-white focus:ring-2 focus:ring-emerald-500/20 transition-all outline-none"
+                        placeholder="SEARCH PARTNER..." 
+                        className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border-none rounded-none pl-11 pr-4 text-[10px] font-black uppercase tracking-widest text-zinc-900 dark:text-white outline-none focus:ring-1 focus:ring-emerald-500/10 transition-all"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
@@ -142,19 +154,19 @@ const MerchantCommissions = () => {
                 <div className="flex gap-2">
                     <button 
                         onClick={fetchMerchants}
-                        className="h-12 px-5 bg-zinc-50 dark:bg-zinc-950 text-zinc-500 hover:text-zinc-900 dark:hover:text-white rounded-2xl flex items-center gap-2 border border-zinc-100 dark:border-zinc-800 transition-all text-[11px] font-black uppercase tracking-widest"
+                        className="h-10 px-4 bg-zinc-50 dark:bg-zinc-950 text-zinc-500 hover:text-zinc-900 dark:hover:text-white rounded-none flex items-center gap-2 border border-zinc-100 dark:border-zinc-800 transition-all text-[9px] font-black uppercase tracking-widest"
                     >
-                        <RefreshCcw size={14} className={loading ? "animate-spin" : ""} />
-                        Reload Registry
+                        <RefreshCcw size={12} className={loading ? "animate-spin" : ""} />
+                        Registry Reload
                     </button>
-                    <button className="h-12 w-12 bg-zinc-50 dark:bg-zinc-950 text-zinc-400 rounded-2xl flex items-center justify-center border border-zinc-100 dark:border-zinc-800">
-                        <Filter size={16} />
+                    <button className="h-10 w-10 bg-zinc-50 dark:bg-zinc-950 text-zinc-400 rounded-none flex items-center justify-center border border-zinc-100 dark:border-zinc-800">
+                        <Filter size={14} />
                     </button>
                 </div>
             </div>
 
             {/* Merchant Table */}
-            <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 shadow-sm overflow-hidden min-h-[500px]">
+            <div className="bg-white dark:bg-zinc-900 rounded-none border border-zinc-100 dark:border-zinc-800 shadow-sm overflow-hidden min-h-[500px]">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
@@ -179,7 +191,7 @@ const MerchantCommissions = () => {
                                     >
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className="h-10 w-10 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700">
+                                                <div className="h-10 w-10 rounded-none overflow-hidden border border-zinc-200 dark:border-zinc-700">
                                                     <img src={merchant.image} className="w-full h-full object-cover" alt="" />
                                                 </div>
                                                 <div>
@@ -188,7 +200,7 @@ const MerchantCommissions = () => {
                                                     </h3>
                                                     <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest leading-none mt-1">{merchant.user?.email}</p>
                                                     <div className="flex gap-1 mt-1.5">
-                                                        <span className="text-[7.5px] font-black uppercase tracking-widest bg-zinc-100 dark:bg-zinc-800 text-zinc-500 px-1.5 py-0.5 rounded-sm">
+                                                        <span className="text-[7.5px] font-black uppercase tracking-widest bg-zinc-100 dark:bg-zinc-800 text-zinc-500 px-1.5 py-1 rounded-none">
                                                             {merchant.city?.name || 'Global'}
                                                         </span>
                                                     </div>
@@ -202,7 +214,7 @@ const MerchantCommissions = () => {
                                                     <input 
                                                         type="number" 
                                                         step="0.1"
-                                                        className="w-full h-9 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-8 pr-2 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500/50 transition-all text-center"
+                                                        className="w-full h-9 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-none pl-8 pr-2 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500/50 transition-all text-center"
                                                         value={editData[merchant.id]?.commission_rate}
                                                         onChange={(e) => setEditData({ 
                                                             ...editData, 
@@ -219,7 +231,7 @@ const MerchantCommissions = () => {
                                                     <input 
                                                         type="number" 
                                                         step="1"
-                                                        className="w-full h-9 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-8 pr-2 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-blue-500/50 transition-all text-center"
+                                                        className="w-full h-9 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-none pl-8 pr-2 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-blue-500/50 transition-all text-center"
                                                         value={editData[merchant.id]?.platform_fee}
                                                         onChange={(e) => setEditData({ 
                                                             ...editData, 
@@ -236,7 +248,7 @@ const MerchantCommissions = () => {
                                                     <input 
                                                         type="number" 
                                                         step="0.1"
-                                                        className="w-full h-9 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-8 pr-2 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-amber-500/50 transition-all text-center"
+                                                        className="w-full h-9 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-none pl-8 pr-2 text-[11px] font-black text-zinc-900 dark:text-white outline-none focus:border-amber-500/50 transition-all text-center"
                                                         value={editData[merchant.id]?.platform_fee_tax}
                                                         onChange={(e) => setEditData({ 
                                                             ...editData, 
@@ -250,7 +262,7 @@ const MerchantCommissions = () => {
                                             <button 
                                                 disabled={updatingIds.includes(merchant.id)}
                                                 onClick={() => handleUpdate(merchant.id)}
-                                                className={`h-9 px-4 rounded-xl flex items-center justify-center gap-2 font-black text-[9px] uppercase tracking-[0.2em] transition-all ml-auto ${
+                                                className={`h-9 px-4 rounded-none flex items-center justify-center gap-2 font-black text-[9px] uppercase tracking-[0.2em] transition-all ml-auto ${
                                                     (parseFloat(editData[merchant.id]?.commission_rate) !== parseFloat(merchant.other_charges?.commission_rate || 0)) ||
                                                     (parseFloat(editData[merchant.id]?.platform_fee) !== parseFloat(merchant.other_charges?.platform_fee || 0)) ||
                                                     (parseFloat(editData[merchant.id]?.platform_fee_tax) !== parseFloat(merchant.other_charges?.platform_fee_tax || 0))
@@ -275,7 +287,7 @@ const MerchantCommissions = () => {
 
                 {filteredMerchants.length === 0 && !loading && (
                     <div className="h-64 flex flex-col items-center justify-center text-center p-10">
-                        <div className="w-16 h-16 bg-zinc-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 bg-zinc-50 dark:bg-zinc-800 rounded-none flex items-center justify-center mb-4">
                             <Store size={24} className="text-zinc-300" />
                         </div>
                         <h4 className="text-[11px] font-black text-zinc-900 dark:text-white uppercase tracking-tight">No partners matched</h4>
@@ -290,7 +302,7 @@ const MerchantCommissions = () => {
                     <button 
                         disabled={currentPage === 1}
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        className="h-11 px-4 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 disabled:cursor-not-allowed hover:text-zinc-900 dark:hover:text-white transition-all"
+                        className="h-10 px-4 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-none text-[9px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 disabled:cursor-not-allowed hover:text-zinc-900 dark:hover:text-white transition-all"
                     >
                         Previous
                     </button>
@@ -300,7 +312,7 @@ const MerchantCommissions = () => {
                             <button
                                 key={i + 1}
                                 onClick={() => setCurrentPage(i + 1)}
-                                className={`w-11 h-11 rounded-xl text-[10px] font-black transition-all ${
+                                className={`w-10 h-10 rounded-none text-[9px] font-black transition-all ${
                                     currentPage === i + 1 
                                     ? 'bg-zinc-900 dark:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
                                     : 'bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800'
@@ -314,7 +326,7 @@ const MerchantCommissions = () => {
                     <button 
                         disabled={currentPage === totalPages}
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        className="h-11 px-4 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 disabled:cursor-not-allowed hover:text-zinc-900 dark:hover:text-white transition-all"
+                        className="h-10 px-4 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-none text-[9px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 disabled:cursor-not-allowed hover:text-zinc-900 dark:hover:text-white transition-all"
                     >
                         Next
                     </button>

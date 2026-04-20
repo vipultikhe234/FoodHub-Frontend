@@ -97,7 +97,7 @@ const RiderStaff = () => {
                 <div className="flex items-center gap-4">
                     <button 
                         onClick={fetchInitialData}
-                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
                     </button>
@@ -107,7 +107,7 @@ const RiderStaff = () => {
                         <input 
                             type="text"
                             placeholder="SEARCH PERSONNEL..."
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-none text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -115,7 +115,7 @@ const RiderStaff = () => {
                     
                     <button 
                         onClick={() => setIsModalOpen(true)}
-                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-none font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
                         <Plus size={16} strokeWidth={3} /> Onboard New Rider
                     </button>
@@ -148,16 +148,16 @@ const RiderStaff = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.05 }}
                                 key={rider.id}
-                                className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-6 rounded-[32px] shadow-sm hover:shadow-xl transition-all group relative overflow-hidden"
+                                className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-6 rounded-none shadow-sm hover:shadow-xl transition-all group relative overflow-hidden"
                             >
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-emerald-500/10 transition-colors"></div>
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-none -mr-16 -mt-16 blur-2xl group-hover:bg-emerald-500/10 transition-colors"></div>
                                 
                                 <div className="flex items-start justify-between mb-6 relative">
-                                    <div className="w-14 h-14 bg-zinc-50 dark:bg-zinc-800 rounded-2xl flex items-center justify-center text-zinc-400 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-inner">
+                                    <div className="w-14 h-14 bg-zinc-50 dark:bg-zinc-800 rounded-none flex items-center justify-center text-zinc-400 group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-inner">
                                         <Bike size={24} />
                                     </div>
-                                    <div className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 rounded-full flex items-center gap-1.5 border border-emerald-100 dark:border-emerald-900/50">
-                                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                                    <div className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 px-3 py-1.5 rounded-none flex items-center gap-1.5 border border-emerald-100 dark:border-emerald-900/50">
+                                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-none animate-pulse"></div>
                                         <span className="text-[10px] font-black uppercase tracking-wider">Active Force</span>
                                     </div>
                                 </div>
@@ -178,7 +178,7 @@ const RiderStaff = () => {
                                             <span className="text-xs font-medium font-mono">{rider.phone}</span>
                                         </div>
                                         {rider.merchant_id && (
-                                            <div className="flex items-center justify-between col-span-2 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/10 p-2.5 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
+                                            <div className="flex items-center justify-between col-span-2 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/10 p-2.5 rounded-none border border-emerald-100 dark:border-emerald-900/20">
                                                 <div className="flex items-center gap-3">
                                                     <Store size={14} />
                                                     <span className="text-[10px] font-black uppercase tracking-widest truncate">Node: {merchants.find(m => String(m.id) === String(rider.merchant_id))?.name || 'Unknown'}</span>
@@ -191,8 +191,8 @@ const RiderStaff = () => {
 
                                 <div className="mt-8 pt-6 border-t border-zinc-50 dark:border-zinc-800 flex items-center justify-between">
                                     <div className="flex -space-x-2">
-                                        <div className="w-7 h-7 rounded-full bg-blue-100 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px] font-bold text-blue-600">DL</div>
-                                        <div className="w-7 h-7 rounded-full bg-amber-100 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px] font-bold text-amber-600">ID</div>
+                                        <div className="w-7 h-7 rounded-none bg-blue-100 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px] font-bold text-blue-600">DL</div>
+                                        <div className="w-7 h-7 rounded-none bg-amber-100 border-2 border-white dark:border-zinc-900 flex items-center justify-center text-[10px] font-bold text-amber-600">ID</div>
                                     </div>
                                     <button className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                                         <MoreVertical size={18} />
@@ -219,7 +219,7 @@ const RiderStaff = () => {
                             initial={{ y: 50, opacity: 0, scale: 0.9 }}
                             animate={{ y: 0, opacity: 1, scale: 1 }}
                             exit={{ y: 50, opacity: 0, scale: 0.9 }}
-                            className="relative w-full max-w-[500px] bg-white dark:bg-zinc-900 rounded-[40px] shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 flex flex-col max-h-[90vh]"
+                            className="relative w-full max-w-[500px] bg-white dark:bg-zinc-900 rounded-none shadow-2xl overflow-hidden border border-zinc-100 dark:border-zinc-800 flex flex-col max-h-[90vh]"
                         >
                             <div className="p-8 lg:p-10 flex flex-col h-full">
                                 <header className="flex items-center justify-between mb-8 shrink-0">
@@ -227,7 +227,7 @@ const RiderStaff = () => {
                                         <h2 className="text-2xl font-black text-zinc-900 dark:text-white uppercase italic tracking-tight">Onboard {isMerchant ? 'Staff' : 'Rider'}</h2>
                                         <p className="text-zinc-500 text-xs font-medium mt-1">{isMerchant ? 'Register a courier for your station.' : 'Initialize new logistics personnel profile.'}</p>
                                     </div>
-                                    <button type="button" onClick={() => setIsModalOpen(false)} className="w-10 h-10 bg-zinc-50 dark:bg-zinc-800 rounded-full flex items-center justify-center text-zinc-400 shrink-0">
+                                    <button type="button" onClick={() => setIsModalOpen(false)} className="w-10 h-10 bg-zinc-50 dark:bg-zinc-800 rounded-none flex items-center justify-center text-zinc-400 shrink-0">
                                         <X size={20} />
                                     </button>
                                 </header>
@@ -237,7 +237,7 @@ const RiderStaff = () => {
                                         <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1 italic">Full Identity Name</label>
                                         <input 
                                             required
-                                            className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-2xl px-5 text-sm font-bold placeholder:text-zinc-300 outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
+                                            className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-none px-5 text-sm font-bold placeholder:text-zinc-300 outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
                                             placeholder="Alpha Courier 01"
                                             value={formData.name}
                                             onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -249,7 +249,7 @@ const RiderStaff = () => {
                                             <input 
                                                 required
                                                 type="email"
-                                                className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-2xl px-5 text-sm font-bold placeholder:text-zinc-300 outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
+                                                className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-none px-5 text-sm font-bold placeholder:text-zinc-300 outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
                                                 placeholder="rider@apnacart.com"
                                                 value={formData.email}
                                                 onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -259,7 +259,7 @@ const RiderStaff = () => {
                                             <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1 italic">Phone Matrix</label>
                                             <input 
                                                 required
-                                                className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-2xl px-5 text-sm font-bold placeholder:text-zinc-300 outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
+                                                className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-none px-5 text-sm font-bold placeholder:text-zinc-300 outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
                                                 placeholder="+91 00000 00000"
                                                 value={formData.phone}
                                                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -271,7 +271,7 @@ const RiderStaff = () => {
                                         <input 
                                             required
                                             type="password"
-                                            className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-2xl px-5 text-sm font-bold placeholder:text-zinc-300 outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
+                                            className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-none px-5 text-sm font-bold placeholder:text-zinc-300 outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
                                             placeholder="••••••••"
                                             value={formData.password}
                                             onChange={(e) => setFormData({...formData, password: e.target.value})}
@@ -281,7 +281,7 @@ const RiderStaff = () => {
                                         <div className="space-y-1.5">
                                             <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest px-1 italic">Merchant Node Assignment (Optional)</label>
                                             <select 
-                                                className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-2xl px-5 text-sm font-bold outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
+                                                className="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border-2 border-zinc-100 dark:border-zinc-700 rounded-none px-5 text-sm font-bold outline-none focus:border-emerald-500 transition-all text-zinc-900 dark:text-white"
                                                 value={formData.merchant_id}
                                                 onChange={(e) => setFormData({...formData, merchant_id: e.target.value})}
                                             >
@@ -296,7 +296,7 @@ const RiderStaff = () => {
                                     <button 
                                         type="submit"
                                         disabled={submitting}
-                                        className="w-full h-14 bg-zinc-900 dark:bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 mt-4 hover:opacity-90 transition-all disabled:opacity-50"
+                                        className="w-full h-14 bg-zinc-900 dark:bg-emerald-500 text-white rounded-none font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 mt-4 hover:opacity-90 transition-all disabled:opacity-50"
                                     >
                                         {submitting ? <ApnaCartLoader centered={false} size={20} /> : <>Initialize Onboarding <CheckCircle2 size={18} /></>}
                                     </button>

@@ -251,40 +251,40 @@ const Merchants = () => {
                 <div className="flex items-center gap-4">
                     <button
                         onClick={fetchMerchants}
-                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                        className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
-                        <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+                        <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
                     </button>
 
                     <div className="relative group hidden sm:block">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={14} />
                         <input
                             type="text"
                             placeholder="SEARCH MERCHANTS..."
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-2.5 rounded-none text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
 
                     <div className="relative group hidden md:block">
-                        <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={16} />
+                        <Archive className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-emerald-500 transition-colors" size={14} />
                         <select
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-10 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-11 pr-10 py-2.5 rounded-none text-[10px] font-black uppercase tracking-widest outline-none focus:ring-4 focus:ring-emerald-500/5 appearance-none cursor-pointer dark:text-white"
                             value={selectedCategoryId}
                             onChange={(e) => setSelectedCategoryId(e.target.value)}
                         >
-                            <option value="">ALL CATEGORIES</option>
+                            <option value="">ALL SEGMENTS</option>
                             {merchantCategories.map(cat => (
                                 <option key={cat.id} value={cat.id}>{cat.name}</option>
                             ))}
                         </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={14} />
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={12} />
                     </div>
 
                     <button
                         onClick={() => { setEditingId(null); setFormData(initialFormState); setIsModalOpen(true); }}
-                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-none font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
                         <Plus size={16} strokeWidth={3} />
                         Add Merchant
@@ -293,7 +293,7 @@ const Merchants = () => {
             </div>
 
             {/* ── Table List View ── */}
-            <div className="bg-white dark:bg-zinc-900 rounded-[2rem] border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                     {loading ? (
                         <div className="py-24 text-center">
@@ -317,7 +317,7 @@ const Merchants = () => {
                                         <tr>
                                             <td colSpan="6" className="py-20 text-center">
                                                 <div className="flex flex-col items-center gap-4">
-                                                    <div className="w-16 h-16 bg-zinc-50 dark:bg-zinc-800 rounded-3xl flex items-center justify-center border border-zinc-100 dark:border-zinc-700 animate-pulse">
+                                                    <div className="w-16 h-16 bg-zinc-50 dark:bg-zinc-800 rounded-none flex items-center justify-center border border-zinc-100 dark:border-zinc-700 animate-pulse">
                                                         <SearchX className="text-zinc-300" size={32} />
                                                     </div>
                                                     <div>
@@ -338,7 +338,7 @@ const Merchants = () => {
                                                 {/* Merchant Name + Image */}
                                                 <td className="px-4 py-5">
                                                     <div className="flex items-center gap-4">
-                                                        <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 shadow-sm shrink-0">
+                                                        <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-none overflow-hidden border border-zinc-200 dark:border-zinc-700 shadow-sm shrink-0">
                                                             <img
                                                                 src={rest.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5'}
                                                                 alt={rest.name}
@@ -360,7 +360,7 @@ const Merchants = () => {
                                                 {/* Classification */}
                                                 <td className="py-5 px-3">
                                                     <div className="flex items-center gap-2">
-                                                        <div className="w-8 h-8 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-emerald-500 transition-colors">
+                                                        <div className="w-8 h-8 rounded-none bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-emerald-500 transition-colors">
                                                             <Archive size={14} />
                                                         </div>
                                                         <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600 dark:text-zinc-300">
@@ -375,7 +375,7 @@ const Merchants = () => {
                                                         <button
                                                             onClick={() => handleToggleStatus(rest.id)}
                                                             disabled={updatingId === rest.id}
-                                                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border transition-all ${rest.is_active
+                                                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-none text-[9px] font-black uppercase tracking-widest w-fit border transition-all ${rest.is_active
                                                                     ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/40'
                                                                     : 'bg-rose-50 dark:bg-rose-950/40 text-rose-500 dark:text-rose-400 border-rose-100 dark:border-rose-900/40'
                                                                 }`}
@@ -408,7 +408,7 @@ const Merchants = () => {
                                                 <td className="py-5 px-3">
                                                     {rest.user ? (
                                                         <div className="flex items-center gap-3">
-                                                            <div className="w-8 h-8 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 font-black text-[10px] shrink-0 uppercase">
+                                                            <div className="w-8 h-8 bg-zinc-100 dark:bg-zinc-800 rounded-none flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 font-black text-[10px] shrink-0 uppercase">
                                                                 {rest.user.name?.[0]}
                                                             </div>
                                                             <div className="min-w-0">
@@ -426,14 +426,14 @@ const Merchants = () => {
                                                     <div className="flex items-center justify-end gap-2">
                                                         <button
                                                             onClick={() => handleViewDetail(rest)}
-                                                            className="p-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-500 hover:text-white rounded-lg text-zinc-500 dark:text-zinc-400 transition-all shadow-sm group/btn"
+                                                            className="p-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-500 hover:text-white rounded-none text-zinc-500 dark:text-zinc-400 transition-all shadow-sm group/btn"
                                                             title="View Details"
                                                         >
                                                             <Eye size={14} />
                                                         </button>
                                                         <button
                                                             onClick={() => openEditModal(rest)}
-                                                            className="p-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-emerald-500 hover:text-white rounded-lg text-zinc-500 dark:text-zinc-400 transition-all shadow-sm group/btn"
+                                                            className="p-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-emerald-500 hover:text-white rounded-none text-zinc-500 dark:text-zinc-400 transition-all shadow-sm group/btn"
                                                             title="Edit Merchant"
                                                         >
                                                             <Edit3 size={14} />
@@ -452,7 +452,7 @@ const Merchants = () => {
                                     <button
                                         disabled={currentPage === 1}
                                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                                        className="h-10 px-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                                        className="h-10 px-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-[10px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800"
                                     >
                                         Prev
                                     </button>
@@ -461,7 +461,7 @@ const Merchants = () => {
                                             <button
                                                 key={i + 1}
                                                 onClick={() => setCurrentPage(i + 1)}
-                                                className={`w-10 h-10 rounded-xl text-[10px] font-black transition-all ${
+                                                className={`w-10 h-10 rounded-none text-[10px] font-black transition-all ${
                                                     currentPage === i + 1
                                                         ? 'bg-zinc-900 dark:bg-emerald-500 text-white shadow-xl shadow-emerald-500/10'
                                                         : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800'
@@ -474,7 +474,7 @@ const Merchants = () => {
                                     <button
                                         disabled={currentPage === totalPages}
                                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                                        className="h-10 px-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                                        className="h-10 px-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-[10px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800"
                                     >
                                         Next
                                     </button>
@@ -500,7 +500,7 @@ const Merchants = () => {
                             initial={{ scale: 0.9, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden my-auto"
+                            className="relative w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden my-auto"
                         >
                             <div className="p-8 sm:p-12 overflow-y-auto max-h-[90vh] custom-scrollbar">
                                 <div className="flex items-center justify-between mb-10">
@@ -512,7 +512,7 @@ const Merchants = () => {
                                             {editingId ? 'Update details below.' : 'Fill in the details for the new merchant.'}
                                         </p>
                                     </div>
-                                    <button onClick={() => setIsModalOpen(false)} className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-2xl text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                                    <button onClick={() => setIsModalOpen(false)} className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-none text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                                         <XCircle size={24} />
                                     </button>
                                 </div>
@@ -522,19 +522,19 @@ const Merchants = () => {
                                         <div className="space-y-6">
                                             <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">Owner Details</p>
                                             <div className="space-y-4">
-                                                <input required name="val_name" type="text" placeholder="Full Name" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.merchant_name} onChange={(e) => setFormData({ ...formData, merchant_name: e.target.value })} />
-                                                <input required name="val_email" type="email" placeholder="Email Address" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
-                                                <input name="val_pass" type="password" placeholder={editingId ? "New Password (Optional)" : "Password"} className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} required={!editingId} autoComplete="new-password" />
+                                                <input required name="val_name" type="text" placeholder="Full Name" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.merchant_name} onChange={(e) => setFormData({ ...formData, merchant_name: e.target.value })} />
+                                                <input required name="val_email" type="email" placeholder="Email Address" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                                                <input name="val_pass" type="password" placeholder={editingId ? "New Password (Optional)" : "Password"} className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} required={!editingId} autoComplete="new-password" />
                                             </div>
                                         </div>
                                         <div className="space-y-6">
                                             <p className="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em]">Merchant Outlet</p>
                                             <div className="space-y-4">
-                                                <input required name="val_rest" type="text" placeholder="Merchant / Outlet Name" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.Merchant_name} onChange={(e) => setFormData({ ...formData, Merchant_name: e.target.value })} />
+                                                <input required name="val_rest" type="text" placeholder="Merchant / Outlet Name" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.Merchant_name} onChange={(e) => setFormData({ ...formData, Merchant_name: e.target.value })} />
                                                 <div className="relative">
                                                     <select
                                                         required
-                                                        className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[12px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none uppercase tracking-widest"
+                                                        className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-6 text-[12px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all appearance-none uppercase tracking-widest"
                                                         value={formData.merchant_category_id}
                                                         onChange={(e) => setFormData({ ...formData, merchant_category_id: e.target.value })}
                                                     >
@@ -545,10 +545,10 @@ const Merchants = () => {
                                                     </select>
                                                     <Settings size={16} className="absolute right-6 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" />
                                                 </div>
-                                                <input required name="val_addr" type="text" placeholder="Street Address" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} />
+                                                <input required name="val_addr" type="text" placeholder="Street Address" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} />
                                                 <div className="flex gap-4">
                                                     <div className="flex-1 relative">
-                                                        <input name="val_img" type="text" placeholder="Image URL (optional)" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm pr-14" value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} />
+                                                        <input name="val_img" type="text" placeholder="Image URL (optional)" className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-6 text-[14px] font-black text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500 shadow-sm pr-14" value={formData.image} onChange={(e) => setFormData({ ...formData, image: e.target.value })} />
                                                         {formLoading && (
                                                             <div className="absolute right-4 top-1/2 -translate-y-1/2">
                                                                 <ApnaCartLoader centered={false} size={20} />
@@ -576,7 +576,7 @@ const Merchants = () => {
                                     </div>
 
                                     {/* Financial Config (Fees & Taxes) */}
-                                    <div className="p-8 bg-zinc-50 dark:bg-zinc-800/30 rounded-[2rem] border-2 border-dashed border-zinc-200 dark:border-zinc-700/50 space-y-8">
+                                    <div className="p-8 bg-zinc-50 dark:bg-zinc-800/30 rounded-none border-2 border-dashed border-zinc-200 dark:border-zinc-700/50 space-y-8">
                                         <div className="flex items-center gap-3">
                                             <Settings size={18} className="text-zinc-400" />
                                             <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Financial & Performance Metrics</p>
@@ -584,11 +584,11 @@ const Merchants = () => {
 
                                         <div className="space-y-6">
                                             {/* Delivery Matrix */}
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white dark:bg-zinc-900/50 p-5 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white dark:bg-zinc-900/50 p-5 rounded-none border border-zinc-100 dark:border-zinc-800 shadow-sm">
                                                 <div className="space-y-4">
                                                     <div className="space-y-1.5">
                                                         <label className="text-[8px] font-black text-zinc-400 uppercase tracking-widest ml-1">Delivery Strategy</label>
-                                                        <select className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.delivery_charge_type} onChange={e => setFormData({ ...formData, delivery_charge_type: e.target.value })}>
+                                                        <select className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.delivery_charge_type} onChange={e => setFormData({ ...formData, delivery_charge_type: e.target.value })}>
                                                             <option value="fixed">Fixed Rate</option>
                                                             <option value="distance">Distance Based (km)</option>
                                                         </select>
@@ -598,36 +598,36 @@ const Merchants = () => {
                                                             <div className="flex gap-2">
                                                                 <div className="flex-1 space-y-1.5">
                                                                     <label className="text-[7px] font-black text-zinc-400 uppercase tracking-widest ml-1">Rate/KM</label>
-                                                                    <input type="number" step="0.1" placeholder="₹" className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black focus:border-emerald-500 text-zinc-900 dark:text-white outline-none" value={formData.delivery_charge_per_km} onChange={e => setFormData({ ...formData, delivery_charge_per_km: e.target.value })} />
+                                                                    <input type="number" step="0.1" placeholder="₹" className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-black focus:border-emerald-500 text-zinc-900 dark:text-white outline-none" value={formData.delivery_charge_per_km} onChange={e => setFormData({ ...formData, delivery_charge_per_km: e.target.value })} />
                                                                 </div>
                                                                 <div className="flex-1 space-y-1.5">
                                                                     <label className="text-[7px] font-black text-zinc-400 uppercase tracking-widest ml-1">Max KM</label>
-                                                                    <input type="number" step="0.1" placeholder="KM" className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black focus:border-emerald-500 text-zinc-900 dark:text-white outline-none" value={formData.max_delivery_distance} onChange={e => setFormData({ ...formData, max_delivery_distance: e.target.value })} />
+                                                                    <input type="number" step="0.1" placeholder="KM" className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-black focus:border-emerald-500 text-zinc-900 dark:text-white outline-none" value={formData.max_delivery_distance} onChange={e => setFormData({ ...formData, max_delivery_distance: e.target.value })} />
                                                                 </div>
                                                             </div>
                                                         ) : (
                                                             <div className="space-y-1.5">
                                                                 <label className="text-[7px] font-black text-zinc-400 uppercase tracking-widest ml-1">Amount (₹)</label>
-                                                                <input type="number" step="0.01" placeholder="₹" className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black focus:border-emerald-500 text-zinc-900 dark:text-white outline-none" value={formData.delivery_charge} onChange={e => setFormData({ ...formData, delivery_charge: e.target.value })} />
+                                                                <input type="number" step="0.01" placeholder="₹" className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-black focus:border-emerald-500 text-zinc-900 dark:text-white outline-none" value={formData.delivery_charge} onChange={e => setFormData({ ...formData, delivery_charge: e.target.value })} />
                                                             </div>
                                                         )}
                                                     </div>
                                                 </div>
                                                 <div className="space-y-1.5 self-end">
                                                     <label className="text-[8px] font-black text-amber-500 uppercase tracking-widest ml-1">Delivery GST (%)</label>
-                                                    <input type="number" step="0.1" className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-amber-500 text-zinc-900 dark:text-white" value={formData.delivery_charge_tax} onChange={e => setFormData({ ...formData, delivery_charge_tax: e.target.value })} />
+                                                    <input type="number" step="0.1" className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-bold outline-none focus:border-amber-500 text-zinc-900 dark:text-white" value={formData.delivery_charge_tax} onChange={e => setFormData({ ...formData, delivery_charge_tax: e.target.value })} />
                                                 </div>
                                             </div>
                                             
                                             {/* Packaging Matrix */}
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white dark:bg-zinc-900/50 p-5 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white dark:bg-zinc-900/50 p-5 rounded-none border border-zinc-100 dark:border-zinc-800 shadow-sm">
                                                 <div className="space-y-1.5">
                                                     <label className="text-[8px] font-black text-zinc-400 uppercase tracking-widest ml-1">Packing Fee (Fixed)</label>
-                                                    <input type="number" step="0.01" className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.packaging_charge} onChange={e => setFormData({ ...formData, packaging_charge: e.target.value })} />
+                                                    <input type="number" step="0.01" className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.packaging_charge} onChange={e => setFormData({ ...formData, packaging_charge: e.target.value })} />
                                                 </div>
                                                 <div className="space-y-1.5">
                                                     <label className="text-[8px] font-black text-amber-500 uppercase tracking-widest ml-1">Packing GST (%)</label>
-                                                    <input type="number" step="0.1" className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-amber-500 text-zinc-900 dark:text-white" value={formData.packaging_charge_tax} onChange={e => setFormData({ ...formData, packaging_charge_tax: e.target.value })} />
+                                                    <input type="number" step="0.1" className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-none px-4 text-[11px] font-bold outline-none focus:border-amber-500 text-zinc-900 dark:text-white" value={formData.packaging_charge_tax} onChange={e => setFormData({ ...formData, packaging_charge_tax: e.target.value })} />
                                                 </div>
                                             </div>
                                         </div>
@@ -635,17 +635,17 @@ const Merchants = () => {
 
                                     {/* Location Row */}
                                     <div className="space-y-3">
-                                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em]">Location <span className="text-zinc-400 font-bold">(Optional — merchant can set later)</span></p>
+                                        <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em]">Location <span className="text-zinc-400 font-bold">(Optional)</span></p>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            <select value={formData.country_id} onChange={e => handleFormCountry(e.target.value)} className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all">
+                                            <select value={formData.country_id} onChange={e => handleFormCountry(e.target.value)} className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all">
                                                 <option value="">Country</option>
                                                 {countries.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                                             </select>
-                                            <select value={formData.state_id} onChange={e => handleFormState(e.target.value)} disabled={!formData.country_id} className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all disabled:opacity-40">
+                                            <select value={formData.state_id} onChange={e => handleFormState(e.target.value)} disabled={!formData.country_id} className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all disabled:opacity-40">
                                                 <option value="">State</option>
                                                 {formStates.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                                             </select>
-                                            <select value={formData.city_id} onChange={e => setFormData({ ...formData, city_id: e.target.value })} disabled={!formData.state_id} className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-2xl px-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all disabled:opacity-40">
+                                            <select value={formData.city_id} onChange={e => setFormData({ ...formData, city_id: e.target.value })} disabled={!formData.state_id} className="w-full h-14 bg-zinc-100 dark:bg-zinc-800 border-2 border-zinc-200 dark:border-zinc-700/50 rounded-none px-4 text-sm font-bold text-zinc-900 dark:text-white outline-none focus:border-emerald-500 transition-all disabled:opacity-40">
                                                 <option value="">City</option>
                                                 {formCities.map(ci => <option key={ci.id} value={ci.id}>{ci.name}</option>)}
                                             </select>
@@ -656,7 +656,7 @@ const Merchants = () => {
                                         <button
                                             disabled={formLoading}
                                             type="submit"
-                                            className="w-full h-16 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-3xl font-black text-xs uppercase tracking-[0.3em] shadow-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                                            className="w-full h-16 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-none font-black text-xs uppercase tracking-[0.3em] shadow-2xl active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                                         >
                                             {formLoading ? <ApnaCartLoader centered={false} size={24} /> : <>{editingId ? 'Update Merchant' : 'Save Merchant'} <ArrowRight size={20} strokeWidth={3} /></>}
                                         </button>
@@ -681,7 +681,7 @@ const Merchants = () => {
                             initial={{ scale: 0.9, opacity: 0, y: 50 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 50 }}
-                            className="relative w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-[3rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden my-auto"
+                            className="relative w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-2xl overflow-hidden my-auto"
                         >
                             {/* Merchant Banner */}
                             <div className="relative h-64 bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
@@ -692,8 +692,8 @@ const Merchants = () => {
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                                 <div className="absolute bottom-8 left-10">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-20 h-20 bg-white dark:bg-zinc-900 rounded-3xl p-1 shadow-2xl">
-                                            <div className="w-full h-full bg-zinc-100 dark:bg-zinc-800 rounded-[1.25rem] flex items-center justify-center text-zinc-400">
+                                        <div className="w-20 h-20 bg-white dark:bg-zinc-900 rounded-none p-1 shadow-2xl">
+                                            <div className="w-full h-full bg-zinc-100 dark:bg-zinc-800 rounded-none flex items-center justify-center text-zinc-400">
                                                 <Store size={32} />
                                             </div>
                                         </div>
@@ -702,7 +702,7 @@ const Merchants = () => {
                                                 {viewingMerchant.name}
                                             </h2>
                                             <div className="flex items-center gap-2">
-                                                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${viewingMerchant.is_active
+                                                <span className={`px-4 py-1.5 rounded-none text-[10px] font-black uppercase tracking-widest border ${viewingMerchant.is_active
                                                         ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/20'
                                                         : 'bg-rose-500/20 text-rose-400 border-rose-500/20'
                                                     }`}>
@@ -712,7 +712,7 @@ const Merchants = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <button onClick={() => setIsViewModalOpen(false)} className="absolute top-8 right-8 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-2xl text-white transition-all">
+                                <button onClick={() => setIsViewModalOpen(false)} className="absolute top-8 right-8 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl rounded-none text-white transition-all">
                                     <XCircle size={28} />
                                 </button>
                             </div>
@@ -728,7 +728,7 @@ const Merchants = () => {
                                         </div>
                                         <div className="space-y-6">
                                             <div className="flex items-start gap-4">
-                                                <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800 rounded-xl text-zinc-400"><MapPin size={18} /></div>
+                                                <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800 rounded-none text-zinc-400"><MapPin size={18} /></div>
                                                 <div>
                                                     <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-1">Location</p>
                                                     <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 leading-relaxed uppercase">
@@ -738,7 +738,7 @@ const Merchants = () => {
                                                 </div>
                                             </div>
                                             <div className="flex items-start gap-4">
-                                                <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800 rounded-xl text-zinc-400"><Clock size={18} /></div>
+                                                <div className="p-2.5 bg-zinc-50 dark:bg-zinc-800 rounded-none text-zinc-400"><Clock size={18} /></div>
                                                 <div>
                                                     <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-1">Operating Hours</p>
                                                     <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-widest font-mono">
@@ -757,14 +757,14 @@ const Merchants = () => {
                                             <UserCircle size={16} strokeWidth={3} />
                                             <p className="text-[10px] font-black uppercase tracking-[0.2em]">Owner Profiles</p>
                                         </div>
-                                        <div className="p-6 bg-zinc-50 dark:bg-zinc-800/50 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 space-y-5">
+                                        <div className="p-6 bg-zinc-50 dark:bg-zinc-800/50 rounded-none border border-zinc-100 dark:border-zinc-800 space-y-5">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-zinc-900 font-black text-sm uppercase">
+                                                <div className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-none flex items-center justify-center text-white dark:text-zinc-900 font-black text-sm uppercase">
                                                     {viewingMerchant.user?.name?.[0]}
                                                 </div>
                                                 <div>
                                                     <p className="text-xs font-black text-zinc-900 dark:text-white leading-none mb-1.5 uppercase">{viewingMerchant.user?.name}</p>
-                                                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg text-[8px] font-black uppercase tracking-widest w-fit">
+                                                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-none text-[8px] font-black uppercase tracking-widest w-fit">
                                                         <ShieldCheck size={8} /> Verified Partner
                                                     </div>
                                                 </div>
@@ -791,20 +791,20 @@ const Merchants = () => {
                                             <p className="text-[10px] font-black uppercase tracking-[0.2em]">Node Operations</p>
                                         </div>
                                         <div className="grid grid-cols-2 gap-4">
-                                            <div className="p-5 bg-zinc-50 dark:bg-zinc-800/30 rounded-[1.5rem] border border-zinc-100 dark:border-zinc-800">
+                                            <div className="p-5 bg-zinc-50 dark:bg-zinc-800/30 rounded-none border border-zinc-100 dark:border-zinc-800">
                                                 <p className="text-[8px] font-black text-zinc-400 uppercase tracking-widest mb-1.5 text-center">Status</p>
                                                 <p className={`text-[10px] font-black text-center uppercase tracking-widest ${viewingMerchant.is_open ? 'text-emerald-500' : 'text-rose-500'}`}>
                                                     {viewingMerchant.is_open ? 'LIVE' : 'CLOSED'}
                                                 </p>
                                             </div>
-                                            <div className="p-5 bg-zinc-50 dark:bg-zinc-800/30 rounded-[1.5rem] border border-zinc-100 dark:border-zinc-800">
+                                            <div className="p-5 bg-zinc-50 dark:bg-zinc-800/30 rounded-none border border-zinc-100 dark:border-zinc-800">
                                                 <p className="text-[8px] font-black text-zinc-400 uppercase tracking-widest mb-1.5 text-center">Joined</p>
                                                 <p className="text-[10px] font-black text-zinc-900 dark:text-white text-center uppercase tracking-widest">
                                                     {new Date(viewingMerchant.user?.created_at).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
                                                 </p>
                                             </div>
                                         </div>
-                                        <button className="w-full h-14 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3">
+                                        <button className="w-full h-14 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-none font-black text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3">
                                             <Share2 size={16} /> Share Partner Node
                                         </button>
                                     </div>

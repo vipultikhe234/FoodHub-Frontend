@@ -169,8 +169,8 @@ const Offers = () => {
             (t) => (
                 <span style={{display:'flex',alignItems:'center',gap:'12px'}}>
                     Retract this live offer?
-                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/offers/${id}`); fetchOffers(); toast.success("Offer removed"); } catch { toast.error("Removal failed"); }}} style={{background:'#ef4444',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>REMOVE</button>
-                    <button onClick={() => toast.dismiss(t.id)} style={{background:'#27272a',color:'#fff',border:'none',borderRadius:'8px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>CANCEL</button>
+                    <button onClick={async () => { toast.dismiss(t.id); try { await api.delete(`/offers/${id}`); fetchOffers(); toast.success("Offer removed"); } catch { toast.error("Removal failed"); }}} style={{background:'#ef4444',color:'#fff',border:'none',borderRadius:'0px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>REMOVE</button>
+                    <button onClick={() => toast.dismiss(t.id)} style={{background:'#27272a',color:'#fff',border:'none',borderRadius:'0px',padding:'6px 14px',fontWeight:900,cursor:'pointer',fontSize:'10px',letterSpacing:'0.1em'}}>CANCEL</button>
                 </span>
             ),
             { duration: 6000 }
@@ -193,7 +193,7 @@ const Offers = () => {
                 <div className="flex items-center gap-4">
                     <button 
                         onClick={fetchOffers}
-                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
+                        className="p-3.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none text-zinc-400 hover:text-emerald-500 transition-all active:scale-95"
                     >
                         <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
                     </button>
@@ -203,28 +203,28 @@ const Offers = () => {
                         <input 
                             type="text"
                             placeholder="SEARCH PROMOTIONS..."
-                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
+                            className="bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 pl-12 pr-6 py-3.5 rounded-none text-[11px] font-black uppercase tracking-wider outline-none focus:ring-4 focus:ring-emerald-500/5 w-56 transition-all dark:text-white"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
 
-                    <div className="flex bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-1 rounded-2xl">
+                    <div className="flex bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-1 rounded-none">
                         <button 
                             onClick={() => setFilterStatus('active')}
-                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === 'active' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                            className={`px-4 py-2.5 rounded-none text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === 'active' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
                         >
                             Live
                         </button>
                         <button 
                             onClick={() => setFilterStatus('inactive')}
-                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === 'inactive' ? 'bg-zinc-900 dark:bg-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                            className={`px-4 py-2.5 rounded-none text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === 'inactive' ? 'bg-zinc-900 dark:bg-zinc-800 text-white shadow-lg' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
                         >
                             Deactivated
                         </button>
                         <button 
                             onClick={() => setFilterStatus('all')}
-                            className={`px-4 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === 'all' ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
+                            className={`px-4 py-2.5 rounded-none text-[9px] font-black uppercase tracking-widest transition-all ${filterStatus === 'all' ? 'bg-zinc-200 dark:bg-zinc-800 text-zinc-900 dark:text-white' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'}`}
                         >
                             All
                         </button>
@@ -232,7 +232,7 @@ const Offers = () => {
                     
                     <button 
                         onClick={() => { setEditingId(null); setForm(initialFormState); setShowModal(true); }}
-                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
+                        className="bg-emerald-500 text-white px-4 py-2.5 rounded-none font-black text-[10px] uppercase tracking-[0.15em] flex items-center gap-2 shadow-xl shadow-emerald-500/20 active:scale-95 transition-all outline-none"
                     >
                         <Plus size={16} strokeWidth={3} />
                         New Offer
@@ -247,7 +247,7 @@ const Offers = () => {
                         <ApnaCartLoader centered={true} size={80} />
                     </div>
                 ) : offers.length === 0 ? (
-                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
+                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
                         <Zap size={48} className="text-zinc-400" />
                         <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No active promotions</p>
                     </div>
@@ -260,7 +260,7 @@ const Offers = () => {
                     const matchesStatus = filterStatus === 'all' || (filterStatus === 'active' ? isActive : !isActive);
                     return matchesSearch && matchesStatus;
                 }).length === 0 ? (
-                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
+                    <div className="col-span-full py-24 bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 flex flex-col items-center justify-center opacity-30">
                         <SearchX size={48} className="text-zinc-400" />
                         <p className="text-xs font-bold uppercase tracking-widest mt-4 text-zinc-500">No promotions match your filter</p>
                     </div>
@@ -279,7 +279,7 @@ const Offers = () => {
                     <motion.div
                         key={offer.id}
                         whileHover={{ y: -4 }}
-                        className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden group"
+                        className="bg-white dark:bg-zinc-900 rounded-none border border-zinc-200 dark:border-zinc-800 shadow-sm overflow-hidden group"
                     >
                         {/* Banner Preview */}
                         <div className="h-32 bg-zinc-100 dark:bg-zinc-800 relative overflow-hidden">
@@ -302,19 +302,19 @@ const Offers = () => {
                                         });
                                         setShowModal(true);
                                     }}
-                                    className="p-2 bg-white/90 dark:bg-zinc-900/90 text-zinc-600 dark:text-zinc-300 rounded-lg shadow-lg hover:text-emerald-500"
+                                    className="p-2 bg-white/90 dark:bg-zinc-900/90 text-zinc-600 dark:text-zinc-300 rounded-none shadow-lg hover:text-emerald-500"
                                 >
                                     <Edit2 size={14} />
                                 </button>
                                 <button
                                     onClick={() => handleDelete(offer.id)}
-                                    className="p-2 bg-white/90 dark:bg-zinc-900/90 text-zinc-600 dark:text-zinc-300 rounded-lg shadow-lg hover:text-red-500"
+                                    className="p-2 bg-white/90 dark:bg-zinc-900/90 text-zinc-600 dark:text-zinc-300 rounded-none shadow-lg hover:text-red-500"
                                 >
                                     <Trash2 size={14} />
                                 </button>
                             </div>
                             <div className="absolute bottom-4 left-4">
-                                <span className={`px-2.5 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border ${isActuallyLive ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-rose-500/10 border-rose-500/20 text-rose-500'}`}>
+                                <span className={`px-2.5 py-1 rounded-none text-[8px] font-black uppercase tracking-widest border ${isActuallyLive ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-500' : 'bg-rose-500/10 border-rose-500/20 text-rose-500'}`}>
                                     {isActuallyLive ? 'Live Now' : (!isDateValid ? 'Expired' : 'Draft')}
                                 </span>
                             </div>
@@ -329,11 +329,11 @@ const Offers = () => {
                             </div>
 
                             <div className="flex items-center gap-2">
-                                <div className="px-3 py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-lg text-[11px] font-black tracking-widest uppercase">
+                                <div className="px-3 py-1.5 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-none text-[11px] font-black tracking-widest uppercase">
                                     {offer.discount_type === 'percentage' ? `${offer.discount_value}% OFF` : `₹${offer.discount_value} OFF`}
                                 </div>
                                 {offer.priority >= 10 && (
-                                    <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/20 px-2 py-1.5 rounded-lg border border-amber-100 dark:border-amber-900/40">
+                                    <div className="flex items-center gap-1 bg-amber-50 dark:bg-amber-900/20 px-2 py-1.5 rounded-none border border-amber-100 dark:border-amber-900/40">
                                         <Zap size={10} className="text-amber-500 fill-amber-500" />
                                         <span className="text-[9px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest">Hot Deal</span>
                                     </div>
@@ -370,54 +370,54 @@ const Offers = () => {
                 {showModal && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowModal(false)} className="absolute inset-0 bg-zinc-950/60 backdrop-blur-sm" />
-                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative w-full max-w-2xl bg-white dark:bg-zinc-950 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative w-full max-w-2xl bg-white dark:bg-zinc-950 rounded-none shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
                             <div className="p-6 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between shrink-0">
                                 <div>
                                     <h2 className="text-xl font-bold text-zinc-900 dark:text-white uppercase tracking-tight">{editingId ? 'Modify Promotion' : 'Configure New Offer'}</h2>
                                     <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-1">Global & Merchant Targeted Deals</p>
                                 </div>
-                                <button type="button" onClick={() => setShowModal(false)} className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full text-zinc-400"><X size={20} /></button>
+                                <button type="button" onClick={() => setShowModal(false)} className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-none text-zinc-400"><X size={20} /></button>
                             </div>
 
                             <form onSubmit={handleSubmit} className="p-8 space-y-6 overflow-y-auto flex-1">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Column 1: Identity & Offer Structure */}
                                     <div className="space-y-6">
-                                        <div className="bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-800 space-y-4">
+                                        <div className="bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-none border border-zinc-100 dark:border-zinc-800 space-y-4">
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Offer Title</label>
-                                                <input required type="text" placeholder="E.G. ORGANIC HARVEST SALE" className="w-full px-5 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-xs uppercase tracking-widest shadow-sm" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value.toUpperCase() })} />
+                                                <input required type="text" placeholder="E.G. ORGANIC HARVEST SALE" className="w-full px-5 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-xs uppercase tracking-widest shadow-sm" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value.toUpperCase() })} />
                                             </div>
-
+ 
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Banner Visual</label>
                                                 <div className="relative group">
-                                                    <input type="text" placeholder="HTTPS://IMAGE-URL.JPG" className="w-full pl-12 pr-12 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase tracking-wider shadow-sm" value={form.banner_url} onChange={(e) => setForm({ ...form, banner_url: e.target.value })} />
+                                                    <input type="text" placeholder="HTTPS://IMAGE-URL.JPG" className="w-full pl-12 pr-12 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase tracking-wider shadow-sm" value={form.banner_url} onChange={(e) => setForm({ ...form, banner_url: e.target.value })} />
                                                     <ImageIcon size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400" />
                                                     <button 
                                                         type="button" 
                                                         onClick={generateWithAI}
                                                         disabled={generating || !form.title}
-                                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-xl shadow-lg hover:rotate-12 transition-all disabled:opacity-30 disabled:rotate-0"
+                                                        className="absolute right-3 top-1/2 -translate-y-1/2 p-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-none shadow-lg hover:rotate-12 transition-all disabled:opacity-30 disabled:rotate-0"
                                                         title="Generate Visual with AI"
                                                     >
                                                         {generating ? <ApnaCartLoader centered={false} size={12} /> : <Sparkles size={12} className="fill-current" />}
                                                     </button>
                                                 </div>
                                                 {form.banner_url && (
-                                                    <div className="mt-3 relative h-28 w-full bg-zinc-100 dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 animate-in fade-in slide-in-from-top-2">
+                                                    <div className="mt-3 relative h-28 w-full bg-zinc-100 dark:bg-zinc-900 rounded-none overflow-hidden border border-zinc-200 dark:border-zinc-800 animate-in fade-in slide-in-from-top-2">
                                                         <img src={form.banner_url} alt="Preview" className="w-full h-full object-cover" />
                                                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                                                        <button type="button" onClick={() => setForm({ ...form, banner_url: '' })} className="absolute top-2 right-2 p-1.5 bg-black/50 text-white rounded-full hover:bg-black/70 backdrop-blur-md transition-all"><X size={12} /></button>
+                                                        <button type="button" onClick={() => setForm({ ...form, banner_url: '' })} className="absolute top-2 right-2 p-1.5 bg-black/50 text-white rounded-none hover:bg-black/70 backdrop-blur-md transition-all"><X size={12} /></button>
                                                     </div>
                                                 )}
                                             </div>
-
+ 
                                             {!selectedMerchantId && (
                                                 <div className="space-y-2 animate-in fade-in slide-in-from-left-4 duration-500">
                                                     <label className="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em] block">Assign to Merchant</label>
                                                     <div className="relative">
-                                                        <select required className="w-full pl-12 pr-5 py-3.5 bg-white dark:bg-zinc-900 border-2 border-rose-500/20 dark:border-rose-500/10 rounded-2xl outline-none focus:border-rose-500 transition-colors dark:text-white font-bold text-[10px] uppercase appearance-none shadow-sm" value={form.merchant_id} onChange={(e) => setForm({ ...form, merchant_id: e.target.value, category_id: '', product_id: '' })}>
+                                                        <select required className="w-full pl-12 pr-5 py-3.5 bg-white dark:bg-zinc-900 border-2 border-rose-500/20 dark:border-rose-500/10 rounded-none outline-none focus:border-rose-500 transition-colors dark:text-white font-bold text-[10px] uppercase appearance-none shadow-sm" value={form.merchant_id} onChange={(e) => setForm({ ...form, merchant_id: e.target.value, category_id: '', product_id: '' })}>
                                                             <option value="">Select Target Merchant</option>
                                                             {merchants.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
                                                         </select>
@@ -426,19 +426,19 @@ const Offers = () => {
                                                 </div>
                                             )}
                                         </div>
-
-                                        <div className="bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-800">
+ 
+                                        <div className="bg-zinc-50 dark:bg-zinc-900/50 p-6 rounded-none border border-zinc-100 dark:border-zinc-800">
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="space-y-2">
                                                     <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Discount Type</label>
-                                                    <select className="w-full px-4 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase shadow-sm" value={form.discount_type} onChange={(e) => setForm({ ...form, discount_type: e.target.value })}>
+                                                    <select className="w-full px-4 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase shadow-sm" value={form.discount_type} onChange={(e) => setForm({ ...form, discount_type: e.target.value })}>
                                                         <option value="percentage">Percentage (%)</option>
                                                         <option value="flat">Flat Cash (₹)</option>
                                                     </select>
                                                 </div>
                                                 <div className="space-y-2">
                                                     <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Discount Value</label>
-                                                    <input required type="number" className="w-full px-5 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-xs shadow-sm" value={form.discount_value} onChange={(e) => setForm({ ...form, discount_value: e.target.value })} />
+                                                    <input required type="number" className="w-full px-5 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-xs shadow-sm" value={form.discount_value} onChange={(e) => setForm({ ...form, discount_value: e.target.value })} />
                                                 </div>
                                             </div>
                                         </div>
@@ -446,65 +446,65 @@ const Offers = () => {
 
                                     {/* Column 2: Targeting & Timeline */}
                                     <div className="space-y-6">
-                                        <div className="bg-zinc-50 dark:bg-zinc-950/50 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-800 space-y-5">
+                                        <div className="bg-zinc-50 dark:bg-zinc-950/50 p-6 rounded-none border border-zinc-100 dark:border-zinc-800 space-y-5">
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Target Category</label>
                                                 <div className="relative">
-                                                    <select className="w-full pl-12 pr-5 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase appearance-none shadow-sm" value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value, product_id: '' })}>
+                                                    <select className="w-full pl-12 pr-5 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase appearance-none shadow-sm" value={form.category_id} onChange={(e) => setForm({ ...form, category_id: e.target.value, product_id: '' })}>
                                                         <option value="">Global / Select Category</option>
                                                         {categories.filter(c => !form.merchant_id || String(c.merchant_id) === String(form.merchant_id)).map(c => <option key={c.id} value={c.id}>{c.name} {!selectedMerchantId && `(${c.merchant?.name || 'Global'})`}</option>)}
                                                     </select>
                                                     <LayoutGrid size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400" />
                                                 </div>
                                             </div>
-
+ 
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Target Product</label>
                                                 <div className="relative">
-                                                    <select disabled={!form.category_id} className="w-full pl-12 pr-5 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase appearance-none shadow-sm disabled:opacity-50 disabled:cursor-not-allowed" value={form.product_id} onChange={(e) => setForm({ ...form, product_id: e.target.value })}>
+                                                    <select disabled={!form.category_id} className="w-full pl-12 pr-5 py-3.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[10px] uppercase appearance-none shadow-sm disabled:opacity-50 disabled:cursor-not-allowed" value={form.product_id} onChange={(e) => setForm({ ...form, product_id: e.target.value })}>
                                                         <option value="">{form.category_id ? 'All Products in Category' : 'Select Category First'}</option>
                                                         {products.filter(p => String(p.category_id) === String(form.category_id)).map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                                                     </select>
                                                     <Tag size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400" />
                                                 </div>
                                                 {form.category_id && products.filter(p => String(p.category_id) === String(form.category_id)).length === 0 && (
-                                                    <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mt-2 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/20">No catalog items linked to this category ID ({form.category_id}).</p>
+                                                    <p className="text-[9px] font-bold text-amber-500 uppercase tracking-widest mt-2 bg-amber-500/10 px-3 py-1.5 rounded-none border border-amber-500/20">No catalog items linked to this category ID ({form.category_id}).</p>
                                                 )}
                                             </div>
                                         </div>
-
-                                        <div className="bg-zinc-50 dark:bg-zinc-950/50 p-6 rounded-3xl border border-zinc-100 dark:border-zinc-800 space-y-4">
+ 
+                                        <div className="bg-zinc-50 dark:bg-zinc-950/50 p-6 rounded-none border border-zinc-100 dark:border-zinc-800 space-y-4">
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                                 <div className="space-y-2">
                                                     <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Campaign Start</label>
                                                     <div className="relative">
-                                                        <input required type="date" className="w-full pr-2 pl-12 py-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[13px] uppercase shadow-sm tracking-tight" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
+                                                        <input required type="date" className="w-full pr-2 pl-12 py-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[13px] uppercase shadow-sm tracking-tight" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
                                                         <Calendar size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400" />
                                                     </div>
                                                 </div>
                                                 <div className="space-y-2">
                                                     <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Campaign Expiry</label>
                                                     <div className="relative">
-                                                        <input required type="date" className="w-full pr-2 pl-12 py-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[13px] uppercase shadow-sm tracking-tight" value={form.end_date} onChange={(e) => setForm({ ...form, end_date: e.target.value })} />
+                                                        <input required type="date" className="w-full pr-2 pl-12 py-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-[13px] uppercase shadow-sm tracking-tight" value={form.end_date} onChange={(e) => setForm({ ...form, end_date: e.target.value })} />
                                                         <Calendar size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400" />
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="space-y-2">
                                                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] block">Marketplace Priority (0-100)</label>
-                                                <input type="number" className="w-full px-5 py-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-xs shadow-sm" value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} />
+                                                <input type="number" className="w-full px-5 py-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-none outline-none focus:border-emerald-500 transition-colors dark:text-white font-bold text-xs shadow-sm" value={form.priority} onChange={(e) => setForm({ ...form, priority: e.target.value })} />
                                             </div>
-
+ 
                                             <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800">
-                                                <label className="flex items-center justify-between cursor-pointer group">
+                                                <label className="flex items-center justify-between cursor-pointer group px-1">
                                                     <div>
                                                         <span className="text-[10px] font-black text-zinc-900 dark:text-white uppercase tracking-widest block">Show on Landing Screen</span>
                                                         <span className="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">Promote this deal on mobile home screen</span>
                                                     </div>
                                                     <div className="relative">
                                                         <input type="checkbox" className="sr-only p-2" checked={form.show_on_landing} onChange={(e) => setForm({ ...form, show_on_landing: e.target.checked })} />
-                                                        <div className={`w-12 h-6 rounded-full transition-all duration-300 ${form.show_on_landing ? 'bg-emerald-500' : 'bg-zinc-200 dark:bg-zinc-800'}`}>
-                                                            <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-all duration-300 ${form.show_on_landing ? 'translate-x-6' : ''}`} />
+                                                        <div className={`w-12 h-6 rounded-none transition-all duration-300 ${form.show_on_landing ? 'bg-emerald-500' : 'bg-zinc-200 dark:bg-zinc-800'}`}>
+                                                            <div className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-none transition-all duration-300 ${form.show_on_landing ? 'translate-x-[24px]' : ''}`} />
                                                         </div>
                                                     </div>
                                                 </label>
@@ -512,10 +512,10 @@ const Offers = () => {
                                         </div>
                                     </div>
                                 </div>
-
+ 
                                 <div className="flex gap-4 pt-4">
                                     <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-4 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-zinc-600 transition-colors">Abort Mission</button>
-                                    <button type="submit" disabled={submitting} className="flex-[3] py-4 bg-zinc-900 dark:bg-emerald-500 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-zinc-900/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-3">
+                                    <button type="submit" disabled={submitting} className="flex-[3] py-4 bg-zinc-900 dark:bg-emerald-500 text-white rounded-none font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-zinc-900/20 hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-3">
                                         {submitting ? <Loader2 size={18} className="animate-spin" /> : <CheckCircle2 size={18} />} {editingId ? 'Update Promotion' : 'Deploy Live Offer'}
                                     </button>
                                 </div>

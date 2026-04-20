@@ -32,10 +32,10 @@ const Dashboard = () => {
     const { orders, stats, loading, error } = useDashboardStats(selectedMerchantId);
 
     if (error) return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-12 bg-white dark:bg-zinc-900 rounded-2xl border border-red-100 dark:border-red-900/20 max-w-xl mx-auto shadow-sm">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-12 bg-white dark:bg-zinc-900 rounded-none border border-red-100 dark:border-red-900/20 max-w-xl mx-auto shadow-sm">
             <h2 className="text-xl font-bold text-zinc-900 dark:text-white mb-2">Sync Interrupted</h2>
             <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-8">{error}</p>
-            <button onClick={() => window.location.reload()} className="bg-emerald-500 text-white px-8 py-3 rounded-xl font-semibold shadow-sm hover:opacity-90 transition-all text-sm">Retry Connection</button>
+            <button onClick={() => window.location.reload()} className="bg-emerald-500 text-white px-8 py-3 rounded-none font-semibold shadow-sm hover:opacity-90 transition-all text-sm">Retry Connection</button>
         </div>
     );
 
@@ -49,17 +49,17 @@ const Dashboard = () => {
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-black text-zinc-900 dark:text-white tracking-tight uppercase flex items-center gap-3">
-                        <span className="w-1.5 h-8 bg-zinc-900 dark:bg-emerald-500 rounded-full" />
+                        <span className="w-1.5 h-8 bg-zinc-900 dark:bg-emerald-500 rounded-none" />
                         Platform Control Center
                     </h1>
                     <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-black uppercase tracking-[0.3em] mt-1 italic ml-4">
                         Master Intelligence & Real-time Node Monitoring
                     </p>
                 </div>
-                <div className="flex bg-white dark:bg-zinc-900 rounded-2xl p-1.5 shadow-sm border border-zinc-100 dark:border-zinc-800">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 dark:bg-emerald-950/20 rounded-xl">
-                        <Activity className="text-emerald-500 animate-pulse" size={14} />
-                        <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-[9px]">System Online</span>
+                <div className="flex bg-white dark:bg-zinc-900 rounded-none p-1 shadow-sm border border-zinc-100 dark:border-zinc-800">
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950/20 rounded-none">
+                        <Activity className="text-emerald-500 animate-pulse" size={12} />
+                        <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">System Online</span>
                     </div>
                 </div>
             </header>
@@ -132,7 +132,7 @@ const Dashboard = () => {
                     </Link>
                 </div>
                 
-                <div className="bg-white dark:bg-zinc-900 rounded-[32px] border border-zinc-100 dark:border-zinc-800 overflow-hidden shadow-sm">
+                <div className="bg-white dark:bg-zinc-900 rounded-none border border-zinc-100 dark:border-zinc-800 overflow-hidden shadow-sm">
                     {orders.length === 0 ? (
                         <div className="py-20 text-center opacity-30">
                             <SearchX size={48} className="mx-auto text-zinc-400 mb-4" />
@@ -154,7 +154,7 @@ const Dashboard = () => {
                                         <tr key={order.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors group">
                                             <td className="px-8 py-5">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center font-black text-zinc-400 text-xs">#{String(order.id).slice(-3)}</div>
+                                                    <div className="w-10 h-10 bg-zinc-100 dark:bg-zinc-800 rounded-none flex items-center justify-center font-black text-zinc-400 text-xs">#{String(order.id).slice(-3)}</div>
                                                     <div>
                                                         <p className="text-xs font-bold text-zinc-900 dark:text-white uppercase">{order.user?.name || 'Customer'}</p>
                                                         <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-tighter mt-0.5">{new Date(order.created_at).toLocaleTimeString()}</p>
@@ -162,7 +162,7 @@ const Dashboard = () => {
                                                 </div>
                                             </td>
                                             <td className="px-8 py-5">
-                                                <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
+                                                <span className={`px-2 py-0.5 rounded-none text-[8px] font-black uppercase tracking-widest border ${
                                                     order.status === 'delivered' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 
                                                     order.status === 'cancelled' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
                                                     'bg-amber-500/10 text-amber-500 border-amber-500/20'

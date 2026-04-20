@@ -48,15 +48,15 @@ const DashboardCard = ({ label, value, icon: Icon, color = 'emerald', subLabel, 
     return (
         <motion.div
             whileHover={{ y: -4 }}
-            className="bg-white dark:bg-zinc-900 rounded-[32px] border border-zinc-100 dark:border-zinc-800 p-6 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
+            className="bg-white dark:bg-zinc-900 rounded-none border border-zinc-100 dark:border-zinc-800 p-3.5 shadow-sm hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
         >
-            <div className="flex justify-between items-start mb-4">
-                <div className={`p-3 rounded-2xl ${colors.split(' ')[1]} ${colors.split(' ')[0]}`}>
-                    <Icon size={20} strokeWidth={2.5} />
+            <div className="flex justify-between items-start mb-3">
+                <div className={`p-2 rounded-none ${colors.split(' ')[1]} ${colors.split(' ')[0]}`}>
+                    <Icon size={16} strokeWidth={2.5} />
                 </div>
                 <div className="text-right">
-                    <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-1">{label}</p>
-                    <h2 className="text-2xl font-black text-zinc-900 dark:text-white tracking-tight">
+                    <p className="text-[9px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-1">{label}</p>
+                    <h2 className="text-xl font-black text-zinc-900 dark:text-white tracking-tight">
                         {isCurrency && "₹"}{Number(value).toLocaleString()}
                     </h2>
                 </div>
