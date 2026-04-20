@@ -45,12 +45,14 @@ const Merchants = () => {
     const [editingId, setEditingId] = useState(null);
     const [viewingMerchant, setViewingMerchant] = useState(null);
     const [formLoading, setFormLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     const initialFormState = {
-        merchant_name: '',
+        merchant_name: '', // Owner Name
+        Merchant_name: '', // Shop/Outlet Name
         email: '',
         password: '',
-        Merchant_name: '',
         address: '',
         country_id: '',
         state_id: '',
@@ -61,10 +63,8 @@ const Merchants = () => {
         merchant_category_id: '',
         delivery_charge: 0,
         packaging_charge: 0,
-        platform_fee: 0,
         delivery_charge_tax: 0,
         packaging_charge_tax: 0,
-        platform_fee_tax: 0,
         latitude: '',
         longitude: '',
         delivery_charge_type: 'fixed',
@@ -167,8 +167,8 @@ const Merchants = () => {
         setFormLoading(true);
         try {
             const { fetchRealFoodImage } = await import('../utils/aiHelpers');
-            const url = await fetchRealFoodImage(formData.Merchant_name, true, formData.address, 'merchant');
-            setFormData(prev => ({ ...prev, image: url }));
+            const aiResult = await fetchRealFoodImage(formData.Merchant_name, true, formData.address, 'merchant');
+            setFormData(prev => ({ ...prev, image: aiResult.url }));
             toast.success("AI Image generated successfully");
         } catch (error) {
             console.error("AI Image Generation Error:", error);
@@ -223,7 +223,19 @@ const Merchants = () => {
         const matchesCategory = !selectedCategoryId || r.merchant_category_id?.toString() === selectedCategoryId.toString();
 
         return matchesSearch && matchesCategory;
-    });
+    }).sort((a, b) => a.id - b.id);
+
+    // Pagination Logic
+    const totalPages = Math.ceil(filtered.length / itemsPerPage);
+    const paginatedMerchants = filtered.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    // Reset page on search/filter
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, selectedCategoryId]);
 
     // if (loading) return <ApnaCartLoader />;
 
@@ -288,145 +300,187 @@ const Merchants = () => {
                             <ApnaCartLoader centered={true} size={80} />
                         </div>
                     ) : (
-                        <table className="min-w-full text-left">
-                            <thead>
-                                <tr className="bg-zinc-50/50 dark:bg-zinc-800/60 text-zinc-400 text-[9px] uppercase tracking-[0.2em] font-black border-b border-zinc-100 dark:border-zinc-800">
-                                    <th className="px-8 py-5">Merchant / Outlet</th>
-                                    <th className="py-5 px-6">Classification</th>
-                                    <th className="py-5 px-6">Status</th>
-                                    <th className="py-5 px-6">Location</th>
-                                    <th className="py-5 px-6">Owner</th>
-                                    <th className="px-8 py-5 text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                                {filtered.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="5" className="py-24 text-center">
-                                            <div className="flex flex-col items-center justify-center opacity-30">
-                                                <SearchX size={48} className="text-zinc-400" />
-                                                <p className="text-xs font-black uppercase tracking-widest mt-4 text-zinc-500">No merchants found</p>
-                                            </div>
-                                        </td>
+                        <>
+                            <table className="min-w-full text-left">
+                                <thead>
+                                    <tr className="bg-zinc-50/50 dark:bg-zinc-800/60 text-zinc-400 text-[9px] uppercase tracking-[0.2em] font-black border-b border-zinc-100 dark:border-zinc-800">
+                                        <th className="px-4 py-5 font-black uppercase text-[9px] tracking-widest">Merchant / Outlet</th>
+                                        <th className="py-5 px-3 font-black uppercase text-[9px] tracking-widest">Classification</th>
+                                        <th className="py-5 px-3 font-black uppercase text-[9px] tracking-widest">Status</th>
+                                        <th className="py-5 px-3 font-black uppercase text-[9px] tracking-widest">Location</th>
+                                        <th className="py-5 px-3 font-black uppercase text-[9px] tracking-widest">Owner</th>
+                                        <th className="px-6 py-5 text-right sticky right-0 bg-zinc-50/95 dark:bg-zinc-800/95 backdrop-blur-md z-10">Actions</th>
                                     </tr>
-                                ) : (
-                                    filtered.map((rest) => (
-                                        <motion.tr
-                                            key={rest.id}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            className="group hover:bg-zinc-50/40 dark:hover:bg-zinc-800/40 transition-colors"
-                                        >
-                                            {/* Merchant Name + Image */}
-                                            <td className="px-8 py-5">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 shadow-sm shrink-0">
-                                                        <img
-                                                            src={rest.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5'}
-                                                            alt={rest.name}
-                                                            className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500 scale-110 group-hover:scale-125"
-                                                        />
+                                </thead>
+                                <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
+                                    {paginatedMerchants.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="6" className="py-20 text-center">
+                                                <div className="flex flex-col items-center gap-4">
+                                                    <div className="w-16 h-16 bg-zinc-50 dark:bg-zinc-800 rounded-3xl flex items-center justify-center border border-zinc-100 dark:border-zinc-700 animate-pulse">
+                                                        <SearchX className="text-zinc-300" size={32} />
                                                     </div>
-                                                    <div className="min-w-0">
-                                                        <p className="font-black text-zinc-900 dark:text-white tracking-tight text-[15px] mb-1 group-hover:text-emerald-500 transition-colors leading-none truncate">{rest.name}</p>
-                                                        <div className="flex items-center gap-2">
-                                                            <Clock size={10} className="text-zinc-400" />
-                                                            <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest font-mono">
-                                                                {rest.opening_time?.slice(0, 5)} - {rest.closing_time?.slice(0, 5)}
-                                                            </span>
-                                                        </div>
+                                                    <div>
+                                                        <p className="text-[11px] font-black text-zinc-900 dark:text-white uppercase tracking-tight">No merchants found</p>
+                                                        <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest mt-1">Try adjusting your filters.</p>
                                                     </div>
                                                 </div>
                                             </td>
-
-                                            {/* Classification */}
-                                            <td className="py-5 px-6">
-                                                <div className="flex items-center gap-2">
-                                                    <div className="w-8 h-8 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-emerald-500 transition-colors">
-                                                        <Archive size={14} />
-                                                    </div>
-                                                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600 dark:text-zinc-300">
-                                                        {rest.merchant_category?.name || 'Unclassified'}
-                                                    </span>
-                                                </div>
-                                            </td>
-
-                                            {/* Status */}
-                                            <td className="py-5 px-6">
-                                                <div className="flex flex-col gap-1.5">
-                                                    <button
-                                                        onClick={() => handleToggleStatus(rest.id)}
-                                                        disabled={updatingId === rest.id}
-                                                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border transition-all ${rest.is_active
-                                                                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/40'
-                                                                : 'bg-rose-50 dark:bg-rose-950/40 text-rose-500 dark:text-rose-400 border-rose-100 dark:border-rose-900/40'
-                                                            }`}
-                                                    >
-                                                        {updatingId === rest.id ? <ApnaCartLoader centered={false} size={10} /> : <div className={`w-1.5 h-1.5 rounded-full ${rest.is_active ? 'bg-emerald-500' : 'bg-rose-500'}`} />}
-                                                        {rest.is_active ? 'Active' : 'Inactive'}
-                                                    </button>
-                                                    <span className={`text-[8px] font-black uppercase tracking-widest ml-1 ${rest.is_open ? 'text-blue-500' : 'text-zinc-400'}`}>
-                                                        {rest.is_open ? '● Accepting Orders' : '● Closed'}
-                                                    </span>
-                                                </div>
-                                            </td>
-
-                                            {/* Location */}
-                                            <td className="py-5 px-6">
-                                                <div className="space-y-1.5">
-                                                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-300 text-[10px] uppercase font-black tracking-tight">
-                                                        <MapPin size={11} className="text-rose-500 shrink-0" />
-                                                        <span className="truncate max-w-[200px]">{rest.address}</span>
-                                                    </div>
-                                                    {rest.city && (
-                                                        <div className="flex items-center gap-2 text-zinc-400 text-[9px] uppercase font-bold tracking-widest ml-5">
-                                                            <span>{rest.city.name}, {rest.state?.name}</span>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </td>
-
-                                            {/* Owner Info */}
-                                            <td className="py-5 px-6">
-                                                {rest.user ? (
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="w-8 h-8 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 font-black text-[10px] shrink-0 uppercase">
-                                                            {rest.user.name?.[0]}
+                                        </tr>
+                                    ) : (
+                                        paginatedMerchants.map((rest) => (
+                                            <motion.tr
+                                                key={rest.id}
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                className="group hover:bg-zinc-50/40 dark:hover:bg-zinc-800/40 transition-colors"
+                                            >
+                                                {/* Merchant Name + Image */}
+                                                <td className="px-4 py-5">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-14 h-14 bg-zinc-100 dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 shadow-sm shrink-0">
+                                                            <img
+                                                                src={rest.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5'}
+                                                                alt={rest.name}
+                                                                className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500 scale-110 group-hover:scale-125"
+                                                            />
                                                         </div>
                                                         <div className="min-w-0">
-                                                            <p className="text-[11px] font-black text-zinc-900 dark:text-white leading-none mb-1 truncate">{rest.user.name}</p>
-                                                            <p className="text-[9px] text-zinc-400 font-medium truncate">{rest.user.email}</p>
+                                                            <p className="font-black text-zinc-900 dark:text-white tracking-tight text-[15px] mb-1 group-hover:text-emerald-500 transition-colors leading-none truncate">{rest.name}</p>
+                                                            <div className="flex items-center gap-2">
+                                                                <Clock size={10} className="text-zinc-400" />
+                                                                <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest font-mono">
+                                                                    {rest.opening_time?.slice(0, 5)} - {rest.closing_time?.slice(0, 5)}
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                ) : (
-                                                    <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">—</span>
-                                                )}
-                                            </td>
+                                                </td>
 
-                                            {/* Actions */}
-                                            <td className="px-8 py-5 text-right">
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <button
-                                                        onClick={() => handleViewDetail(rest)}
-                                                        className="p-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-500 hover:text-white rounded-xl text-zinc-500 dark:text-zinc-400 transition-all shadow-sm"
-                                                        title="View Details"
-                                                    >
-                                                        <Eye size={16} />
-                                                    </button>
-                                                    <button
-                                                        onClick={() => openEditModal(rest)}
-                                                        className="p-2.5 bg-zinc-100 dark:bg-zinc-800 hover:bg-emerald-500 hover:text-white rounded-xl text-zinc-500 dark:text-zinc-400 transition-all shadow-sm"
-                                                        title="Edit Merchant"
-                                                    >
-                                                        <Edit3 size={16} />
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </motion.tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
+                                                {/* Classification */}
+                                                <td className="py-5 px-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-8 h-8 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover:text-emerald-500 transition-colors">
+                                                            <Archive size={14} />
+                                                        </div>
+                                                        <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600 dark:text-zinc-300">
+                                                            {rest.merchant_category?.name || 'Unclassified'}
+                                                        </span>
+                                                    </div>
+                                                </td>
+
+                                                {/* Status */}
+                                                <td className="py-5 px-3">
+                                                    <div className="flex flex-col gap-1.5">
+                                                        <button
+                                                            onClick={() => handleToggleStatus(rest.id)}
+                                                            disabled={updatingId === rest.id}
+                                                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest w-fit border transition-all ${rest.is_active
+                                                                    ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/40'
+                                                                    : 'bg-rose-50 dark:bg-rose-950/40 text-rose-500 dark:text-rose-400 border-rose-100 dark:border-rose-900/40'
+                                                                }`}
+                                                        >
+                                                            {updatingId === rest.id ? <ApnaCartLoader centered={false} size={10} /> : <div className={`w-1.5 h-1.5 rounded-full ${rest.is_active ? 'bg-emerald-500' : 'bg-rose-500'}`} />}
+                                                            {rest.is_active ? 'Active' : 'Inactive'}
+                                                        </button>
+                                                        <span className={`text-[8px] font-black uppercase tracking-widest ml-1 ${rest.is_open ? 'text-blue-500' : 'text-zinc-400'}`}>
+                                                            {rest.is_open ? '● Accepting Orders' : '● Closed'}
+                                                        </span>
+                                                    </div>
+                                                </td>
+
+                                                {/* Location */}
+                                                <td className="py-5 px-3">
+                                                    <div className="space-y-1.5">
+                                                        <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-300 text-[10px] uppercase font-black tracking-tight">
+                                                            <MapPin size={11} className="text-rose-500 shrink-0" />
+                                                            <span className="truncate max-w-[200px]">{rest.address}</span>
+                                                        </div>
+                                                        {rest.city && (
+                                                            <div className="flex items-center gap-2 text-zinc-400 text-[9px] uppercase font-bold tracking-widest ml-5">
+                                                                <span>{rest.city.name}, {rest.state?.name}</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </td>
+
+                                                {/* Owner Info */}
+                                                <td className="py-5 px-3">
+                                                    {rest.user ? (
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-8 h-8 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center border border-zinc-200 dark:border-zinc-700 text-zinc-500 font-black text-[10px] shrink-0 uppercase">
+                                                                {rest.user.name?.[0]}
+                                                            </div>
+                                                            <div className="min-w-0">
+                                                                <p className="text-[11px] font-black text-zinc-900 dark:text-white leading-none mb-1 truncate">{rest.user.name}</p>
+                                                                <p className="text-[9px] text-zinc-400 font-medium truncate">{rest.user.email}</p>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-[9px] text-zinc-400 font-bold uppercase tracking-widest">—</span>
+                                                    )}
+                                                </td>
+
+                                                {/* Actions */}
+                                                <td className="px-6 py-5 text-right sticky right-0 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md z-10 border-l border-zinc-100 dark:border-zinc-800/50">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <button
+                                                            onClick={() => handleViewDetail(rest)}
+                                                            className="p-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-500 hover:text-white rounded-lg text-zinc-500 dark:text-zinc-400 transition-all shadow-sm group/btn"
+                                                            title="View Details"
+                                                        >
+                                                            <Eye size={14} />
+                                                        </button>
+                                                        <button
+                                                            onClick={() => openEditModal(rest)}
+                                                            className="p-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-emerald-500 hover:text-white rounded-lg text-zinc-500 dark:text-zinc-400 transition-all shadow-sm group/btn"
+                                                            title="Edit Merchant"
+                                                        >
+                                                            <Edit3 size={14} />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </motion.tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+
+                            {/* Pagination Controls */}
+                            {totalPages > 1 && (
+                                <div className="flex justify-center items-center gap-3 py-6 bg-zinc-50/30 dark:bg-zinc-800/20 border-t border-zinc-100 dark:border-zinc-800">
+                                    <button
+                                        disabled={currentPage === 1}
+                                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                        className="h-10 px-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                                    >
+                                        Prev
+                                    </button>
+                                    <div className="flex items-center gap-1.5">
+                                        {[...Array(totalPages)].map((_, i) => (
+                                            <button
+                                                key={i + 1}
+                                                onClick={() => setCurrentPage(i + 1)}
+                                                className={`w-10 h-10 rounded-xl text-[10px] font-black transition-all ${
+                                                    currentPage === i + 1
+                                                        ? 'bg-zinc-900 dark:bg-emerald-500 text-white shadow-xl shadow-emerald-500/10'
+                                                        : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800'
+                                                }`}
+                                            >
+                                                {i + 1}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <button
+                                        disabled={currentPage === totalPages}
+                                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                        className="h-10 px-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-400 disabled:opacity-30 transition-all hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                                    >
+                                        Next
+                                    </button>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
@@ -528,72 +582,52 @@ const Merchants = () => {
                                             <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Financial & Performance Metrics</p>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                            {/* Charges Section */}
-                                            <div className="space-y-4">
-                                                <div className="flex justify-between items-center px-1">
-                                                    <label className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Pricing & Fees (₹)</label>
-                                                </div>
+                                        <div className="space-y-6">
+                                            {/* Delivery Matrix */}
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white dark:bg-zinc-900/50 p-5 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm">
                                                 <div className="space-y-4">
                                                     <div className="space-y-1.5">
-                                                        <label className="text-[8px] font-black text-zinc-500 uppercase tracking-widest ml-1">Delivery Strategy</label>
-                                                        <select className="w-full h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.delivery_charge_type} onChange={e => setFormData({ ...formData, delivery_charge_type: e.target.value })}>
+                                                        <label className="text-[8px] font-black text-zinc-400 uppercase tracking-widest ml-1">Delivery Strategy</label>
+                                                        <select className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.delivery_charge_type} onChange={e => setFormData({ ...formData, delivery_charge_type: e.target.value })}>
                                                             <option value="fixed">Fixed Rate</option>
                                                             <option value="distance">Distance Based (km)</option>
                                                         </select>
                                                     </div>
-
-                                                    {formData.delivery_charge_type === 'distance' ? (
-                                                        <div className="flex gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                                                            <div className="flex-1 space-y-1.5">
-                                                                <label className="text-[8px] font-black text-zinc-500 uppercase tracking-widest ml-1">Rate (₹/km)</label>
-                                                                <input type="number" step="0.1" placeholder="e.g. 5.0" className="w-full h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.delivery_charge_per_km} onChange={e => setFormData({ ...formData, delivery_charge_per_km: e.target.value })} />
+                                                    <div className="space-y-1.5 pt-1">
+                                                        {formData.delivery_charge_type === 'distance' ? (
+                                                            <div className="flex gap-2">
+                                                                <div className="flex-1 space-y-1.5">
+                                                                    <label className="text-[7px] font-black text-zinc-400 uppercase tracking-widest ml-1">Rate/KM</label>
+                                                                    <input type="number" step="0.1" placeholder="₹" className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black focus:border-emerald-500 text-zinc-900 dark:text-white outline-none" value={formData.delivery_charge_per_km} onChange={e => setFormData({ ...formData, delivery_charge_per_km: e.target.value })} />
+                                                                </div>
+                                                                <div className="flex-1 space-y-1.5">
+                                                                    <label className="text-[7px] font-black text-zinc-400 uppercase tracking-widest ml-1">Max KM</label>
+                                                                    <input type="number" step="0.1" placeholder="KM" className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black focus:border-emerald-500 text-zinc-900 dark:text-white outline-none" value={formData.max_delivery_distance} onChange={e => setFormData({ ...formData, max_delivery_distance: e.target.value })} />
+                                                                </div>
                                                             </div>
-                                                            <div className="flex-1 space-y-1.5">
-                                                                <label className="text-[8px] font-black text-zinc-500 uppercase tracking-widest ml-1">Max dist</label>
-                                                                <input type="number" step="0.1" placeholder="e.g. 10" className="w-full h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.max_delivery_distance} onChange={e => setFormData({ ...formData, max_delivery_distance: e.target.value })} />
+                                                        ) : (
+                                                            <div className="space-y-1.5">
+                                                                <label className="text-[7px] font-black text-zinc-400 uppercase tracking-widest ml-1">Amount (₹)</label>
+                                                                <input type="number" step="0.01" placeholder="₹" className="w-full h-10 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-black focus:border-emerald-500 text-zinc-900 dark:text-white outline-none" value={formData.delivery_charge} onChange={e => setFormData({ ...formData, delivery_charge: e.target.value })} />
                                                             </div>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-zinc-500 uppercase tracking-widest ml-1">Flat Delivery Fee</label>
-                                                            <input type="number" step="0.01" placeholder="e.g. 20.00" className="w-full h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.delivery_charge} onChange={e => setFormData({ ...formData, delivery_charge: e.target.value })} />
-                                                        </div>
-                                                    )}
-
-                                                    <div className="grid grid-cols-2 gap-3">
-                                                        <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-zinc-500 uppercase tracking-widest ml-1">Packing Fee</label>
-                                                            <input type="number" step="0.01" placeholder="₹" className="w-full h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.packaging_charge} onChange={e => setFormData({ ...formData, packaging_charge: e.target.value })} />
-                                                        </div>
-                                                        <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-zinc-500 uppercase tracking-widest ml-1">Platform Fee</label>
-                                                            <input type="number" step="0.01" placeholder="₹" className="w-full h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.platform_fee} onChange={e => setFormData({ ...formData, platform_fee: e.target.value })} />
-                                                        </div>
+                                                        )}
                                                     </div>
+                                                </div>
+                                                <div className="space-y-1.5 self-end">
+                                                    <label className="text-[8px] font-black text-amber-500 uppercase tracking-widest ml-1">Delivery GST (%)</label>
+                                                    <input type="number" step="0.1" className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-amber-500 text-zinc-900 dark:text-white" value={formData.delivery_charge_tax} onChange={e => setFormData({ ...formData, delivery_charge_tax: e.target.value })} />
                                                 </div>
                                             </div>
-
-                                            {/* Taxes Section */}
-                                            <div className="space-y-4">
-                                                <div className="flex justify-between items-center px-1">
-                                                    <label className="text-[10px] font-black text-amber-500 uppercase tracking-widest">Taxation & GST (%)</label>
+                                            
+                                            {/* Packaging Matrix */}
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white dark:bg-zinc-900/50 p-5 rounded-[2rem] border border-zinc-100 dark:border-zinc-800 shadow-sm">
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[8px] font-black text-zinc-400 uppercase tracking-widest ml-1">Packing Fee (Fixed)</label>
+                                                    <input type="number" step="0.01" className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-emerald-500 text-zinc-900 dark:text-white" value={formData.packaging_charge} onChange={e => setFormData({ ...formData, packaging_charge: e.target.value })} />
                                                 </div>
-                                                <div className="space-y-4">
-                                                    <div className="grid grid-cols-2 gap-3">
-                                                        <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-zinc-500 uppercase tracking-widest ml-1">Delivery Tax</label>
-                                                            <input type="number" step="0.1" placeholder="%" className="w-full h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-amber-500 text-zinc-900 dark:text-white" value={formData.delivery_charge_tax} onChange={e => setFormData({ ...formData, delivery_charge_tax: e.target.value })} />
-                                                        </div>
-                                                        <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-zinc-500 uppercase tracking-widest ml-1">Packing Tax</label>
-                                                            <input type="number" step="0.1" placeholder="%" className="w-full h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-amber-500 text-zinc-900 dark:text-white" value={formData.packaging_charge_tax} onChange={e => setFormData({ ...formData, packaging_charge_tax: e.target.value })} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="space-y-1.5">
-                                                        <label className="text-[8px] font-black text-zinc-500 uppercase tracking-widest ml-1">Service/Platform Tax (%)</label>
-                                                        <input type="number" step="0.1" placeholder="e.g. 18.0" className="w-full h-11 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-amber-500 text-zinc-900 dark:text-white" value={formData.platform_fee_tax} onChange={e => setFormData({ ...formData, platform_fee_tax: e.target.value })} />
-                                                    </div>
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[8px] font-black text-amber-500 uppercase tracking-widest ml-1">Packing GST (%)</label>
+                                                    <input type="number" step="0.1" className="w-full h-11 bg-zinc-50 dark:bg-zinc-950 border border-zinc-100 dark:border-zinc-800 rounded-xl px-4 text-[11px] font-bold outline-none focus:border-amber-500 text-zinc-900 dark:text-white" value={formData.packaging_charge_tax} onChange={e => setFormData({ ...formData, packaging_charge_tax: e.target.value })} />
                                                 </div>
                                             </div>
                                         </div>

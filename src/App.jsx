@@ -19,6 +19,8 @@ import LocationMaster from './pages/LocationMaster';
 import Offers from './pages/Offers';
 import MerchantCategories from './pages/MerchantCategories';
 import Reviews from './pages/Reviews';
+import MerchantRevenue from './pages/MerchantRevenue';
+import MerchantCommissions from './pages/MerchantCommissions';
 import ApnaCartLoader from './components/ApnaCartLoader';
 
 import { MerchantProvider } from './contexts/MerchantContext';
@@ -58,6 +60,8 @@ function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="merchant-dashboard" element={<MerchantDashboard />} />
           <Route path="merchant-pos" element={<MerchantPOS />} />
+          <Route path="merchant-revenue" element={<MerchantRevenue />} />
+          <Route path="merchant-commissions" element={<MerchantCommissions />} />
           <Route path="live-monitor" element={<LiveMonitor />} />
           <Route path="rider-staff" element={<RiderStaff />} />
           <Route path="products" element={<Products />} />

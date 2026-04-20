@@ -33,6 +33,8 @@ import {
     Settings2,
     LayoutGrid,
     MessageSquare,
+    Wallet,
+    Percent,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MerchantDropdown from '../components/MerchantDropdown';
@@ -119,6 +121,8 @@ const ADMIN_NAV = [
         icon: Activity,
         items: [
             { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+            { to: '/merchant-revenue', label: 'Merchant Revenue', icon: Wallet },
+            { to: '/merchant-commissions', label: 'Partner Commissions', icon: Percent },
         ],
     },
     {
@@ -172,6 +176,7 @@ const MERCHANT_NAV = [
         items: [
             { to: '/merchant-dashboard', label: 'Dashboard', icon: LayoutDashboard },
             { to: '/merchant-pos', label: 'Active Orders', icon: ShoppingBag, badge: 'Live' },
+            { to: '/merchant-revenue', label: 'Revenue Report', icon: Wallet },
         ],
     },
     {

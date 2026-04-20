@@ -147,5 +147,9 @@ export const merchantCategoryService = {
     adminToggleStatus: (id) => api.patch(`/admin/merchant-categories/${id}/toggle`),
 };
 
+export const analyticsService = {
+    getRevenueReport: (params) => api.get('/analytics/revenue', { params }),
+};
+
 export default api;
 
